@@ -1,0 +1,22 @@
+{
+    "name": "snebes/php-daisydiff",
+    "description": "PHP DaisyDiff Port",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Steve Nebes",
+            "email": "snebes@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "ext-intl": "*",
+        "doctrine/collections": "^1.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "DaisyDiff\\": "src/"
+        }
+    }
+}
