@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.8/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         backupGlobals="false"
+         colors="true">
+    <php>
+        <ini name="error_reporting" value="-1" />
+    </php>
+
+    <testsuites>
+        <testsuite name="PHP DaisyDiff Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>src</directory>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-html"   target="build/coverage" charset="UTF-8" yui="true" highlight="true"/>
+        <log type="coverage-text"   target="build/coverage.txt"/>
+        <log type="coverage-clover" target="build/clover.xml"/>
+    </logging>
+</phpunit>

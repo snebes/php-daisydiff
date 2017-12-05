@@ -138,7 +138,7 @@ abstract class Node
         }
         elseif (count($myParents) > count($otherParents)) {
             // All tags matched but there are tags left in this tree - $other node is not so deeply nested.
-            $result->setIndexInLastCommonParent($myParents[$i - 1].getIndexOf($myParents[$i]))
+            $result->setIndexInLastCommonParent($myParents[$i - 1].getIndexOf($myParents[$i]));
             $result->setSplittingNeeded();
         }
         else {
@@ -171,7 +171,7 @@ abstract class Node
      * @param  TagNode $root
      * @return self
      */
-    protected function setRoot(TagNode $root): self
+    protected function setRoot(TagNode $root): Node
     {
         $this->root = $root;
 

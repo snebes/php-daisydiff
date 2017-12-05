@@ -27,7 +27,7 @@ class TagNode extends Node implements IteratorAggregate
      * @param  string  $qName
      * @param  array   $attributeBag
      */
-    public function __construct(TagNode $parent, string $qName, array $attributes = [])
+    public function __construct(?TagNode $parent, string $qName, array $attributes = [])
     {
         parent::__construct($parent);
 
@@ -47,7 +47,7 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function addChild(Node $node, int $index = null): self
     {
-        if ($node->getParent() != $this) {
+        if ($node->getParent() !== $this) {
             throw new InvalidArgumentException('The new child must have this node as a parent.');
         }
 
@@ -66,7 +66,7 @@ class TagNode extends Node implements IteratorAggregate
      * @param  TagNode $root
      * @return self
      */
-    protected function setRoot(TagNode $root): self
+    protected function setRoot(TagNode $root): Node
     {
         parent::setRoot($root);
 
@@ -87,7 +87,7 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function getIndexOf(Node $child): int
     {
-        $key = array_search($element, $this->children, true);
+        $key = array_search($child, $this->children, true);
 
         if (false === $key) {
             return -1;
@@ -108,7 +108,7 @@ class TagNode extends Node implements IteratorAggregate
             return $this->children[$index];
         }
 
-        throw new OutOfBoundsException("Invalid index: {$index}");
+        throw new OutOfBoundsException(sprintf('Index: %d, Size: %d', $index, count($this->children)));
     }
 
     /**
@@ -126,7 +126,7 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function getNumChildren(): int
     {
-        if (is_null($this->children)) {
+        if (empty($this->children)) {
             return 0;
         } else {
             return count($this->children);
@@ -142,9 +142,9 @@ class TagNode extends Node implements IteratorAggregate
     }
 
     /**
-     * @return
+     * @return iterable
      */
-    public function getAttributes()
+    public function getAttributes(): iterable
     {
         return $this->attributes;
     }
@@ -174,11 +174,11 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function equals(TagNode $tagNode): bool
     {
-        if ($tagNode == $this) {
+        if ($tagNode === $this) {
             return true;
         }
 
-        if ($this->getRoot() == $tagNode->getRoot()) {
+        if ($this->getRoot() === $tagNode->getRoot()) {
             // Not the same and in the same tree, so not equal.
             return false;
         }
@@ -214,7 +214,7 @@ class TagNode extends Node implements IteratorAggregate
         $result = false;
 
         if ($other instanceof TagNode) {
-            if (0 == strcasecmp($this->getQName(), $other->getQName()) {
+            if (0 == strcasecmp($this->getQName(), $other->getQName())) {
                 $result = $this->hasSameAttributes($other->getAttributes());
             }
         }
@@ -231,8 +231,6 @@ class TagNode extends Node implements IteratorAggregate
     public function getOpeningTag(): string
     {
         $s = '<' . $this->getQName();
-
-        $attributes = ;
 
         foreach ($this->getAttributes() as $qName => $value) {
             $s .= sprintf(' %s="%s"', $qName, $value);
@@ -327,7 +325,7 @@ class TagNode extends Node implements IteratorAggregate
     {
         $splitOccurred = false;
 
-        if ($parent != $this) {
+        if ($parent !== $this) {
             $part1 = new TagNode(null, $this->getQName(), $this->getAttributes());
             $part2 = new TagNode(null, $this->getQName(), $this->getAttributes());
             $part1->setParent($this->getParent());
