@@ -51,20 +51,14 @@ class TextNode extends Node
     {
         $nodes = [];
 
+/*
         if ($this->getModification()->getType() == ModificationType::REMOVED &&
             $this->getModification()->getid() == $id) {
             $nodes = [$this];
         }
+*/
 
         return $nodes;
-    }
-
-    /**
-     * @return Modification
-     */
-    public function getModification(): Modification
-    {
-        return $this->modification;
     }
 
     /**
@@ -104,13 +98,25 @@ class TextNode extends Node
     }
 
     /**
+     * @return Modification
+     */
+/*
+    public function getModification(): Modification
+    {
+        return $this->modification;
+    }
+*/
+
+    /**
      * @param  Modification $m
      * @return self
      */
+/*
     public function setModification(Modification $m): self
     {
         $this->modification = $m;
     }
+*/
 
     /**
      * @return string

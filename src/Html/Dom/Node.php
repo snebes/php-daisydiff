@@ -3,6 +3,7 @@
 namespace DaisyDiff\Html\Dom;
 
 use DaisyDiff\Html\Dom\Helper\LastCommonParentResult;
+use InvalidArgumentException;
 
 /**
  * Represents any element in the DOM tree of an HTML file.
@@ -64,7 +65,7 @@ abstract class Node
             $ancestors[] = $ancestor;
         }
 
-        return array_reverse($ancestors, true);
+        return array_reverse($ancestors);
     }
 
     /**
@@ -104,8 +105,12 @@ abstract class Node
      * @param  Node $other
      * @return LastCommonParentResult
      */
-    public function getLastCommonParent(Node $other): LastCommonParentResult
+    public function getLastCommonParent(?Node $other): LastCommonParentResult
     {
+        if (is_null($other)) {
+            throw new InvalidArgumentException('The given TextNode is null.');
+        }
+
         $result = new LastCommonParentResult();
 
         // These lists can be empty.
@@ -138,7 +143,7 @@ abstract class Node
         }
         elseif (count($myParents) > count($otherParents)) {
             // All tags matched but there are tags left in this tree - $other node is not so deeply nested.
-            $result->setIndexInLastCommonParent($myParents[$i - 1].getIndexOf($myParents[$i]));
+            $result->setIndexInLastCommonParent($myParents[$i - 1]->getIndexOf($myParents[$i]));
             $result->setSplittingNeeded();
         }
         else {

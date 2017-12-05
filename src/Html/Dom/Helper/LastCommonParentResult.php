@@ -33,9 +33,9 @@ class LastCommonParentResult
      * @param  TagNode $parent
      * @return self
      */
-    public function setLastCommonParent(TagNode $): self
+    public function setLastCommonParent(TagNode $parent): self
     {
-        $this->parent = $value;
+        $this->parent = $parent;
 
         return $this;
     }

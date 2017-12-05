@@ -446,7 +446,7 @@ class TagNode extends Node implements IteratorAggregate
      */
     public static function isInlineStatic($value): bool
     {
-        return !self::isBlockLevel($value);
+        return !self::isBlockLevelStatic($value);
     }
 
     /**
