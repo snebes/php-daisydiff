@@ -11,8 +11,7 @@
     ],
     "require": {
         "php": ">=7.1.0",
-        "ext-intl": "*",
-        "doctrine/collections": "^1.5"
+        "ext-intl": "*"
     },
     "autoload": {
         "psr-4": {
