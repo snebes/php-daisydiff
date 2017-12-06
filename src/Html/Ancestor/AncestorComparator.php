@@ -4,6 +4,7 @@ namespace DaisyDiff\Html\Ancestor;
 
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
+use DaisyDiff\RangeDifferencer\RangeDifferencer;
 
 /**
  * A comparator used when calculating the difference in ancestry of two Nodes.
@@ -38,7 +39,7 @@ class AncestorComparator implements RangeComparatorInterface
      * @param  int                      $otherIndex
      * @return bool
      */
-    public function rangesEqual(int $thisIndex, RangeComparatorInterface $other, int $otherIndex): int
+    public function rangesEqual(int $thisIndex, RangeComparatorInterface $other, int $otherIndex): bool
     {
         if (!$other instanceof AncestorComparator) {
             return false;
@@ -83,7 +84,7 @@ class AncestorComparator implements RangeComparatorInterface
         $result = new AncestorComparatorResult();
 
         /** @var RangeDifference[] */
-        $differences = RangeDifferencer::findDifferences($other, $this);
+        $differences = RangeDifferencer::findDifferences(null, $other, $this);
 
         if (0 == count($differences)) {
             return $result;

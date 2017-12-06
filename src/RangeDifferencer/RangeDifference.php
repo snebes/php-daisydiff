@@ -13,28 +13,28 @@ namespace DaisyDiff\RangeDifferencer;
  * However, these entity indices and counts are not necessarily character positions. For example, if an entity
  * represents a line in a document, the start index would be a line number and the count would be in lines.
  */
-final class RangeDifference
+class RangeDifference
 {
     /** @var RangeDifferenceType */
     private $fKind;
 
     /** @var float */
-    private $fLeftStart;
+    public $fLeftStart;
 
     /** @var float */
-    private $fLeftLength;
+    protected $fLeftLength;
 
     /** @var float */
-    private $fRightStart;
+    public $fRightStart;
 
     /** @var float */
-    private $fRightLength;
+    protected $fRightLength;
 
     /** @var float */
-    private $lAncestorStart;
+    protected $lAncestorStart;
 
     /** @var float */
-    private $lAncestorLength;
+    protected $lAncestorLength;
 
     /**
      * @param  RangeDifferenceType $kind
@@ -192,6 +192,6 @@ final class RangeDifference
      */
     private function toRangeString(int $start, int $length): string
     {
-        return sprintf('(%d, %d)', $start, $length)
+        return sprintf('(%d, %d)', $start, $length);
     }
 }

@@ -3,7 +3,7 @@
 namespace DaisyDiff\RangeDifferencer;
 
 /**
- * Least Common Somethings.
+ * Least Common Sequence Settings.
  */
 final class LCSSettings
 {

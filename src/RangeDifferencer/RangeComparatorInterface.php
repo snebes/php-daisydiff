@@ -31,7 +31,7 @@ interface RangeComparatorInterface
      * @param  int                      $otherIndex
      * @return bool
      */
-    public function rangesEqual(): bool;
+    public function rangesEqual(int $thisIndex, RangeComparatorInterface $other, int $otherIndex): bool;
 
     /**
      * Returns whether a comparison should be skipped because it would be too costly (or lengthy).

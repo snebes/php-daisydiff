@@ -37,10 +37,14 @@ final class RangeDifferencer
      * @return RangeDifferences[]
      */
     public static function findDifferences(
-        LCSSettings $settings,
+        ?LCSSettings $settings,
         RangeComparatorInterface $left,
         RangeComparatorInterface $right
     ): iterable {
+        if (is_null($settings)) {
+            $settings = new LCSSettings();
+        }
+
         if (!$settings->useGreedyMethod()) {
             return OldDifferencer::findDifferences($left, $right);
         }

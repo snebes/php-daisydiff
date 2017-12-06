@@ -15,4 +15,7 @@ final class RangeDifferenceType
     const LEFT      = 3;
     const ANCESTOR  = 4;
     const ERROR     = 5;
+
+    const INSERT = 0;
+    const DELETE = 1;
 }
