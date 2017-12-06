@@ -2,9 +2,9 @@
 
 namespace DaisyDiff\Html\Dom;
 
-use InvalidArgumentException;
+use DaisyDiff\Html\Modification\Modification;
+use DaisyDiff\Html\Modification\ModificationType;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
 
 /**
  * TextNode Tests.
@@ -36,6 +36,19 @@ class TextNodeTest extends TestCase
 
         $this->assertEquals($textRoot, $textRoot->getLeftMostChild());
         $this->assertEquals($textRoot, $textRoot->getRightMostChild());
+    }
+
+    /**
+     * @covers DaisyDiff\Html\Dom\TextNode::getModification
+     * @covers DaisyDiff\Html\Dom\TextNode::setModification
+     */
+    public function testGetModificationText(): void
+    {
+        $root = new TagNode(null, 'root');
+        $textRoot = new TextNode($root, 'root');
+        $textRoot->setModification(null);
+
+        $this->assertNull($textRoot->getModification());
     }
 
     /**
@@ -76,5 +89,11 @@ class TextNodeTest extends TestCase
         $textIntermediate = new TextNode($root, 'contents of intermediate node');
 
         $this->assertEquals([], $textRoot->getMinimalDeletedSet(0));
+
+        $mod = new Modification(ModificationType::REMOVED, ModificationType::REMOVED);
+        $mod->setId(0);
+        $textIntermediate->setModification($mod);
+
+        $this->assertEquals([$textIntermediate], $textIntermediate->getMinimalDeletedSet(0));
     }
 }

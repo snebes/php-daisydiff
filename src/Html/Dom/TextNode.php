@@ -2,6 +2,9 @@
 
 namespace DaisyDiff\Html\Dom;
 
+use DaisyDiff\Html\Modification\Modification;
+use DaisyDiff\Html\Modification\ModificationType;
+
 /**
  * Represents a piece of text in the HTML file.
  */
@@ -51,12 +54,11 @@ class TextNode extends Node
     {
         $nodes = [];
 
-/*
-        if ($this->getModification()->getType() == ModificationType::REMOVED &&
+        if (!is_null($this->getModification()) &&
+            $this->getModification()->getType() == ModificationType::REMOVED &&
             $this->getModification()->getid() == $id) {
             $nodes = [$this];
         }
-*/
 
         return $nodes;
     }
@@ -100,23 +102,21 @@ class TextNode extends Node
     /**
      * @return Modification
      */
-/*
-    public function getModification(): Modification
+    public function getModification(): ?Modification
     {
         return $this->modification;
     }
-*/
 
     /**
      * @param  Modification $m
      * @return self
      */
-/*
-    public function setModification(Modification $m): self
+    public function setModification(?Modification $m): self
     {
         $this->modification = $m;
+
+        return $this;
     }
-*/
 
     /**
      * @return string

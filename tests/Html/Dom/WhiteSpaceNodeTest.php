@@ -2,9 +2,7 @@
 
 namespace DaisyDiff\Html\Dom;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
 
 /**
  * WhiteSpaceNode Tests.

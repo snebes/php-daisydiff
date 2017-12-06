@@ -1,0 +1,100 @@
+<?php declare(strict_types=1);
+
+namespace DaisyDiff\Html\Ancestor;
+
+use DaisyDiff\Html\Dom\TagNode;
+use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
+
+/**
+ * A comparator used when calculating the difference in ancestry of two Nodes.
+ */
+class AncestorComparator implements RangeComparatorInterface
+{
+    /** @var TagNode[] */
+    private $ancestors = [];
+
+    /** @var string */
+    private $compareTxt = '';
+
+    /**
+     * @param  TagNode[] $ancestors
+     */
+    public function __construct(?array $ancestors)
+    {
+        $this->ancestors = $ancestors ?? [];
+    }
+
+    /**
+     * @return int
+     */
+    public function getRangeCount(): int
+    {
+        return count($this->ancestors);
+    }
+
+    /**
+     * @param  int                      $thisIndex
+     * @param  RangeComparatorInterface $other
+     * @param  int                      $otherIndex
+     * @return bool
+     */
+    public function rangesEqual(int $thisIndex, RangeComparatorInterface $other, int $otherIndex): int
+    {
+        if (!$other instanceof AncestorComparator) {
+            return false;
+        }
+
+        return $other->getAncestor($otherIndex)->isSameTag($this->getAncestor($thisIndex));
+    }
+
+    /**
+     * @param  int                      $length
+     * @param  int                      $maxLength
+     * @param  RangeComparatorInterface $other
+     * @return bool
+     */
+    public function skipRangeComparison(int $length, int $maxLength, RangeComparatorInterface $other): bool
+    {
+        return false;
+    }
+
+    /**
+     * @param  int $i
+     * @return TagNode
+     */
+    public function getAncestor(int $i): ?TagNode
+    {
+        return array_key_exists($i, $this->ancestors)? $this->ancestors[$i] : null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompareTxt(): string
+    {
+        return $this->compareTxt;
+    }
+
+    /**
+     * @return AncestorComparatorResult
+     */
+    public function getResult(AncestorComparator $other): AncestorComparatorResult
+    {
+        $result = new AncestorComparatorResult();
+
+        /** @var RangeDifference[] */
+        $differences = RangeDifferencer::findDifferences($other, $this);
+
+        if (0 == count($differences)) {
+            return $result;
+        }
+
+        $changeTxt = new ChangeTextGenerator($this, $other);
+
+        $result->setChanged(true);
+        $result->setChanges(strval($changeTxt->getChanged($differences)));
+        $result->setHtmlLayoutChanges($changeTxt->getHtmlLayoutChanges());
+
+        return $result;
+    }
+}

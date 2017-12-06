@@ -25,7 +25,10 @@ class Modification
     /** @var bool */
     private $firstOfId = false;
 
-    /** @var array */
+    /** @var string */
+    private $changes;
+
+    /** @var string[] */
     private $htmlLayoutChanges;
 
     /**
@@ -41,9 +44,23 @@ class Modification
     /**
      * @return ModificationType
      */
-    public function getType(): int
+    public function getType(): string
     {
         return $this->type;
+    }
+
+    /**
+     * Returns the type of this modification regarding output formatting (i.e. in order to specify how this modification
+     * shall be formatted).
+     *
+     * In three-way diffs we format "ADDED" modifications as REMOVED, and the other way round, because the comparison is
+     * reversed, compared to a two-way diff.
+     *
+     * @return ModificationType
+     */
+    public function getOutputType(): string
+    {
+        return $this->outputType;
     }
 
     /**
@@ -58,47 +75,9 @@ class Modification
      * @param  int $id
      * @return self
      */
-    public function setId(?int $id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFirstOfId(): bool
-    {
-        return $this->firstOfId;
-    }
-
-    /**
-     * @param  bool $value
-     * @return self
-     */
-    public function setFirstOfId(bool $value): self
-    {
-        $this->firstOfId = $value;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getChanges(): string
-    {
-        return $this->changes;
-    }
-
-    /**
-     * @param  string $changes
-     * @return self
-     */
-    public function setChanges(?string $changes): self
-    {
-        $this->changes = $changes;
 
         return $this;
     }
@@ -137,6 +116,63 @@ class Modification
     public function setNext(?Modification $mod): self
     {
         $this->nextMod = $mod;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getChanges(): ?string
+    {
+        return $this->changes;
+    }
+
+    /**
+     * @param  string $changes
+     * @return self
+     */
+    public function setChanges(?string $changes): self
+    {
+        $this->changes = $changes;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFirstOfId(): bool
+    {
+        return $this->firstOfId;
+    }
+
+    /**
+     * @param  bool $value
+     * @return self
+     */
+    public function setFirstOfId(bool $value): self
+    {
+        $this->firstOfId = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getHtmlLayoutChanges(): ?iterable
+    {
+        return $this->htmlLayoutChanges;
+    }
+
+    /**
+     * @param  string[] $htmlLayoutChanges
+     * @return self
+     */
+    public function setHtmlLayoutChanges(array $htmlLayoutChanges): self
+    {
+        $this->htmlLayoutChanges = $htmlLayoutChanges;
 
         return $this;
     }

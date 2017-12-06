@@ -282,7 +282,7 @@ class TagNode extends Node implements IteratorAggregate
 
         foreach ($this->children as $child) {
             $childrenChildren = $child->getMinimalDeletedSet($id);
-            $nodes = $nodes + $childrenChildren;
+            $nodes = array_merge($nodes, $childrenChildren);
 
             if (!$hasNotDeletedDescendant &&
                 !(1 == count($childrenChildren) && in_array($child, $childrenChildren, true))) {

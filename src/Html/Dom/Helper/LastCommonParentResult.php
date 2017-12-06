@@ -33,7 +33,7 @@ class LastCommonParentResult
      * @param  TagNode $parent
      * @return self
      */
-    public function setLastCommonParent(TagNode $parent): self
+    public function setLastCommonParent(?TagNode $parent): self
     {
         $this->parent = $parent;
 

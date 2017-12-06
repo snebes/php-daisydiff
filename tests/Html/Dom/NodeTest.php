@@ -86,6 +86,7 @@ class NodeTest extends TestCase
         $this->assertEquals($parent, $leafNode->getLastCommonParent($intermediate)->getLastCommonParent());
         $this->assertEquals($root, $leaf2->getLastCommonParent($middle)->getLastCommonParent());
         $this->assertEquals($parent, $leafNode->getLastCommonParent($leaf2)->getLastCommonParent());
+        $this->assertEquals($root, $intermediate->getLastCommonParent($leafNode)->getLastCommonParent());
     }
 
     /**
@@ -151,5 +152,17 @@ class NodeTest extends TestCase
         $this->assertTrue($intermediate->isWhiteBefore());
         $root->setWhiteAfter(true);
         $this->assertTrue($root->isWhiteAfter());
+    }
+
+    /**
+     * @covers DaisyDiff\Html\Dom\Node::detectIgnorableWhiteSpace
+     */
+    public function testDetectIgnorableWhiteSpace(): void
+    {
+        $root = new TagNode(null, 'root');
+        $root->detectIgnorableWhiteSpace();
+
+        // Noop, fake it!
+        $this->assertTrue(true);
     }
 }
