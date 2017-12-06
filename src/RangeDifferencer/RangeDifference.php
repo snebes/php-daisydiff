@@ -22,19 +22,19 @@ class RangeDifference
     public $fLeftStart;
 
     /** @var float */
-    protected $fLeftLength;
+    public $fLeftLength;
 
     /** @var float */
     public $fRightStart;
 
     /** @var float */
-    protected $fRightLength;
+    public $fRightLength;
 
     /** @var float */
-    protected $lAncestorStart;
+    public $lAncestorStart;
 
     /** @var float */
-    protected $lAncestorLength;
+    public $lAncestorLength;
 
     /**
      * @param  RangeDifferenceType $kind
@@ -161,7 +161,7 @@ class RangeDifference
             $this->fKind == $other->kind() &&
             $this->fLeftStart == $other->leftStart() &&
             $this->fLeftLength == $other->leftLength() &&
-            $this->fRigthStart == $other->rightStart() &&
+            $this->fRightStart == $other->rightStart() &&
             $this->fRightLength == $other->rightLength() &&
             $this->lAncestorStart == $other->ancestorStart() &&
             $this->lAncestorLength == $other->ancestorLength()

@@ -12,15 +12,11 @@ use SplFixedArray;
  */
 final class OldDifferencer
 {
-    /** @var RangeDifference[] */
-    private static $EMPTY_RESULT;
-
     /**
      * Prevent class instantiation.
      */
     private function __construct()
     {
-        static::$EMPTY_RESULT = new SplFixedArray(0);
     }
 
     /**
@@ -36,8 +32,8 @@ final class OldDifferencer
         // Assert that both RangeComparatorInterface are of the same class.
         assert(get_class($left) == get_class($right));
 
-        $rightSize = count($right);
-        $leftSize  = count($left);
+        $rightSize = $right->getRangeCount();
+        $leftSize  = $left->getRangeCount();
 
         // Differences matrix:
         // Only the last d of each diagonal is stored, i.e., $lastDiagonal[$k] = row of d
@@ -56,8 +52,7 @@ final class OldDifferencer
         $row = $col = 0;
 
         // Find common prefix.
-        for ($row = 0; $row < $rightSize && $row < $leftSize &&
-            true === self::rangesEqual($right, $row, $left, $row);) {
+        for (; $row < $rightSize && $row < $leftSize && self::rangesEqual($right, $row, $left, $row);) {
             $row++;
         }
 
@@ -68,15 +63,18 @@ final class OldDifferencer
         $upper = ($row == $leftSize)?  $origin - 1 : $origin + 1;
 
         if ($lower > $upper) {
-            return static::$EMPTY_RESULT;
+            return [];
         }
 
         // For each value of the edit distance.
         for ($d = 1; $d <= $maxDiagonal; $d++) {
+            if ($d > 4) {
+                die;
+            }
             // $d is the current edit distance.
 
             if ($right->skipRangeComparison($d, $maxDiagonal, $left)) {
-                return static::$EMPTY_RESULT;
+                return [];
             }
 
             // For each relevant diagonal (-d, -d+2, ... d-2, d)
@@ -87,11 +85,11 @@ final class OldDifferencer
                 if ($k == $origin - $d || $k != $origin + $d && $lastDiagonal[$k + 1] >= $lastDiagonal[$k - 1]) {
                     // Move down.
                     $row  = $lastDiagonal[$k + 1] + 1;
-                    $edit = new LinkedRangeDifference($script[$k + 1], RangeDifferenceType::DELETE);
+                    $edit = new LinkedRangeDifference($script[$k + 1], LinkedRangeDifference::DELETE);
                 } else {
                     // Move right.
                     $row  = $lastDiagonal[$k - 1];
-                    $edit = new LinkedRangeDifference($script[$k - 1], RangeDifferenceType::INSERT);
+                    $edit = new LinkedRangeDifference($script[$k - 1], LinkedRangeDifference::INSERT);
                 }
 
                 $col = $row + $k - $origin;
@@ -109,8 +107,7 @@ final class OldDifferencer
                 $script[$k] = $edit;
 
                 // Slide down the diagonal as far as possible.
-                while ($row < $rightSize && $col < $leftSize &&
-                    true === self::rangesEqual($right, $row, $left, $col)) {
+                while ($row < $rightSize && $col < $leftSize && self::rangesEqual($right, $row, $left, $col)) {
                     $row++;
                     $col++;
                 }
@@ -171,19 +168,29 @@ final class OldDifferencer
     {
         $ep = self::reverseDifferences($start);
         $result = [];
-        $es = null;
 
         while (!is_null($ep)) {
             $es = new RangeDifference(RangeDifferenceType::CHANGE);
 
             if ($ep->isInsert()) {
                 $es->fRightStart = $ep->fRightStart + 1;
-                $es->fLeftStart  = $ep->fLeftStart;
+                $es->fLeftStart = $ep->fLeftStart;
                 $b = $ep;
 
                 do {
                     $ep = $ep->getNext();
-                    $es->fLeftLength--;
+                    $es->fLeftLength++;
+                } while (!is_null($ep) && $ep->isInsert() && $ep->fRightStart == $b->fRightStart);
+            } else {
+                $es->fRightStart = $ep->fRightStart;
+                $es->fLeftStart  = $ep->fLeftStart;
+                $a = $ep;
+
+                // Deleted lines.
+                do {
+                    $a  = $ep;
+                    $ep = $ep->getNext();
+                    $es->fRightLength++;
                 } while (!is_null($ep) && $ep->isDelete() && $ep->fRightStart == $a->fRightStart + 1);
 
                 $change = (!is_null($ep) && $ep->isInsert() && $ep->fRightStart == $a->fRightStart);
@@ -216,16 +223,22 @@ final class OldDifferencer
      * Reverses the range differences.
      *
      * @param  LinkedRangeDifference $start
-     * @return iterable
+     * @return LinkedRangeDifference
      */
     private static function reverseDifferences(LinkedRangeDifference $start): LinkedRangeDifference
     {
         $ahead = $start;
         $ep = null;
 
-        while ($ahead != null) {
+        while (!is_null($ahead)) {
+//            unset($behind);
             $behind = $ep;
+
+//            unset($ep);
             $ep = $ahead;
+
+//            unset($ahead);
+//            $ahead = $ep->getNext();
             $ahead = $ahead->getNext();
             $ep->setNext($behind);
         }

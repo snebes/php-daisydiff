@@ -129,23 +129,21 @@ class TextNodeComparatorTest extends TestCase
         $this->assertFalse($comp->skipRangeComparison(0, 1, $comp));
     }
 
-/*
-    public function testHandlePossibleChangedPart(): void
-    {
-        $tree = new DomTreeBuilder();
-        $comp = new TextNodeComparator($tree);
-        $textNodes = $this->getTextNodes($comp);
-
-        $lastModified = $comp->getLastModified();
-        $m = new Modification(ModificationType::CONFLICT, ModificationType::CONFLICT);
-        $lastModified[] = $m;
-        $comp->setLastModified($lastModified);
-
-        $comp->handlePossibleChangedPart(0, 1, 1, 2, $comp);
-
-        $this->assertEquals('conflict', strval($lastModified[0]->getOutputType()));
-    }
-*/
+//    public function testHandlePossibleChangedPart(): void
+//    {
+//        $tree = new DomTreeBuilder();
+//        $comp = new TextNodeComparator($tree);
+//        $textNodes = $this->getTextNodes($comp);
+//
+//        $lastModified = $comp->getLastModified();
+//        $m = new Modification(ModificationType::CONFLICT, ModificationType::CONFLICT);
+//        $lastModified[] = $m;
+//        $comp->setLastModified($lastModified);
+//
+//        $comp->handlePossibleChangedPart(0, 1, 1, 2, $comp);
+//
+//        $this->assertEquals('conflict', strval($lastModified[0]->getOutputType()));
+//    }
 
     public function testMarkAsDeletedExample1(): void
     {

@@ -77,6 +77,7 @@ class AncestorComparator implements RangeComparatorInterface
     }
 
     /**
+     * @param  AncestorComparator $other
      * @return AncestorComparatorResult
      */
     public function getResult(AncestorComparator $other): AncestorComparatorResult

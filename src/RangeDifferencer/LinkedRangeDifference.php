@@ -4,6 +4,9 @@ namespace DaisyDiff\RangeDifferencer;
 
 class LinkedRangeDifference extends RangeDifference
 {
+    const INSERT = 0;
+    const DELETE = 1;
+
     /** @var LinkedRangeDifference */
     private $fNext;
 
@@ -22,12 +25,12 @@ class LinkedRangeDifference extends RangeDifference
 
     public function isDelete(): bool
     {
-        return $this->kind() == RangeDifferenceType::DELETE;
+        return $this->kind() == self::DELETE;
     }
 
     public function isInsert(): bool
     {
-        return $this->kind() == RangeDifferenceType::INSERT;
+        return $this->kind() == self::INSERT;
     }
 
     public function setNext(?RangeDifference $next): void

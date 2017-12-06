@@ -158,10 +158,10 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
      * @return void
      */
     public function handlePossibleChangedPart(
-        int $leftStart,
-        int $leftEnd,
-        int $rightStart,
-        int $rightEnd,
+        int $leftStart = 0,
+        int $leftEnd = 0,
+        int $rightStart = 0,
+        int $rightEnd = 0,
         TextNodeComparator $leftComparator
     ): void {
         $i = $rightStart;
@@ -212,12 +212,13 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                 }
 
                 $nextLastModified[] = $mod;
+
                 $mod->setChanges($result->getChanges());
                 $mod->setHtmlLayoutChanges($result->getHtmlLayoutChanges());
                 $mod->setId($this->changedId);
 
                 $this->getTextNode($i)->setModification($mod);
-                $this->changes = $result->getChanges();
+                $changes = $result->getChanges();
                 $this->changedIdUsed = true;
             }
             elseif ($this->changedIdUsed) {
@@ -389,12 +390,10 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                     $prevLeaf->getParent()->splitUntil($prevResult->getLastCommonParent(), $prevLeaf, true);
                 }
 
-                $prevLeaf = $deletedNodes[0]->copyTree();
+                // array_shift removes first array element, and returns it.
+                $prevLeaf = array_shift($deletedNodes)->copyTree();
                 $prevLeaf->setParent($prevResult->getLastCommonParent());
                 $prevResult->getLastCommonParent()->addChild($prevLeaf, $prevResult->getIndexInLastCommonParent() + 1);
-
-                // Remove $deletedNodes[0], reinded array.
-                array_splice($deletedNodes, 0, 1);
             }
             elseif ($prevResult->getLastCommonParentDepth() < $nextResult->getLastCommonParentDepth()) {
                 // Inserting at the back.
@@ -408,13 +407,10 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                     }
                 }
 
-                $lastPos  = count($deletedNodes) - 1;
-                $nextLeaf = $deletedNodes[$lastPos]->copyTree();
+                // array_pop removes last array element, and returns it.
+                $nextLeaf = array_pop($deletedNodes)->copyTree();
                 $nextLeaf->setParent($nextResult->getLastCommonParent());
                 $nextResult->getLastCommonParent()->addChild($nextLeaf, $nextResult->getIndexInLastCommonParent());
-
-                // Remove $deletedNodes[$lastPos], reinded array.
-                array_splice($deletedNodes, $lastPos, 1);
             }
             else {
                 throw new RuntimeException();
