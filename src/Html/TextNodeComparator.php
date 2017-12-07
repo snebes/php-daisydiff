@@ -13,6 +13,7 @@ use DaisyDiff\Html\Modification\Modification;
 use DaisyDiff\Html\Modification\ModificationType;
 use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
 use IteratorAggregate;
+use RuntimeException;
 
 /**
  * A comparator that generates a DOM tree of sorts from handling SAX events. Then it can be used to compute the
@@ -191,7 +192,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                         $nextLastModified = [];
                     }
                 }
-                elseif (!is_null($result->getChanges()) && !$result->getChanges()->equals($changes)) {
+                elseif (!is_null($result->getChanges()) && !$result->getChanges() == $changes) {
                     $this->changedId++;
                     $mod->setFirstOfId(true);
 
@@ -367,7 +368,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                 if ($deletedNodes[0]->getParent() == $deletedNodes[count($deletedNodes) - 1]->getParent() &&
                     $prevResult->getLastCommonParent() === $nextResult->getLastCommonParent()) {
                     // The difference is not in the parent.
-                    $prevResult->setLastCommonParentDepth($prevResult->setLastCommonParentDepth() + 1);
+                    $prevResult->setLastCommonParentDepth($prevResult->getLastCommonParentDepth() + 1);
                 } else {
                     // The difference is in the parent, so compare them. now THIS is tricky.
                     $distancePrev = $deletedNodes[0]->getParent()->getMatchRatio($prevResult->getLastCommonParent());

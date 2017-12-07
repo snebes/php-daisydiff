@@ -30,7 +30,7 @@ final class OldDifferencer
     public static function findDifferences(RangeComparatorInterface $left, RangeComparatorInterface $right): ?iterable
     {
         // Assert that both RangeComparatorInterface are of the same class.
-        assert(get_class($left) == get_class($right));
+        assert(get_class($right) == get_class($left));
 
         $rightSize = $right->getRangeCount();
         $leftSize  = $left->getRangeCount();
@@ -44,7 +44,7 @@ final class OldDifferencer
         $lastDiagonal = new SplFixedArray($diagLen + 1);
 
         // On diagonal $k ($lastDiagonal[$k] = $row
-        $origin = $diagLen / 2;
+        $origin = (int) round($diagLen / 2, 0);
 
         // Script corresponding to $d[$k]
         /** @var LinkedRangeDifference */
@@ -68,9 +68,6 @@ final class OldDifferencer
 
         // For each value of the edit distance.
         for ($d = 1; $d <= $maxDiagonal; $d++) {
-            if ($d > 4) {
-                die;
-            }
             // $d is the current edit distance.
 
             if ($right->skipRangeComparison($d, $maxDiagonal, $left)) {
@@ -80,7 +77,7 @@ final class OldDifferencer
             // For each relevant diagonal (-d, -d+2, ... d-2, d)
             for ($k = $lower; $k <= $upper; $k += 2) {
                 // $k is the current diagonal.
-                $edit = null;
+                unset($edit);
 
                 if ($k == $origin - $d || $k != $origin + $d && $lastDiagonal[$k + 1] >= $lastDiagonal[$k - 1]) {
                     // Move down.
@@ -93,15 +90,8 @@ final class OldDifferencer
                 }
 
                 $col = $row + $k - $origin;
-
-                // Set values by reflection.
-                $refProp = new ReflectionProperty($edit, 'fRightStart');
-                $refProp->setAccessible(true);
-                $refProp->setValue($edit, $row);
-
-                $refProp = new ReflectionProperty($edit, 'fLeftStart');
-                $refProp->setAccessible(true);
-                $refProp->setValue($edit, $col);
+                $edit->fRightStart = $row;
+                $edit->fLeftStart  = $col;
 
                 assert($k >= 0 && $k <= $maxDiagonal);
                 $script[$k] = $edit;

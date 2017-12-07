@@ -3,6 +3,7 @@
 namespace DaisyDiff\Html\Dom;
 
 use ArrayIterator;
+use DaisyDiff\Xml\Xml;
 use InvalidArgumentException;
 use IteratorAggregate;
 use OutOfBoundsException;
@@ -230,15 +231,7 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function getOpeningTag(): string
     {
-        $s = '<' . $this->getQName();
-
-        foreach ($this->getAttributes() as $qName => $value) {
-            $s .= sprintf(' %s="%s"', $qName, $value);
-        }
-
-        $s .= '>';
-
-        return $s;
+        return Xml::openElement($this->getQName(), $this->getAttributes());
     }
 
     /**
@@ -248,7 +241,7 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function getClosingTag(): string
     {
-        return sprintf('</%s>', $this->getQName());
+        return Xml::closeElement($this->getQName());
     }
 
     /**
@@ -286,12 +279,12 @@ class TagNode extends Node implements IteratorAggregate
 
             if (!$hasNotDeletedDescendant &&
                 !(1 == count($childrenChildren) && in_array($child, $childrenChildren, true))) {
-                $hasNotDeletedDescendan = true;
+                $hasNotDeletedDescendant = true;
             }
         }
 
         // If all children are in the deleted set, remove them and put $this instead.
-        if (!$hasNotDeletedDescendan) {
+        if (!$hasNotDeletedDescendant) {
             $nodes = [$this];
         }
 

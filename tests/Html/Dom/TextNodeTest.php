@@ -48,7 +48,7 @@ class TextNodeTest extends TestCase
         $textRoot = new TextNode($root, 'root');
         $textRoot->setModification(null);
 
-        $this->assertNull($textRoot->getModification());
+        $this->assertEquals(ModificationType::NONE, $textRoot->getModification()->getType());
     }
 
     /**

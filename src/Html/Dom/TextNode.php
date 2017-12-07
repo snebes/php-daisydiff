@@ -24,7 +24,6 @@ class TextNode extends Node
     {
         parent::__construct($parent);
 
-        $this->modification = null;
         $this->s = $s;
     }
 
@@ -102,8 +101,12 @@ class TextNode extends Node
     /**
      * @return Modification
      */
-    public function getModification(): ?Modification
+    public function getModification(): Modification
     {
+        if (!$this->modification instanceof Modification) {
+            $this->modification = new Modification(ModificationType::NONE, ModificationType::NONE);
+        }
+
         return $this->modification;
     }
 
