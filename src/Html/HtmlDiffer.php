@@ -131,7 +131,7 @@ class HtmlDiffer
         }
 
         if (($numbers[0] == 0 && $numbers[1] == 0) || ($numbers[2] == 0 && $numbers[3] == 0)) {
-            return 0;
+            return floatval(0);
         }
 
         $d = 0;
@@ -146,6 +146,6 @@ class HtmlDiffer
             $d += $number;
         }
 
-        return $d / (1.5 * count($numbers));
+        return floatval($d / (1.5 * count($numbers)));
     }
 }
