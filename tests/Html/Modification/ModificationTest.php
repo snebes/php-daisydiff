@@ -66,7 +66,7 @@ class ModificationTest extends TestCase
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);
         $changes = '<b>UIC</b>';
 
-        $this->assertNull($newM->getChanges());
+        $this->assertEmpty($newM->getChanges());
 
         $newM->setChanges($changes);
         $this->assertEquals($changes, $newM->getChanges());

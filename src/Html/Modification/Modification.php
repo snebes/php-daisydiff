@@ -123,9 +123,9 @@ class Modification
     /**
      * @return string
      */
-    public function getChanges(): ?string
+    public function getChanges(): string
     {
-        return $this->changes;
+        return $this->changes ?? '';
     }
 
     /**
