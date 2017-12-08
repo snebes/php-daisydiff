@@ -301,6 +301,9 @@ class TagNodeTest extends TestCase
         $this->assertEquals($root, $root->copyTree());
     }
 
+    /**
+     * @group incomplete
+     */
     public function testGetMatchRatio(): void
     {
         // Uses non-implemented RangeDifferencer methods.

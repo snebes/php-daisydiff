@@ -19,12 +19,12 @@ use StdClass;
  */
 class LongHtmlTest extends TestCase
 {
-    public function longHtml1(): void
+    public function testlongHtml1(): void
     {
         $oldText = '<html> <body> <A HREF="../../javax/realtime/AsyncEventHandler.html#AsyncEventHandler(javax.realtime.SchedulingParameter, b)">AsyncEventHandler</A> </body> </html>';
         $newText = '<html> <body> <A HREF="../../javax/realtime/BsyncEventHandler.html#AsyncEventHandler(javax.realtime.SchedulingParameter, b)">AsyncEventHandler</A> </body> </html>';
 
-        $result = HtmlTextFixture::diff($oldText, $newText);
+        $result = HtmlTestFixture::diff($oldText, $newText);
 
         $this->assertContains('diff-html-changed', $result);
     }

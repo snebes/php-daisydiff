@@ -35,6 +35,9 @@ class ChangeTextGeneratorTest extends TestCase
         $this->assertEquals(ChangeTextGenerator::class, get_class($textGenerator));
     }
 
+    /**
+     * @group incomplete
+     */
     public function testGetChanged(): void
     {
         $root = new TagNode(null, 'root');

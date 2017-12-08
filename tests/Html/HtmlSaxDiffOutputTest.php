@@ -401,26 +401,4 @@ class HtmlSaxDiffOutputTest extends TestCase
         $this->assertTrue(array_key_exists('changeId', $result));
         $this->assertTrue(array_key_exists('next', $result));
     }
-
-    public function testWriteImageExample1(): void
-    {
-        $attrs = ['src' => 'diff-tag-html'];
-
-        $html = new TagNode(null, 'html');
-        $textImage = new ImageNode($html, $attrs);
-
-        $m = new Modification(ModificationType::ADDED, ModificationType::ADDED);
-        $textImage->setModification($m);
-        $html->addChild($textImage);
-
-        $output = $this->getOutput();
-        $result = $this->executeMethod($output, 'writeImage', [$textImage]);
-
-        $attrs = $result->getAttributes();
-
-/*
-        $this->assertTrue(array_key_exists('class', $attrs));
-        $this->assertEquals('diff-added-image', $attrs['class']);
-*/
-    }
 }
