@@ -17,6 +17,8 @@ use RuntimeException;
  *
  * The algorithm used is an objectified version of one described in: A File Comparison Program, by Webb Miller and
  * Eugene W. Myers, Software Practice and Experience, Vol. 15, Nov. 1985.
+ *
+ * @codeCoverageIgnore
  */
 final class RangeDifferencer
 {
