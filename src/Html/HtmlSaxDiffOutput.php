@@ -197,7 +197,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
     {
         if ($mod->getOutputType() == ModificationType::CHANGED) {
             $changes = $mod->getChanges();
-            $attrs['changes'] = $changes;
+            $attrs['changes'] = htmlspecialchars($changes);
         }
 
         // Add previous changes.
