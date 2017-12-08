@@ -51,7 +51,7 @@ final class RangeDifferencer
             return OldDifferencer::findDifferences($left, $right);
         }
 
-        throw new RuntimeException('This is not implemented.');
+        return RangeComparatorLCS::findDifferences($settings, $left, $right);
     }
 
     /**

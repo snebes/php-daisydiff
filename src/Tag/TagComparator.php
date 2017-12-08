@@ -13,7 +13,7 @@ use RuntimeException;
 class TagComparator implements AtomSplitterInterface
 {
     /** @var AtomInterface[] */
-    private $atoms;
+    private $atoms = [];
 
     /**
      * @param  string $s
@@ -28,7 +28,7 @@ class TagComparator implements AtomSplitterInterface
      */
     public function getAtoms(): iterable
     {
-        return $this->atoms ?? [];
+        return $this->atoms;
     }
 
     /**
@@ -132,7 +132,7 @@ class TagComparator implements AtomSplitterInterface
     public function rangesEqual(int $thisIndex, RangeComparatorInterface $other, int $otherIndex): bool
     {
         if (!$other instanceof TagComparator) {
-            return false;
+            return false; // @codeCoverageIgnore
         }
 
         return $other->getAtom($otherIndex)->equalsIdentifier($this->getAtom($thisIndex));
