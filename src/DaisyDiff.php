@@ -27,38 +27,14 @@ class DaisyDiff
         // Parse $old XML.
         $oldHandler = new DomTreeBuilder();
         $oldHandler->startDocument();
-        $oldXml = sprintf('<?xml version="1.0" encoding="UTF-8"?><body>%s</body>', $old);
-
-        $xmlParser = xml_parser_create('UTF-8');
-        xml_set_element_handler($xmlParser, [$oldHandler, 'startElement'], [$oldHandler, 'endElement']);
-        xml_set_character_data_handler($xmlParser, [$oldHandler, 'characters']);
-
-        if (!xml_parse($xmlParser, $oldXml, true)) {
-            $error = xml_error_string(xml_get_error_code($xmlParser));
-            $line  = xml_get_current_line_number($xmlParser);
-
-            throw new Exception("XML Error: {$error} at line {$line}\n");
-        }
-
-        xml_parser_free($xmlParser);
+        $sax1 = new SAXReader($oldHandler);
+        $sax1->parse($old);
 
         // Parse $new XML.
         $newHandler = new DomTreeBuilder();
         $newHandler->startDocument();
-        $newXml = sprintf('<?xml version="1.0" encoding="UTF-8"?><body>%s</body>', $new);
-
-        $xmlParser = xml_parser_create('UTF-8');
-        xml_set_element_handler($xmlParser, [$newHandler, 'startElement'], [$newHandler, 'endElement']);
-        xml_set_character_data_handler($xmlParser, [$newHandler, 'characters']);
-
-        if (!xml_parse($xmlParser, $newXml, true)) {
-            $error = xml_error_string(xml_get_error_code($xmlParser));
-            $line  = xml_get_current_line_number($xmlParser);
-
-            throw new Exception("XML Error: {$error} at line {$line}\n");
-        }
-
-        xml_parser_free($xmlParser);
+        $sax2 = new SAXReader($newHandler);
+        $sax2->parse($new);
 
         // Diff.
         $leftComparator  = new TextNodeComparator($oldHandler);
