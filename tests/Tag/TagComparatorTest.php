@@ -47,7 +47,7 @@ class TagComparatorTest extends TestCase
         try {
             $comparator->getAtom(20);
         } catch (OutOfBoundsException $e) {
-            $this->assertEquals('There is no Atom with index 20.', $e->getMessage());
+            $this->assertEquals('Index: 20, Size: 12', $e->getMessage());
             throw $e;
         }
     }
@@ -63,7 +63,7 @@ class TagComparatorTest extends TestCase
         try {
             $comparator->getAtom(-1);
         } catch (OutOfBoundsException $e) {
-            $this->assertEquals('There is no Atom with index -1.', $e->getMessage());
+            $this->assertEquals('Index: -1, Size: 12', $e->getMessage());
             throw $e;
         }
     }

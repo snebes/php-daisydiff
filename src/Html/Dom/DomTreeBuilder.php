@@ -271,6 +271,7 @@ final class DomTreeBuilder
 
         // Don't add multiple separators.
         $count = count($this->textNodes);
+
         if ($this->textNodes[$count - 1] instanceof SeparatingNode) {
             return;
         }

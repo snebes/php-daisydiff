@@ -12,10 +12,6 @@ use ReflectionMethod;
  */
 class LastCommonParentResultTest extends TestCase
 {
-    /**
-     * @covers DaisyDiff\Html\Dom\Helper\LastCommonParentResult::getLastCommonParent
-     * @covers DaisyDiff\Html\Dom\Helper\LastCommonParentResult::setLastCommonParent
-     */
     public function testSetLastCommonParent(): void
     {
         $root = new TagNode(null, 'root');
@@ -28,10 +24,6 @@ class LastCommonParentResultTest extends TestCase
         $this->assertNull($common->getLastCommonParent());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\Helper\LastCommonParentResult::isSplittingNeeded
-     * @covers DaisyDiff\Html\Dom\Helper\LastCommonParentResult::setSplittingNeeded
-     */
     public function testIsSplittingNeeded(): void
     {
         $common = new LastCommonParentResult();
@@ -41,10 +33,6 @@ class LastCommonParentResultTest extends TestCase
         $this->assertTrue($common->isSplittingNeeded());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\Helper\LastCommonParentResult::getLastCommonParentDepth
-     * @covers DaisyDiff\Html\Dom\Helper\LastCommonParentResult::setLastCommonParentDepth
-     */
     public function testLastCommonParentDepth(): void
     {
         $common = new LastCommonParentResult();
@@ -54,10 +42,6 @@ class LastCommonParentResultTest extends TestCase
         $this->assertEquals(2, $common->getLastCommonParentDepth());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\Helper\LastCommonParentResult::getIndexInLastCommonParent
-     * @covers DaisyDiff\Html\Dom\Helper\LastCommonParentResult::setIndexInLastCommonParent
-     */
     public function testIndexInLastCommonParentDepth(): void
     {
         $common = new LastCommonParentResult();

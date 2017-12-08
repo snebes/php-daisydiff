@@ -8,21 +8,9 @@ use RuntimeException;
 
 /**
  * DomTreeBuilder Tests.
- *
- * @covers DaisyDiff\Html\Dom\DomTreeBuilder::__construct
- * @covers DaisyDiff\Html\Dom\DomTreeBuilder::endWord
- * @covers DaisyDiff\Html\Dom\DomTreeBuilder::isSeparatingTag
- * @covers DaisyDiff\Html\Dom\DomTreeBuilder::addSeparatorNode
- * @covers DaisyDiff\Html\Dom\DomTreeBuilder::isDelimiter
  */
 class DomTreeBuilderTest extends TestCase
 {
-    /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::isDocumentStarted
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::startDocument
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::getBodyNode
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::getTextNodes
-     */
     public function testStartDocument(): void
     {
         $tree = new DomTreeBuilder();
@@ -37,7 +25,6 @@ class DomTreeBuilderTest extends TestCase
     }
 
     /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::startDocument
      * @expectedException RuntimeException
      */
     public function testStartDocumentException(): void
@@ -54,10 +41,6 @@ class DomTreeBuilderTest extends TestCase
         }
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::isDocumentEnded
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::endDocument
-     */
     public function testEndDocument(): void
     {
         $tree = new DomTreeBuilder();
@@ -73,7 +56,6 @@ class DomTreeBuilderTest extends TestCase
     }
 
     /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::endDocument
      * @expectedException RuntimeException
      */
     public function testEndDocumentException1(): void
@@ -89,7 +71,6 @@ class DomTreeBuilderTest extends TestCase
     }
 
     /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::endDocument
      * @expectedException RuntimeException
      */
     public function testEndDocumentException2(): void
@@ -106,9 +87,6 @@ class DomTreeBuilderTest extends TestCase
         }
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::startElement
-     */
     public function testStartElementExample1(): void
     {
         $attrs = ['class' => 'diff'];
@@ -121,9 +99,6 @@ class DomTreeBuilderTest extends TestCase
         $this->assertEquals('<p class="diff">', strval($tree->getBodyNode()->getChild(0)));
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::startElement
-     */
     public function testStartElementExample2(): void
     {
         $attrs = ['class' => 'diff'];
@@ -137,9 +112,6 @@ class DomTreeBuilderTest extends TestCase
         $this->assertEquals(0, strval($tree->getBodyNode()->getNumChildren()));
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::startElement
-     */
     public function testStartElementExample3(): void
     {
         $attrs = ['class' => 'diff'];
@@ -153,9 +125,6 @@ class DomTreeBuilderTest extends TestCase
         $this->assertEquals(0, strval($tree->getBodyNode()->getNumChildren()));
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::startElement
-     */
     public function testStartElementExample4(): void
     {
         $attrs = ['class' => 'diff'];
@@ -170,7 +139,6 @@ class DomTreeBuilderTest extends TestCase
     }
 
     /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::startElement
      * @expectedException RuntimeException
      */
     public function testStartElementExample5(): void
@@ -190,7 +158,6 @@ class DomTreeBuilderTest extends TestCase
     }
 
     /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::startElement
      * @expectedException RuntimeException
      */
     public function testStartElementExample6(): void
@@ -212,9 +179,6 @@ class DomTreeBuilderTest extends TestCase
         }
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::startElement
-     */
     public function testStartElementExample7(): void
     {
         $attrs = ['class' => 'diff'];
@@ -226,9 +190,6 @@ class DomTreeBuilderTest extends TestCase
         $this->assertEquals('<body>', strval($tree->getBodyNode()));
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::startElement
-     */
     public function testStartElementExample8(): void
     {
         $attrs = ['class' => 'diff'];
@@ -241,9 +202,6 @@ class DomTreeBuilderTest extends TestCase
         $this->assertEquals('<pre class="diff">', strval($tree->getBodyNode()->getChild(0)));
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::endElement
-     */
     public function testEndElementExample1(): void
     {
         $attrs = ['class' => 'diff'];
@@ -259,9 +217,6 @@ class DomTreeBuilderTest extends TestCase
         $this->assertEquals(0, $tree->getBodyNode()->getNumChildren());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::endElement
-     */
     public function testEndElementExample2(): void
     {
         $attrs = ['class' => 'diff'];
@@ -277,9 +232,6 @@ class DomTreeBuilderTest extends TestCase
         $this->assertEquals(0, $tree->getBodyNode()->getNumChildren());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::endElement
-     */
     public function testEndElementExample3(): void
     {
         $attrs = ['class' => 'diff'];
@@ -296,7 +248,6 @@ class DomTreeBuilderTest extends TestCase
     }
 
     /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::endElement
      * @expectedException RuntimeException
      */
     public function testEndElementExample4(): void
@@ -316,7 +267,6 @@ class DomTreeBuilderTest extends TestCase
     }
 
     /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::endElement
      * @expectedException RuntimeException
      */
     public function testEndElementExample5(): void
@@ -338,9 +288,6 @@ class DomTreeBuilderTest extends TestCase
         }
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::endElement
-     */
     public function testEndElementExample6(): void
     {
         $attrs = ['class' => 'diff'];
@@ -354,9 +301,6 @@ class DomTreeBuilderTest extends TestCase
         $this->assertEquals('<body>', strval($tree->getBodyNode()));
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::endElement
-     */
     public function testEndElementExample7(): void
     {
         $attrs = ['src' => 'Image path'];
@@ -371,9 +315,6 @@ class DomTreeBuilderTest extends TestCase
         $this->assertEquals('<img src="Image path">', strval($tree->getBodyNode()->getChild(0)));
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::endElement
-     */
     public function testEndElementExample8(): void
     {
         $attrs = ['class' => 'diff'];
@@ -388,9 +329,6 @@ class DomTreeBuilderTest extends TestCase
         $this->assertEquals('<pre class="diff">', strval($tree->getBodyNode()->getChild(0)));
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::characters
-     */
     public function testCharacters(): void
     {
         $attrs = ['class' => 'diff'];
@@ -409,7 +347,6 @@ class DomTreeBuilderTest extends TestCase
     }
 
     /**
-     * @covers DaisyDiff\Html\Dom\DomTreeBuilder::characters
      * @expectedException RuntimeException
      */
     public function testCharactersException(): void

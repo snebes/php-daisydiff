@@ -4,6 +4,7 @@ namespace DaisyDiff\Html;
 
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * HtmlDiffer Tests.
@@ -74,7 +75,7 @@ class HtmlDifferTest extends TestCase
 
     public function testScore(): void
     {
-        $refClass = new \ReflectionClass(HtmlDiffer::class);
+        $refClass = new ReflectionClass(HtmlDiffer::class);
         $differ = $refClass->newInstanceWithoutConstructor();
 
         $this->assertEquals(2.7, $differ->score(2, 5, 10), '', 0.5);
@@ -89,7 +90,7 @@ class HtmlDifferTest extends TestCase
      */
     public function testScoreException(): void
     {
-        $refClass = new \ReflectionClass(HtmlDiffer::class);
+        $refClass = new ReflectionClass(HtmlDiffer::class);
         $differ = $refClass->newInstanceWithoutConstructor();
 
         try {

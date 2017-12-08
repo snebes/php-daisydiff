@@ -109,7 +109,7 @@ class TagComparator implements AtomSplitterInterface
     public function getAtom(int $i): AtomInterface
     {
         if ($i < 0 || $i >= count($this->atoms)) {
-            throw new OutOfBoundsException("There is no Atom with index {$i}.");
+            throw new OutOfBoundsException(sprintf('Index: %d, Size: %d', $i, count($this->atoms)));
         }
 
         return $this->atoms[$i];

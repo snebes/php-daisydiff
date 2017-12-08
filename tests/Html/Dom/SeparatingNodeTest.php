@@ -6,14 +6,9 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * SeparatingNode Tests.
- *
- * @covers DaisyDiff\Html\Dom\SeparatingNode::__construct
  */
 class SeparatingNodeTest extends TestCase
 {
-    /**
-     * @covers DaisyDiff\Html\Dom\SeparatingNode::equals
-     */
     public function testEquals(): void
     {
         $root = new TagNode(null, 'root');

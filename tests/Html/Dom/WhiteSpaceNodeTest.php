@@ -6,14 +6,9 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * WhiteSpaceNode Tests.
- *
- * @covers DaisyDiff\Html\Dom\WhiteSpaceNode::__construct
  */
 class WhiteSpaceNodeTest extends TestCase
 {
-    /**
-     * @covers DaisyDiff\Html\Dom\WhiteSpaceNode::__construct
-     */
     public function testCopyTree(): void
     {
         $root = new TagNode(null, 'root');
@@ -26,9 +21,6 @@ class WhiteSpaceNodeTest extends TestCase
         $this->assertNull($whiteSpaceNodeNullPointer->getParent());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\WhiteSpaceNode::isWhiteSpace
-     */
     public function testIsWhiteSpace(): void
     {
         $this->assertFalse(WhiteSpaceNode::isWhiteSpace('a'));

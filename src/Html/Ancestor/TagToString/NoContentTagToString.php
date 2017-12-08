@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace DaisyDiff\Html\Ancestor\Helper;
+namespace DaisyDiff\Html\Ancestor\TagToString;
 
 use DaisyDiff\Html\Ancestor\ChangeText;
 use DaisyDiff\Html\Dom\TagNode;
@@ -11,7 +11,7 @@ class NoContentTagToString extends TagToString
      * @param  TagNode $node
      * @param  string  $sem
      */
-    protected function __construct(TagNode $node, string $sem)
+    public function __construct(TagNode $node, string $sem)
     {
         parent::__construct($node, $sem);
     }

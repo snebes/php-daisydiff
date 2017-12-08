@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 namespace DaisyDiff\Html\Ancestor;
-use DaisyDiff\Html\Ancestor\Helper\TagToStringFactory;
+use DaisyDiff\Html\Ancestor\TagToString\TagToStringFactory;
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Modification\HtmlLayoutChange;
 use DaisyDiff\RangeDifferencer\RangeDifference;
@@ -44,7 +44,7 @@ class ChangeTextGenerator
      */
     public function getChanged(array $differences): ChangeText
     {
-        $text = new ChangeText();
+        $text = new ChangeText(self::MAX_OUTPUT_LINE_LENGTH);
         $rootListOpened = false;
 
         if (count($differences) > 1) {

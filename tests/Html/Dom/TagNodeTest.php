@@ -10,14 +10,9 @@ use TypeError;
 
 /**
  * TagNode Tests.
- *
- * @covers DaisyDiff\Html\Dom\TagNode::__construct
  */
 class TagNodeTest extends TestCase
 {
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::addChild
-     */
     public function testAddChild(): void
     {
         $root = new TagNode(null, 'root');
@@ -28,7 +23,6 @@ class TagNodeTest extends TestCase
     }
 
     /**
-     * @covers DaisyDiff\Html\Dom\TagNode::addChild
      * @expectedException TypeError
      */
     public function testAddChildNullExcpetion(): void
@@ -38,7 +32,6 @@ class TagNodeTest extends TestCase
     }
 
     /**
-     * @covers DaisyDiff\Html\Dom\TagNode::addChild
      * @expectedException InvalidArgumentException
      */
     public function testAddChildExcpetion(): void
@@ -55,9 +48,6 @@ class TagNodeTest extends TestCase
         }
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::addChild
-     */
     public function testAddChildIndex(): void
     {
         $root = new TagNode(null, 'root');
@@ -71,7 +61,6 @@ class TagNodeTest extends TestCase
     }
 
     /**
-     * @covers DaisyDiff\Html\Dom\TagNode::addChild
      * @expectedException TypeError
      */
     public function testAddChildIndexNullException(): void
@@ -88,7 +77,6 @@ class TagNodeTest extends TestCase
 
 
     /**
-     * @covers DaisyDiff\Html\Dom\TagNode::addChild
      * @expectedException InvalidArgumentException
      */
     public function testAddChildIndexException(): void
@@ -105,9 +93,6 @@ class TagNodeTest extends TestCase
         }
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::setRoot
-     */
     public function testSetRoot(): void
     {
         $root = new TagNode(null, 'root');
@@ -123,9 +108,6 @@ class TagNodeTest extends TestCase
         $this->assertEquals($root, $intermediate->getRoot());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::getIndexOf
-     */
     public function testGetIndexOf(): void
     {
         $root = new TagNode(null, 'root');
@@ -141,9 +123,6 @@ class TagNodeTest extends TestCase
         $this->assertEquals(2, $intermediate->getIndexOf($leaf2));
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::getChild
-     */
     public function testGetChild(): void
     {
         $root = new TagNode(null, 'root');
@@ -160,7 +139,6 @@ class TagNodeTest extends TestCase
     }
 
     /**
-     * @covers DaisyDiff\Html\Dom\TagNode::getChild
      * @expectedException OutOfBoundsException
      */
     public function testGetChildException(): void
@@ -177,9 +155,6 @@ class TagNodeTest extends TestCase
         }
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::getNumChildren
-     */
     public function testGetNumChildren(): void
     {
         $root = new TagNode(null, 'root');
@@ -193,9 +168,6 @@ class TagNodeTest extends TestCase
         $this->assertEquals(0, $leaf->getNumChildren());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::getIterator
-     */
     public function testGetIterator(): void
     {
         $root = new TagNode(null, 'root');
@@ -210,9 +182,6 @@ class TagNodeTest extends TestCase
         $this->assertEquals($intermediate, $iterator->current());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::getQName
-     */
     public function testGetQName(): void
     {
         $root = new TagNode(null, 'root');
@@ -220,9 +189,6 @@ class TagNodeTest extends TestCase
         $this->assertEquals('root', $root->getQName());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::isSameTag
-     */
     public function testIsSameTag(): void
     {
         $root = new TagNode(null, 'root');
@@ -240,9 +206,6 @@ class TagNodeTest extends TestCase
         $this->assertTrue($intermediate->isSameTag($compareIntermediate));
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::isSimilarTag
-     */
     public function testIsSimilarTag(): void
     {
         $root1 = new TagNode(null, 'root');
@@ -260,10 +223,6 @@ class TagNodeTest extends TestCase
         $this->assertFalse($refMethod->invoke($intermediate, $root2));
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::getOpeningTag
-     * @covers DaisyDiff\Html\Dom\TagNode::__toString
-     */
     public function testGetOpeningTag(): void
     {
         $html  = '<table width="500" height="175">';
@@ -280,9 +239,6 @@ class TagNodeTest extends TestCase
         $this->assertEquals($html, strval($root));
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::getClosingTag
-     */
     public function testGetClosingTag(): void
     {
         $root = new TagNode(null, 'root');
@@ -292,10 +248,6 @@ class TagNodeTest extends TestCase
         $this->assertEquals('</middle>', $intermediate->getClosingTag());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::isBlockLevel
-     * @covers DaisyDiff\Html\Dom\TagNode::isBlockLevelStatic
-     */
     public function testIsBlockLevel(): void
     {
         $root = new TagNode(null, 'html');
@@ -310,7 +262,6 @@ class TagNodeTest extends TestCase
     }
 
     /**
-     * @covers DaisyDiff\Html\Dom\TagNode::isBlockLevelStatic
      * @expectedException InvalidArgumentException
      */
     public function testIsBlockLevelException(): void
@@ -323,10 +274,6 @@ class TagNodeTest extends TestCase
         }
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::isInline
-     * @covers DaisyDiff\Html\Dom\TagNode::isInlineStatic
-     */
     public function testIsInline(): void
     {
         $root = new TagNode(null, 'ul');
@@ -340,9 +287,6 @@ class TagNodeTest extends TestCase
         $this->assertTrue(TagNode::isInlineStatic($intermediate->getQName()));
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::copyTree
-     */
     public function testCopyTree(): void
     {
         $root = new TagNode(null, 'root');
@@ -357,12 +301,12 @@ class TagNodeTest extends TestCase
         $this->assertEquals($root, $root->copyTree());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::getMatchRatio
-     */
-/*
     public function testGetMatchRatio(): void
     {
+        // Uses non-implemented RangeDifferencer methods.
+        $this->markTestIncomplete();
+
+
         $root = new TagNode(null, 'root');
         $textNode = new TextNode($root, 'Content of the root node');
         $intermediate = new TagNode($root, 'root');
@@ -370,12 +314,7 @@ class TagNodeTest extends TestCase
 
         $this->assertEquals(0.25, $root->getMatchRatio($intermediate), '', 0.1);
     }
-*/
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::getLeftMostChild
-     * @covers DaisyDiff\Html\Dom\TagNode::getRightMostChild
-     */
     public function testGetLeftRightMostChild(): void
     {
         $root = new TagNode(null, 'root');
@@ -391,9 +330,6 @@ class TagNodeTest extends TestCase
         $this->assertEquals($leaf2, $root->getRightMostChild());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TagNode::isPre
-     */
     public function testIsPre(): void
     {
         $root = new TagNode(null, 'pre');
@@ -402,6 +338,4 @@ class TagNodeTest extends TestCase
         $this->assertTrue($root->isPre());
         $this->assertFalse($intermediate->isPre());
     }
-
-
 }

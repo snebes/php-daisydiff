@@ -3,6 +3,7 @@
 namespace DaisyDiff\Html\Dom;
 
 use ArrayIterator;
+use DaisyDiff\Html\Ancestor\TextOnlyComparator;
 use DaisyDiff\Xml\Xml;
 use InvalidArgumentException;
 use IteratorAggregate;
@@ -466,7 +467,9 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function getMatchRatio(TagNode $other): int
     {
-        // no op.
+        $textComp = new TextOnlyComparator($other);
+
+        return $textComp->getMatchRatio(new TextOnlyComparator($this));
     }
 
     /**

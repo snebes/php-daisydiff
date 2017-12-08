@@ -12,10 +12,6 @@ use ReflectionMethod;
  */
 class HtmlLayoutChangeTest extends TestCase
 {
-    /**
-     * @covers DaisyDiff\Html\Modification\HtmlLayoutChange::getType
-     * @covers DaisyDiff\Html\Modification\HtmlLayoutChange::setType
-     */
     public function testGetSetType(): void
     {
         $tagAdd = new HtmlLayoutChange();
@@ -32,12 +28,6 @@ class HtmlLayoutChangeTest extends TestCase
         $this->assertNull($nullTag->getType());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Modification\HtmlLayoutChange::getOpeningTag
-     * @covers DaisyDiff\Html\Modification\HtmlLayoutChange::setOpeningTag
-     * @covers DaisyDiff\Html\Modification\HtmlLayoutChange::getEndingTag
-     * @covers DaisyDiff\Html\Modification\HtmlLayoutChange::setEndingTag
-     */
     public function testGetSetTag(): void
     {
         $tagAdd = new HtmlLayoutChange();

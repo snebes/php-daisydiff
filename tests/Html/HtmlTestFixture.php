@@ -20,16 +20,16 @@ class HtmlTestFixture
      * Performs HTML diffing on two HTML strings. Notice that the input strings are "cleaned-up" first (e.g. all html
      * tags are converted to lowercase).
      *
-     * @param  string $old
-     * @param  string $new
+     * @param  string $oldText
+     * @param  string $newText
      * @return string
      */
-    public static function diff(string $old, string $new): string
+    public static function diff(string $oldText, string $newText): string
     {
         // Parse $old XML.
         $oldHandler = new DomTreeBuilder();
         $oldHandler->startDocument();
-        $oldXml = sprintf('<?xml version="1.0" encoding="UTF-8"?><body>%s</body>', $old);
+        $oldXml = sprintf('<?xml version="1.0" encoding="UTF-8"?><body>%s</body>', $oldText);
 
         $xmlParser = xml_parser_create('UTF-8');
         xml_set_element_handler($xmlParser, [$oldHandler, 'startElement'], [$oldHandler, 'endElement']);
@@ -48,7 +48,7 @@ class HtmlTestFixture
         // Parse $new XML.
         $newHandler = new DomTreeBuilder();
         $newHandler->startDocument();
-        $newXml = sprintf('<?xml version="1.0" encoding="UTF-8"?><body>%s</body>', $new);
+        $newXml = sprintf('<?xml version="1.0" encoding="UTF-8"?><body>%s</body>', $newText);
 
         $xmlParser = xml_parser_create('UTF-8');
         xml_set_element_handler($xmlParser, [$newHandler, 'startElement'], [$newHandler, 'endElement']);
@@ -68,7 +68,7 @@ class HtmlTestFixture
         $leftComparator  = new TextNodeComparator($oldHandler);
         $rightComparator = new TextNodeComparator($newHandler);
 
-        $content = new ChangeText();
+        $content = new ChangeText(55);
         $handler = new DelegatingContentHandler($content);
         $output  = new HtmlSaxDiffOutput($handler, 'test');
         $differ  = new HtmlDiffer($output);

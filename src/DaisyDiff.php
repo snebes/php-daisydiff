@@ -64,9 +64,9 @@ class DaisyDiff
         $leftComparator  = new TextNodeComparator($oldHandler);
         $rightComparator = new TextNodeComparator($newHandler);
 
-        $content = new ChangeText();
+        $content = new ChangeText(50);
         $handler = new DelegatingContentHandler($content);
-        $output  = new HtmlSaxDiffOutput($handler, 'test');
+        $output  = new HtmlSaxDiffOutput($handler, 'diff');
         $differ  = new HtmlDiffer($output);
         $differ->diff($leftComparator, $rightComparator);
 

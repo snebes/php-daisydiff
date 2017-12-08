@@ -5,6 +5,7 @@ namespace DaisyDiff\Html\Ancestor;
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
 use DaisyDiff\RangeDifferencer\RangeDifferencer;
+use OutOfBoundsException;
 
 /**
  * A comparator used when calculating the difference in ancestry of two Nodes.
@@ -42,7 +43,7 @@ class AncestorComparator implements RangeComparatorInterface
     public function rangesEqual(int $thisIndex, RangeComparatorInterface $other, int $otherIndex): bool
     {
         if (!$other instanceof AncestorComparator) {
-            return false;
+            return false; // @codeCoverageIgnore
         }
 
         return $other->getAncestor($otherIndex)->isSameTag($this->getAncestor($thisIndex));
@@ -65,7 +66,11 @@ class AncestorComparator implements RangeComparatorInterface
      */
     public function getAncestor(int $i): ?TagNode
     {
-        return array_key_exists($i, $this->ancestors)? $this->ancestors[$i] : null;
+        if (array_key_exists($i, $this->ancestors)) {
+            return $this->ancestors[$i];
+        } else {
+            throw new OutOfBoundsException(sprintf('Index: %d, Size: %d', $i, count($this->ancestors)));
+        }
     }
 
     /**

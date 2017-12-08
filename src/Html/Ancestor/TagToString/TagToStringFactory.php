@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace DaisyDiff\Html\Ancestor\Helper;
+namespace DaisyDiff\Html\Ancestor\TagToString;
 
 use DaisyDiff\Html\Ancestor\TagChangeSemantic;
 use DaisyDiff\Html\Dom\TagNode;

@@ -8,14 +8,9 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * TextNode Tests.
- *
- * @covers DaisyDiff\Html\Dom\TextNode::__construct
  */
 class TextNodeTest extends TestCase
 {
-    /**
-     * @covers DaisyDiff\Html\Dom\TextNode::copyTree
-     */
     public function testCopyTree(): void
     {
         $root = new TagNode(null, 'root');
@@ -25,10 +20,6 @@ class TextNodeTest extends TestCase
         $this->assertEquals($textRoot->getText(), $copyRoot->getText());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TextNode::getLeftMostChild
-     * @covers DaisyDiff\Html\Dom\TextNode::getRightMostChild
-     */
     public function testGetLeftRightMostChild(): void
     {
         $root = new TagNode(null, 'root');
@@ -38,10 +29,6 @@ class TextNodeTest extends TestCase
         $this->assertEquals($textRoot, $textRoot->getRightMostChild());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TextNode::getModification
-     * @covers DaisyDiff\Html\Dom\TextNode::setModification
-     */
     public function testGetModificationText(): void
     {
         $root = new TagNode(null, 'root');
@@ -51,10 +38,6 @@ class TextNodeTest extends TestCase
         $this->assertEquals(ModificationType::NONE, $textRoot->getModification()->getType());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TextNode::getText
-     * @covers DaisyDiff\Html\Dom\TextNode::__toString
-     */
     public function testGetText(): void
     {
         $root = new TagNode(null, 'root');
@@ -64,9 +47,6 @@ class TextNodeTest extends TestCase
         $this->assertEquals('root', strval($textRoot));
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TextNode::isSameText
-     */
     public function testIsSameText(): void
     {
         $root = new TagNode(null, 'root');
@@ -78,9 +58,6 @@ class TextNodeTest extends TestCase
         $this->assertFalse($textRoot->isSameText($root));
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\TextNode::getMinimalDeletedSet
-     */
     public function testGetMinimalDeletedSet(): void
     {
         $root = new TagNode(null, 'root');

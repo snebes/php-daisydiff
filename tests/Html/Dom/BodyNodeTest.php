@@ -6,23 +6,15 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * BodyNode Tests.
- *
- * @covers DaisyDiff\Html\Dom\BodyNode::__construct
  */
 class BodyNodeTest extends TestCase
 {
-    /**
-     * @covers DaisyDiff\Html\Dom\BodyNode::copyTree
-     */
     public function testCopyTreeWithNoChildren(): void
     {
         $body = new BodyNode();
         $this->assertEquals($body, $body->copyTree());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\BodyNode::copyTree
-     */
     public function testCopyTreeWithChildren(): void
     {
         $body = new BodyNode();
@@ -35,9 +27,6 @@ class BodyNodeTest extends TestCase
         $this->assertEquals($body, $body->copyTree());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\BodyNode::getMinimalDeletedSet
-     */
     public function testGetMinimalDeletedSet(): void
     {
         $body = new BodyNode();

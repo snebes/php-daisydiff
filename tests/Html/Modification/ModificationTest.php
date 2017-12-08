@@ -12,9 +12,6 @@ use ReflectionMethod;
  */
 class ModificationTest extends TestCase
 {
-    /**
-     * Test cloning.
-     */
     public function testClone(): void
     {
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);
@@ -23,10 +20,6 @@ class ModificationTest extends TestCase
         $this->assertFalse($newM === $clonedModification);
     }
 
-    /**
-     * @covers DaisyDiff\Html\Modification\Modification::getId
-     * @covers DaisyDiff\Html\Modification\Modification::setId
-     */
     public function testSetId(): void
     {
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);
@@ -38,10 +31,6 @@ class ModificationTest extends TestCase
         $this->assertEquals($id, $newM->getId());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Modification\Modification::getType
-     * @covers DaisyDiff\Html\Modification\Modification::getOutputType
-     */
     public function testGetTypes(): void
     {
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);
@@ -50,10 +39,6 @@ class ModificationTest extends TestCase
         $this->assertEquals(ModificationType::REMOVED, $newM->getOutputType());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Modification\Modification::getPrevious
-     * @covers DaisyDiff\Html\Modification\Modification::setPrevious
-     */
     public function testGetSetPrevious(): void
     {
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);
@@ -65,10 +50,6 @@ class ModificationTest extends TestCase
         $this->assertNull($newM->getPrevious());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Modification\Modification::getNext
-     * @covers DaisyDiff\Html\Modification\Modification::setNext
-     */
     public function testGetSetNext(): void
     {
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);
@@ -80,10 +61,6 @@ class ModificationTest extends TestCase
         $this->assertNull($newM->getNext());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Modification\Modification::getChanges
-     * @covers DaisyDiff\Html\Modification\Modification::setChanges
-     */
     public function testGetSetChanges(): void
     {
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);
@@ -95,10 +72,6 @@ class ModificationTest extends TestCase
         $this->assertEquals($changes, $newM->getChanges());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Modification\Modification::isFirstOfID
-     * @covers DaisyDiff\Html\Modification\Modification::setFirstOfID
-     */
     public function testIsFirstOfId(): void
     {
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);
@@ -109,10 +82,6 @@ class ModificationTest extends TestCase
         $this->assertTrue($newM->isFirstOfID());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Modification\Modification::getHtmlLayoutChanges
-     * @covers DaisyDiff\Html\Modification\Modification::setHtmlLayoutChanges
-     */
     public function testGetHtmlLayoutChanges(): void
     {
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);

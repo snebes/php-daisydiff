@@ -18,6 +18,11 @@
     },
     "autoload": {
         "psr-4": {
+            "DaisyDiff\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "DaisyDiff\\": ["src/", "tests/"]
         }
     }

@@ -49,6 +49,30 @@ final class RangeDifferencer
             return OldDifferencer::findDifferences($left, $right);
         }
 
-        throw RuntimeException('This is not implemented.');
+        throw new RuntimeException('This is not implemented.');
+    }
+
+    /**
+     * Finds the differences among three RangeComparatorInterfaces. The differences are returned as a list of
+     * RangeComparatorInterfaces. If no differences are detected an empty list is returned. If the ancestor range
+     * comparator is null, a two-way comparison is performed.
+     *
+     * @param  LCSSettings              $settings
+     * @param  RangeComparatorInterface $ancestor
+     * @param  RangeComparatorInterface $left
+     * @param  RangeComparatorInterface $right
+     * @return RangeDifference[]
+     */
+    public static function findDifferences3(
+        ?LCSSettings $settings,
+        ?RangeComparatorInterface $ancestor,
+        RangeComparatorInterface $left,
+        RangeComparatorInterface $right
+    ): iterable {
+        if (is_null($ancestor)) {
+            return self::findDifferences($settings, $left, $right);
+        }
+
+        throw new RuntimeException('This is not implemented.');
     }
 }

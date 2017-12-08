@@ -7,8 +7,25 @@ namespace DaisyDiff\Html\Ancestor;
  */
 class ChangeText
 {
+    /** @var int */
+    private $maxNumCharsPerLine;
+
     /** @var string */
     private $text;
+
+    /** @var string */
+    private $newLine = '<br/>';
+
+    /** @var int */
+    private $charsThisLine = 0;
+
+    /**
+     * @param  int $maxNumCharsPerLine
+     */
+    public function __construct(int $maxNumCharsPerLine)
+    {
+        $this->maxNumCharsPerLine = $maxNumCharsPerLine;
+    }
 
     /**
      * @param  string $s
@@ -30,6 +47,15 @@ class ChangeText
     public function addHtml(string $s): void
     {
         $this->text .= $s;
+    }
+
+    /**
+     * @return void
+     */
+    public function addNewLine(): void
+    {
+        $this->addHtml($this->newLine);
+        $this->charsThisLine = 0;
     }
 
     /**

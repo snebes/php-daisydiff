@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace DaisyDiff\Html\Ancestor\Helper;
+namespace DaisyDiff\Html\Ancestor\TagToString;
 
 use DaisyDiff\Html\Ancestor\ChangeText;
 use DaisyDiff\Html\Ancestor\TagChangeSemantic;
@@ -112,7 +112,7 @@ class TagToString
     /**
      * @return string
      */
-    protected function getMovedTo(): string
+    public function getMovedTo(): string
     {
         return $this->getString('diff-movedto');
     }
@@ -120,7 +120,7 @@ class TagToString
     /**
      * @return string
      */
-    protected function getStyleAdded(): string
+    public function getStyleAdded(): string
     {
         return $this->getString('diff-styleadded');
     }
@@ -128,7 +128,7 @@ class TagToString
     /**
      * @return string
      */
-    protected function getAdded(): string
+    public function getAdded(): string
     {
         return $this->getString('diff-added');
     }
@@ -136,7 +136,7 @@ class TagToString
     /**
      * @return string
      */
-    protected function getMovedOutOf(): string
+    public function getMovedOutOf(): string
     {
         return $this->getString('diff-movedoutof');
     }
@@ -144,7 +144,7 @@ class TagToString
     /**
      * @return string
      */
-    protected function getSytleRemoved(): string
+    public function getStyleRemoved(): string
     {
         return $this->getString('diff-styleremoved');
     }
@@ -152,7 +152,7 @@ class TagToString
     /**
      * @return string
      */
-    protected function getRemoved(): string
+    public function getRemoved(): string
     {
         return $this->getString('diff-removed');
     }
@@ -162,7 +162,7 @@ class TagToString
      * @param  iterable   $attributes
      * @return void
      */
-    protected function addAttributes(ChangeText $text, iterable $attributes = []): void
+    public function addAttributes(ChangeText $text, iterable $attributes = []): void
     {
         if (count($attributes) < 1) {
             return;
@@ -178,7 +178,7 @@ class TagToString
     /**
      * @return string
      */
-    protected function getAnd(): string
+    public function getAnd(): string
     {
         return $this->getString('diff-and');
     }
@@ -186,7 +186,7 @@ class TagToString
     /**
      * @return string
      */
-    protected function getWith(): string
+    public function getWith(): string
     {
         return $this->getString('diff-with');
     }
@@ -215,7 +215,7 @@ class TagToString
     /**
      * @return string
      */
-    protected function getSource(): string
+    public function getSource(): string
     {
         return $this->getString('diff-source');
     }
@@ -223,7 +223,7 @@ class TagToString
     /**
      * @return string
      */
-    protected function getWidth(): string
+    public function getWidth(): string
     {
         return $this->getString('diff-width');
     }
@@ -231,7 +231,7 @@ class TagToString
     /**
      * @return string
      */
-    protected function getHeight(): string
+    public function getHeight(): string
     {
         return $this->getString('diff-height');
     }
@@ -239,7 +239,7 @@ class TagToString
     /**
      * @return string
      */
-    protected function getArticle(): string
+    public function getArticle(): string
     {
         return $this->getString(sprintf('diff-%s-article', $this->node->getQName()));
     }
@@ -250,7 +250,23 @@ class TagToString
      */
     public function getString(string $key): string
     {
-        return sprintf('!%s!', $key);
+        $trans = [
+            'diff-movedto'      => 'Moved to',
+            'diff-styleadded'   => 'Style added',
+            'diff-added'        => 'Added',
+            'diff-movedoutof'   => 'Moved out of',
+            'diff-styleremoved' => 'Style removed',
+            'diff-removed'      => 'Removed',
+            'diff-and'          => 'And',
+
+            'diff-html'         => 'Html page',
+            'diff-a'            => 'Link',
+            'diff-img'          => 'Image',
+            'diff-form'         => 'Form',
+            'diff-div'          => 'Division',
+        ];
+
+        return array_key_exists($key, $trans)?  $trans[$key] : sprintf('!%s!', $key);
     }
 
     /**

@@ -8,14 +8,9 @@ use ReflectionMethod;
 
 /**
  * Node Tests.
- *
- * @covers DaisyDiff\Html\Dom\Node::__construct
  */
 class NodeTest extends TestCase
 {
-    /**
-     * @covers DaisyDiff\Html\Dom\Node::getParentTree
-     */
     public function testGetParentTree(): void
     {
         $root = new TagNode(null, 'root');
@@ -28,9 +23,6 @@ class NodeTest extends TestCase
         $this->assertEquals([$root, $intermediate], $leaf->getParentTree());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\Node::getRoot
-     */
     public function testGetRoot(): void
     {
         $root = new TagNode(null, 'root');
@@ -41,7 +33,6 @@ class NodeTest extends TestCase
     }
 
     /**
-     * @covers DaisyDiff\Html\Dom\Node::getLastCommonParent
      * @expectedException InvalidArgumentException
      */
     public function testGetLastCommonParentNullException(): void
@@ -58,9 +49,6 @@ class NodeTest extends TestCase
         }
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\Node::getLastCommonParent
-     */
     public function testGetLastCommonParent(): void
     {
         $root = new TagNode(null, 'root');
@@ -89,11 +77,6 @@ class NodeTest extends TestCase
         $this->assertEquals($root, $intermediate->getLastCommonParent($leafNode)->getLastCommonParent());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\Node::getParent
-     * @covers DaisyDiff\Html\Dom\Node::setParent
-     * @covers DaisyDiff\Html\Dom\Node::setRoot
-     */
     public function testSetParentRoot(): void
     {
         $refMethod = new ReflectionMethod(Node::class, 'setRoot');
@@ -111,9 +94,6 @@ class NodeTest extends TestCase
         $this->assertNull($leaf->getParent());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\Node::inPre
-     */
     public function testInPre(): void
     {
         $preRoot = new TagNode(null, 'pre');
@@ -135,12 +115,6 @@ class NodeTest extends TestCase
         $this->assertFalse($leafNode->inPre());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\Node::isWhiteBefore
-     * @covers DaisyDiff\Html\Dom\Node::isWhiteAfter
-     * @covers DaisyDiff\Html\Dom\Node::setWhiteBefore
-     * @covers DaisyDiff\Html\Dom\Node::setWhiteAfter
-     */
     public function testIsWhiteBeforeAfter(): void
     {
         $root = new TagNode(null, 'root');
@@ -154,9 +128,6 @@ class NodeTest extends TestCase
         $this->assertTrue($root->isWhiteAfter());
     }
 
-    /**
-     * @covers DaisyDiff\Html\Dom\Node::detectIgnorableWhiteSpace
-     */
     public function testDetectIgnorableWhiteSpace(): void
     {
         $root = new TagNode(null, 'root');
