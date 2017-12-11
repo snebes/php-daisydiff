@@ -114,7 +114,7 @@ class TextNodeComparatorTest extends TestCase
     {
         $tree = new DomTreeBuilder();
         $comp = new TextNodeComparator($tree);
-        $textNodes = $this->getTextNodes($comp);
+        $this->getTextNodes($comp);
 
         $this->assertFalse($comp->rangesEqual(0, $comp, 1));
         $this->assertTrue($comp->rangesEqual(0, $comp, 0));
@@ -124,7 +124,7 @@ class TextNodeComparatorTest extends TestCase
     {
         $tree = new DomTreeBuilder();
         $comp = new TextNodeComparator($tree);
-        $textNodes = $this->getTextNodes($comp);
+        $this->getTextNodes($comp);
 
         $this->assertFalse($comp->skipRangeComparison(0, 1, $comp));
     }
@@ -133,7 +133,7 @@ class TextNodeComparatorTest extends TestCase
    {
        $tree = new DomTreeBuilder();
        $comp = new TextNodeComparator($tree);
-       $textNodes = $this->getTextNodes($comp);
+       $this->getTextNodes($comp);
 
        $lastModified = $comp->getLastModified();
        $m = new Modification(ModificationType::CONFLICT, ModificationType::CONFLICT);

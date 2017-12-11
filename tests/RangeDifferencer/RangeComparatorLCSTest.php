@@ -152,7 +152,7 @@ class RangeComparatorLCSTest extends TestCase
      */
     public function testGetDifferencesExample1(): void
     {
-        $oldText = '<p> This is a blue book</p> \n <div style="example">This book is about food</div>';
+        $oldText = "<p> This is a blue book</p> \n <div style=\"example\">This book is about food</div>";
         $newText = '<p> This is a <b>big</b> blue book</p>';
 
         $left  = new TagComparator($oldText);
@@ -160,10 +160,10 @@ class RangeComparatorLCSTest extends TestCase
 
         $comp = new RangeComparatorLCS($left, $right);
 
-        $rangeDifference = $comp->getDifferences();
+        $diff = $comp->getDifferences();
 
-        $this->assertEquals(1, count($rangeDifference));
-        $this->assertEquals('Left: (0, 26) Right: (0, 16)', strval($rangeDifference[0]));
+        $this->assertEquals(1, count($diff));
+        $this->assertEquals('Left: (0, 26) Right: (0, 16)', strval($diff[0]));
     }
 
     public function testGetDifferencesExample2(): void
