@@ -161,7 +161,7 @@ abstract class LCS
         $delta  = $N - $M;
         $isEven = false;
 
-        if (($delta & 1) == 1) {
+        if (($delta % 2) == 1) {
             $isEven = false;
         } else {
             $isEven = true;
@@ -386,7 +386,7 @@ abstract class LCS
         }
 
         // Return the middle diagonal with maximum progress.
-        return $maxProgress[intval(floor($numProgress / 2))];
+        return $maxProgress[intval(ceil($numProgress / 2))];
     }
 
     /**

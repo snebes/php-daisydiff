@@ -14,6 +14,8 @@ final class OldDifferencer
 {
     /**
      * Prevent class instantiation.
+     *
+     * @codeCoverageIgnore
      */
     private function __construct()
     {
@@ -44,7 +46,7 @@ final class OldDifferencer
         $lastDiagonal = new SplFixedArray($diagLen + 1);
 
         // On diagonal $k ($lastDiagonal[$k] = $row
-        $origin = (int) round($diagLen / 2, 0);
+        $origin = intval(round($diagLen / 2, 0));
 
         // Script corresponding to $d[$k]
         /** @var LinkedRangeDifference */
@@ -123,9 +125,7 @@ final class OldDifferencer
         }
 
         // Too many differences.
-        assert(false);
-
-        return null;
+        throw new RuntimeException('Too many differences to compute.'); // @codeCoverageIgnore
     }
 
     /**

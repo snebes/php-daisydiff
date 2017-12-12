@@ -40,14 +40,4 @@ class ChangeTextTest extends TestCase
 
         $this->assertEquals(ChangeText::class, get_class($text));
     }
-
-    public function testAddNewLine(): void
-    {
-        $text = new ChangeText(5);
-
-        $text->addNewLine();
-
-        $this->assertEquals('<br/>', strval($text));
-        $this->assertEquals(ChangeText::class, get_class($text));
-    }
 }

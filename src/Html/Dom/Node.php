@@ -121,7 +121,7 @@ abstract class Node
         $isSame = true;
 
         while ($isSame && $i < count($myParents) && $i < count($otherParents)) {
-            if ($myParents[$i] && $otherParents[$i] && !$myParents[$i]->isSameTag($otherParents[$i])) {
+            if (!$myParents[$i]->isSameTag($otherParents[$i])) {
                 $isSame = false;
             } else {
                 // After the while, the index $i-1 must be the last common parent.

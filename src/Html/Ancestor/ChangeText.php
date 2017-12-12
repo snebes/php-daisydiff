@@ -36,7 +36,6 @@ class ChangeText
         $s = $this->clean($s);
 
         // fancy add?  nope!
-
         $this->text .= $s;
     }
 
@@ -47,15 +46,6 @@ class ChangeText
     public function addHtml(string $s): void
     {
         $this->text .= $s;
-    }
-
-    /**
-     * @return void
-     */
-    public function addNewLine(): void
-    {
-        $this->addHtml($this->newLine);
-        $this->charsThisLine = 0;
     }
 
     /**

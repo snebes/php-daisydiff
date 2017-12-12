@@ -72,10 +72,6 @@ class TextOnlyComparatorTest extends TestCase
      */
     public function testGetMatchRatio(): void
     {
-        // Uses non-implemented RangeDifferencer methods.
-        $this->markTestIncomplete();
-
-
         $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);

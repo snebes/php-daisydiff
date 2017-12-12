@@ -452,7 +452,7 @@ class TagNode extends Node implements IteratorAggregate
         $newThis->setWhiteBefore($this->isWhiteBefore());
         $newThis->setWhiteAfter($this->isWhiteAfter());
 
-        foreach ($this->children as $child) {
+        foreach ($this as $child) {
             $newChild = $child->copyTree();
             $newChild->setParent($newThis);
             $newThis->addChild($newChild);
@@ -463,9 +463,9 @@ class TagNode extends Node implements IteratorAggregate
 
     /**
      * @param  TagNode $other
-     * @return int
+     * @return float
      */
-    public function getMatchRatio(TagNode $other): int
+    public function getMatchRatio(TagNode $other): float
     {
         $textComp = new TextOnlyComparator($other);
 
@@ -473,9 +473,9 @@ class TagNode extends Node implements IteratorAggregate
     }
 
     /**
-     * @return self
+     * @return void
      */
-    public function expandWhitespace(): self
+    public function expandWhiteSpace(): void
     {
         $shift = 0;
         $spaceAdded = false;
@@ -485,7 +485,7 @@ class TagNode extends Node implements IteratorAggregate
             $child = $this->getChild($i + $shift);
 
             if ($child instanceof TagNode && !$child->isPre()) {
-                $child->expandWhitespace();
+                $child->expandWhiteSpace();
             }
 
             if (!$spaceAdded && $child->isWhiteBefore()) {
@@ -503,8 +503,6 @@ class TagNode extends Node implements IteratorAggregate
                 $spaceAdded = false;
             }
         }
-
-        return $this;
     }
 
     /**
@@ -540,6 +538,6 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function isPre(): bool
     {
-        return 0 === strcasecmp('pre', $this->getQName());
+        return 0 == strcasecmp('pre', $this->getQName());
     }
 }

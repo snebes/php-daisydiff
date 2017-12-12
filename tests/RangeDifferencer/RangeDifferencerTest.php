@@ -126,9 +126,9 @@ class RangeDifferencerTest extends TestCase
         $left  = new TagComparator($oldText);
         $right = new TagComparator($newText);
 
-        $settings = new LCSSettings();
-        $settings->setGreedyMethod(true);
-        $diff = RangeDifferencer::findDifferences($settings, $left, $right);
+        $lcs = new LCSSettings();
+        $lcs->setGreedyMethod(true);
+        $diff = RangeDifferencer::findDifferences($lcs, $left, $right);
 
         $this->assertEquals(5, count($diff));
         $this->assertEquals('Left: (0, 8) Right: (0, 8)', strval($diff[0]));

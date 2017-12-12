@@ -51,10 +51,12 @@ class SAXReader
         if (!xml_parse($parser, $clean, true)) {
             $error = xml_error_string(xml_get_error_code($parser));
             $line  = xml_get_current_line_number($parser);
+            $col   = xml_get_current_column_number($parser);
 
-            throw new Exception("XML Error: {$error} at line {$line}\n");
+            throw new Exception("XML Error: {$error} at line {$line} and column {$col}\n");
         }
 
         xml_parser_free($parser);
+        unset($parser);
     }
 }

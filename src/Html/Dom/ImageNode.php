@@ -34,7 +34,7 @@ class ImageNode extends TextNode
             return false;
         }
 
-        return 0 === strcasecmp($this->getText(), $other->getText());
+        return 0 == strcasecmp($this->getText(), $other->getText());
     }
 
     /**

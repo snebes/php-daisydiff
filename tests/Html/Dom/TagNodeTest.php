@@ -306,10 +306,6 @@ class TagNodeTest extends TestCase
      */
     public function testGetMatchRatio(): void
     {
-        // Uses non-implemented RangeDifferencer methods.
-        $this->markTestIncomplete();
-
-
         $root = new TagNode(null, 'root');
         $textNode = new TextNode($root, 'Content of the root node');
         $intermediate = new TagNode($root, 'root');

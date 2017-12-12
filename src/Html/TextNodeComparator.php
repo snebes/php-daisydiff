@@ -132,11 +132,11 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
      */
     public function rangesEqual(int $thisIndex, RangeComparatorInterface $other, int $otherIndex): bool
     {
-        if (!$other instanceof TextNodeComparator) {
-            return false;
+        if ($other instanceof TextNodeComparator) {
+            return $this->getTextNode($thisIndex)->isSameText($other->getTextNode($otherIndex));
         }
 
-        return $this->getTextNode($thisIndex)->isSameText($other->getTextNode($otherIndex));
+        return false; // @codeCoverageIgnore
     }
 
     /**
@@ -173,6 +173,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
             $this->changedIdUsed = false;
         }
 
+        /** @var Modification[] */
         $nextLastModified = [];
         $changes = null;
 
@@ -192,7 +193,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                         $nextLastModified = [];
                     }
                 }
-                elseif (!is_null($result->getChanges()) && !$result->getChanges() == $changes) {
+                elseif (!is_null($result->getChanges()) && $result->getChanges() != $changes) {
                     $this->changedId++;
                     $mod->setFirstOfId(true);
 
@@ -345,7 +346,8 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
         }
 
         while (count($deletedNodes) > 0) {
-            $prevResult = $nextResult = null;
+            $prevResult = null;
+            $nextResult = null;
 
             if (!is_null($prevLeaf)) {
                 $prevResult = $prevLeaf->getLastCommonParent($deletedNodes[0]);
@@ -399,10 +401,10 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
             elseif ($prevResult->getLastCommonParentDepth() < $nextResult->getLastCommonParentDepth()) {
                 // Inserting at the back.
                 if ($nextResult->isSplittingNeeded()) {
-                    $splitOccured = $nextLeaf->getParent()
+                    $splitOccurred = $nextLeaf->getParent()
                         ->splitUntil($nextResult->getLastCommonParent(), $nextLeaf, false);
 
-                    if ($splitOccured) {
+                    if ($splitOccurred) {
                         // The place where to insert is shifted one place to the right.
                         $nextResult->setIndexInLastCommonParent($nextResult->getIndexInLastCommonParent() + 1);
                     }

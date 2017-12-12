@@ -144,7 +144,7 @@ final class DomTreeBuilder
         elseif ($this->bodyStarted) {
             // Ignoring element after body tag closed.
         }
-        elseif (0 === strcasecmp($qName, 'body')) {
+        elseif (0 == strcasecmp($qName, 'body')) {
             $this->bodyStarted = true;
         }
     }
@@ -160,11 +160,11 @@ final class DomTreeBuilder
             throw new RuntimeException('No document is opened.', 8003);
         }
 
-        if (0 === strcasecmp($qName, 'body')) {
+        if (0 == strcasecmp($qName, 'body')) {
             $this->bodyEnded = true;
         }
         elseif ($this->bodyStarted && !$this->bodyEnded) {
-            if (0 === strcasecmp($qName, 'img')) {
+            if (0 == strcasecmp($qName, 'img')) {
                 // Insert a dummy leaf for the image.
                 $img = new ImageNode($this->currentParent, $this->currentParent->getAttributes());
                 $img->setWhiteBefore($this->whiteSpaceBeforeThis);
@@ -180,7 +180,7 @@ final class DomTreeBuilder
                 $this->lastSibling = null;
             }
 
-            if (0 === strcasecmp($qName, 'pre')) {
+            if (0 == strcasecmp($qName, 'pre')) {
                 $this->numberOfActivePreTags--;
             }
 
@@ -204,30 +204,58 @@ final class DomTreeBuilder
             throw new RuntimeException('No document is opened.', 8004);
         }
 
-        for ($i = 0, $max = mb_strlen($chars); $i < $max; $i++) {
-            $c = $chars[$i];
+        $regex   = '/([\s\.\,\"\\\'\(\)\?\:\;\!\{\}\-\+\*\=\_\[\]\&\|\$]{1})/';
+        $matches = preg_split($regex, htmlentities($chars, ENT_NOQUOTES, 'UTF-8'), -1, PREG_SPLIT_DELIM_CAPTURE);
 
-            if ($this->isDelimiter($c)) {
+        foreach ($matches as &$word) {
+            if (preg_match('/^[\s]{1}$/', $word) && $this->numberOfActivePreTags == 0) {
                 $this->endWord();
 
-                if (WhiteSpaceNode::isWhiteSpace($c) && $this->numberOfActivePreTags == 0) {
-                    if (!is_null($this->lastSibling)) {
-                        $this->lastSibling->setWhiteAfter(true);
-                    }
-
-                    $this->whiteSpaceBeforeThis = true;
-                } else {
-                    $textNode = new TextNode($this->currentParent, $c);
-                    $textNode->setWhiteBefore(false);
-
-                    $this->whiteSpaceBeforeThis = false;
-                    $this->lastSibling = $textNode;
-                    $this->textNodes[] = $textNode;
+                if (!is_null($this->lastSibling)) {
+                    $this->lastSibling->setWhiteAfter(true);
                 }
-            } else {
-                $this->newWord .= $c;
+                $this->whiteSpaceBeforeThis = true;
+            }
+            elseif (preg_match('/^[\s\.\,\"\\\'\(\)\?\:\;\!\{\}\-\+\*\=\_\[\]\&\|\$]{1}$/', $word)) {
+                $this->endWord();
+
+                $textNode = new TextNode($this->currentParent, $word);
+                $textNode->setWhiteBefore($this->whiteSpaceBeforeThis);
+
+                $this->whiteSpaceBeforeThis = false;
+                $this->lastSibling = $textNode;
+                $this->textNodes[] = $textNode;
+            }
+            else {
+                $this->newWord .= $word;
             }
         }
+
+        // Java port:
+//        for ($i = 0, $max = mb_strlen($chars); $i < $max; $i++) {
+//            $c = $chars[$i];
+//
+//            if ($this->isDelimiter($c)) {
+//                $this->endWord();
+//
+//                if (WhiteSpaceNode::isWhiteSpace($c) && $this->numberOfActivePreTags == 0) {
+//                    if (!is_null($this->lastSibling)) {
+//                        $this->lastSibling->setWhiteAfter(true);
+//                    }
+//
+//                    $this->whiteSpaceBeforeThis = true;
+//                } else {
+//                    $textNode = new TextNode($this->currentParent, $c);
+//                    $textNode->setWhiteBefore($this->whiteSpaceBeforeThis);
+//
+//                    $this->whiteSpaceBeforeThis = false;
+//                    $this->lastSibling = $textNode;
+//                    $this->textNodes[] = $textNode;
+//                }
+//            } else {
+//                $this->newWord .= $c;
+//            }
+//        }
     }
 
     /**
@@ -296,7 +324,7 @@ final class DomTreeBuilder
             case ';':
             case '?':
             case '=':
-            case '\'':
+            case "'":
             case '"':
             case '[':
             case ']':

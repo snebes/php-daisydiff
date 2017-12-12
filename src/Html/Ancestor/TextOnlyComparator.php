@@ -110,6 +110,6 @@ class TextOnlyComparator implements RangeComparatorInterface
             $distanceThis += $d->rightLength();
         }
 
-        return ((0.0 + $distanceOther) / $other->getRangeCount() + (0.0 + $distanceThis) / $this->getRangeCount()) / 2;
+        return floatval(((0.0 + $distanceOther) / $other->getRangeCount() + (0.0 + $distanceThis) / $this->getRangeCount()) / 2.0);
     }
 }
