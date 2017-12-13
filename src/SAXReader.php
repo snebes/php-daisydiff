@@ -3,7 +3,9 @@
 namespace DaisyDiff;
 
 use DaisyDiff\Html\Dom\DomTreeBuilder;
+use DaisyDiff\Xml\Sanitizer;
 use Exception;
+use Psr\Log\LoggerInterface;
 use tidy;
 
 /**
@@ -14,12 +16,17 @@ class SAXReader
     /** @var DomTreeBuilder */
     private $contentHandler;
 
+    /** @var LoggerInterface */
+    private $logger;
+
     /**
-     * @param  DomTreeBuilder $contentHandler
+     * @param  DomTreeBuilder  $contentHandler
+     * @param  LoggerInterface $logger
      */
-    public function __construct(DomTreeBuilder $contentHandler)
+    public function __construct(DomTreeBuilder $contentHandler, ?LoggerInterface $logger = null)
     {
         $this->contentHandler = $contentHandler;
+        $this->logger = $logger;
     }
 
     /**
@@ -31,20 +38,19 @@ class SAXReader
     public function parse(string $xml): void
     {
         // Wrap xml in valid block.
-        $tidyConfig = [
-            'add-xml-decl'      => true,
-            'char-encoding'     => 'utf8',
-            'input-encoding'    => 'utf8',
-            'output-encoding'   => 'utf8',
-            'output-xml'        => true,
-        ];
-        $tidy  = new tidy();
-        $clean = $tidy->repairString($xml, $tidyConfig, 'utf8');
+        $clean = sprintf('<?xml version="1.0" encoding="UTF-8"?>%s<body>%s</body>', Sanitizer::getDocType(), $xml);
+
+        if ($this->logger) {
+            $this->logger->info("Before cleanup:\n\n" . $xml);
+            $this->logger->info("After cleanup:\n\n" . $clean);
+        }
 
         // Create parser.
-        $parser = xml_parser_create('UTF-8');
+        $parser = xml_parser_create('');
         xml_set_element_handler($parser, [$this->contentHandler, 'startElement'], [$this->contentHandler, 'endElement']);
         xml_set_character_data_handler($parser, [$this->contentHandler, 'characters']);
+
+        // Force xml tags to be lowercase.
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
 
         // Parse!

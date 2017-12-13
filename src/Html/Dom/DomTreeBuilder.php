@@ -49,6 +49,7 @@ final class DomTreeBuilder
     {
         $this->bodyNode = new BodyNode();
         $this->currentParent = $this->bodyNode;
+        $this->lastSibling = null;
     }
 
     /**
@@ -104,6 +105,8 @@ final class DomTreeBuilder
             throw new RuntimeException('No document opened.', 8001);
         }
 
+        $this->endWord();
+
         $this->documentEnded = true;
         $this->documentStarted = false;
     }
@@ -128,7 +131,7 @@ final class DomTreeBuilder
             $this->lastSibling   = null;
 
             if ($this->whiteSpaceBeforeThis && $newTagNode->isInline()) {
-                $newTagNode->setWhiteBefore(true);
+                $this->currentParent->setWhiteBefore(true);
             }
 
             $this->whiteSpaceBeforeThis = false;
@@ -204,58 +207,30 @@ final class DomTreeBuilder
             throw new RuntimeException('No document is opened.', 8004);
         }
 
-        $regex   = '/([\s\.\,\"\\\'\(\)\?\:\;\!\{\}\-\+\*\=\_\[\]\&\|\$]{1})/';
-        $matches = preg_split($regex, htmlentities($chars, ENT_NOQUOTES, 'UTF-8'), -1, PREG_SPLIT_DELIM_CAPTURE);
+        for ($i = 0, $max = mb_strlen($chars); $i < $max; $i++) {
+            $c = $chars[$i];
 
-        foreach ($matches as &$word) {
-            if (preg_match('/^[\s]{1}$/', $word) && $this->numberOfActivePreTags == 0) {
+            if ($this->isDelimiter($c)) {
                 $this->endWord();
 
-                if (!is_null($this->lastSibling)) {
-                    $this->lastSibling->setWhiteAfter(true);
+                if (WhiteSpaceNode::isWhiteSpace($c) && $this->numberOfActivePreTags == 0) {
+                    if (!is_null($this->lastSibling)) {
+                        $this->lastSibling->setWhiteAfter(true);
+                    }
+
+                    $this->whiteSpaceBeforeThis = true;
+                } else {
+                    $textNode = new TextNode($this->currentParent, $c);
+                    $textNode->setWhiteBefore($this->whiteSpaceBeforeThis);
+
+                    $this->whiteSpaceBeforeThis = false;
+                    $this->lastSibling = $textNode;
+                    $this->textNodes[] = $textNode;
                 }
-                $this->whiteSpaceBeforeThis = true;
-            }
-            elseif (preg_match('/^[\s\.\,\"\\\'\(\)\?\:\;\!\{\}\-\+\*\=\_\[\]\&\|\$]{1}$/', $word)) {
-                $this->endWord();
-
-                $textNode = new TextNode($this->currentParent, $word);
-                $textNode->setWhiteBefore($this->whiteSpaceBeforeThis);
-
-                $this->whiteSpaceBeforeThis = false;
-                $this->lastSibling = $textNode;
-                $this->textNodes[] = $textNode;
-            }
-            else {
-                $this->newWord .= $word;
+            } else {
+                $this->newWord .= $c;
             }
         }
-
-        // Java port:
-//        for ($i = 0, $max = mb_strlen($chars); $i < $max; $i++) {
-//            $c = $chars[$i];
-//
-//            if ($this->isDelimiter($c)) {
-//                $this->endWord();
-//
-//                if (WhiteSpaceNode::isWhiteSpace($c) && $this->numberOfActivePreTags == 0) {
-//                    if (!is_null($this->lastSibling)) {
-//                        $this->lastSibling->setWhiteAfter(true);
-//                    }
-//
-//                    $this->whiteSpaceBeforeThis = true;
-//                } else {
-//                    $textNode = new TextNode($this->currentParent, $c);
-//                    $textNode->setWhiteBefore($this->whiteSpaceBeforeThis);
-//
-//                    $this->whiteSpaceBeforeThis = false;
-//                    $this->lastSibling = $textNode;
-//                    $this->textNodes[] = $textNode;
-//                }
-//            } else {
-//                $this->newWord .= $c;
-//            }
-//        }
     }
 
     /**

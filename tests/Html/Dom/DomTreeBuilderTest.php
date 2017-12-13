@@ -11,6 +11,9 @@ use RuntimeException;
  */
 class DomTreeBuilderTest extends TestCase
 {
+    /**
+     * @group unit
+     */
     public function testStartDocument(): void
     {
         $tree = new DomTreeBuilder();
@@ -26,6 +29,7 @@ class DomTreeBuilderTest extends TestCase
 
     /**
      * @expectedException RuntimeException
+     * @group unit
      */
     public function testStartDocumentException(): void
     {
@@ -41,6 +45,9 @@ class DomTreeBuilderTest extends TestCase
         }
     }
 
+    /**
+     * @group unit
+     */
     public function testEndDocument(): void
     {
         $tree = new DomTreeBuilder();
@@ -57,6 +64,7 @@ class DomTreeBuilderTest extends TestCase
 
     /**
      * @expectedException RuntimeException
+     * @group unit
      */
     public function testEndDocumentException1(): void
     {
@@ -72,6 +80,7 @@ class DomTreeBuilderTest extends TestCase
 
     /**
      * @expectedException RuntimeException
+     * @group unit
      */
     public function testEndDocumentException2(): void
     {
@@ -85,6 +94,90 @@ class DomTreeBuilderTest extends TestCase
             $this->assertEquals(8001, $e->getCode());
             throw $e;
         }
+    }
+
+    /**
+     * @group unit
+     */
+    public function testUnitStartElement1(): void
+    {
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, true);
+        $tree->startElement(null, 'p', ['class' => 'test']);
+        $this->setBodyEnded($tree, true);
+        $tree->endDocument();
+
+        $refProp = new ReflectionProperty($tree, 'currentParent');
+        $refProp->setAccessible(true);
+        $element = $refProp->getValue($tree);
+
+        $this->assertTrue($element instanceof TagNode);
+        $this->assertEquals('<p class="test">', strval($element));
+        $this->assertFalse($element->isWhiteBefore());
+        $this->assertFalse($element->isWhiteAfter());
+    }
+
+    /**
+     * @group unit
+     */
+    public function testUnitStartElement2(): void
+    {
+        $tree = new DomTreeBuilder();
+
+        $refProp = new ReflectionProperty($tree, 'whiteSpaceBeforeThis');
+        $refProp->setAccessible(true);
+        $refProp->setValue($tree, true);
+
+        $tree->startDocument();
+        $this->setBodyStarted($tree, true);
+        $tree->startElement(null, 'span', []);
+        $this->setBodyEnded($tree, true);
+        $tree->endDocument();
+
+        $refProp = new ReflectionProperty($tree, 'currentParent');
+        $refProp->setAccessible(true);
+        $element = $refProp->getValue($tree);
+
+        $this->assertTrue($element instanceof TagNode);
+        $this->assertEquals('<span>', strval($element));
+        $this->assertTrue($element->isWhiteBefore());
+        $this->assertFalse($element->isWhiteAfter());
+    }
+
+    /**
+     * @group unit
+     */
+    public function testUnitStartElement3(): void
+    {
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, true);
+        $tree->startElement(null, 'pre', []);
+        $this->setBodyEnded($tree, true);
+        $tree->endDocument();
+
+        $refProp = new ReflectionProperty($tree, 'numberOfActivePreTags');
+        $refProp->setAccessible(true);
+        $value = $refProp->getValue($tree);
+
+        $this->assertEquals(1, $value);
+    }
+
+    /**
+     * @group unit
+     */
+    public function testUnitStartElement4(): void
+    {
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $tree->startElement(null, 'body', []);
+
+        $refProp = new ReflectionProperty($tree, 'bodyStarted');
+        $refProp->setAccessible(true);
+        $value = $refProp->getValue($tree);
+
+        $this->assertTrue($value);
     }
 
     public function testStartElementExample1(): void
@@ -140,6 +233,7 @@ class DomTreeBuilderTest extends TestCase
 
     /**
      * @expectedException RuntimeException
+     * @group unit
      */
     public function testStartElementExample5(): void
     {
@@ -159,6 +253,7 @@ class DomTreeBuilderTest extends TestCase
 
     /**
      * @expectedException RuntimeException
+     * @group unit
      */
     public function testStartElementExample6(): void
     {
@@ -200,6 +295,59 @@ class DomTreeBuilderTest extends TestCase
 
         $tree->startElement(null, 'pre', $attrs);
         $this->assertEquals('<pre class="diff">', strval($tree->getBodyNode()->getChild(0)));
+    }
+
+    /**
+     * @group unit
+     */
+    public function testUnitEndElement1(): void
+    {
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, true);
+        $tree->endElement(null, 'body');
+
+        $refProp = new ReflectionProperty($tree, 'bodyEnded');
+        $refProp->setAccessible(true);
+        $value = $refProp->getValue($tree);
+
+        $this->assertTrue($value);
+    }
+
+    /**
+     * @group unit
+     */
+    public function testUnitEndElement2(): void
+    {
+        $tree = new DomTreeBuilder();
+
+        $refProp = new ReflectionProperty($tree, 'numberOfActivePreTags');
+        $refProp->setAccessible(true);
+        $refProp->setValue($tree, 1);
+
+        $tree->startDocument();
+        $this->setBodyStarted($tree, true);
+        $tree->endElement(null, 'pre');
+
+        $this->assertEquals(0, $refProp->getValue($tree));
+    }
+
+    /**
+     * @group unit
+     */
+    public function testUnitEndElement3(): void
+    {
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, true);
+        $tree->startElement(null, 'span', []);
+        $tree->endElement(null, 'img');
+
+        $refProp = new ReflectionProperty($tree, 'lastSibling');
+        $refProp->setAccessible(true);
+        $element = $refProp->getValue($tree);
+
+        $this->assertEquals('<span>', strval($element));
     }
 
     public function testEndElementExample1(): void
@@ -249,6 +397,7 @@ class DomTreeBuilderTest extends TestCase
 
     /**
      * @expectedException RuntimeException
+     * @group unit
      */
     public function testEndElementExample4(): void
     {
@@ -268,6 +417,7 @@ class DomTreeBuilderTest extends TestCase
 
     /**
      * @expectedException RuntimeException
+     * @group unit
      */
     public function testEndElementExample5(): void
     {
@@ -347,7 +497,134 @@ class DomTreeBuilderTest extends TestCase
     }
 
     /**
+     * @group unit
+     */
+    public function testUnitCharacters1(): void
+    {
+        $chars = 'a.a,a"a\'a(a)a?a:a;a!a{a}a-a+a*a=a_a[a]a|';
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $tree->characters(null, $chars);
+        $tree->endDocument();
+
+        $refProp = new ReflectionProperty($tree, 'textNodes');
+        $refProp->setAccessible(true);
+        $textNodes = $refProp->getValue($tree);
+
+        $chars = str_split($chars);
+
+        for ($i = 0, $max = count($chars); $i < $max; $i += 2) {
+            $this->assertEquals('a', strval($textNodes[$i]));
+            $this->assertEquals($chars[$i + 1], strval($textNodes[$i + 1]));
+
+            $this->assertFalse($textNodes[$i]->isWhiteBefore());
+            $this->assertFalse($textNodes[$i]->isWhiteAfter());
+            $this->assertFalse($textNodes[$i + 1]->isWhiteBefore());
+            $this->assertFalse($textNodes[$i + 1]->isWhiteAfter());
+        }
+    }
+
+    /**
+     * @group unit
+     */
+    public function testUnitCharacters2(): void
+    {
+        $chars = 'a a.a,a"a\'a(a)a?a:a;a!a{a}a-a+a*a=a_a[a]a|';
+        $tree = new DomTreeBuilder();
+
+        $refProp = new ReflectionProperty($tree, 'numberOfActivePreTags');
+        $refProp->setAccessible(true);
+        $refProp->setValue($tree, 1);
+
+        $tree->startDocument();
+        $tree->characters(null, $chars);
+        $tree->endDocument();
+
+        $refProp = new ReflectionProperty($tree, 'textNodes');
+        $refProp->setAccessible(true);
+        $textNodes = $refProp->getValue($tree);
+
+        $chars = str_split($chars);
+
+        for ($i = 0, $max = count($chars); $i < $max; $i += 2) {
+            $this->assertEquals('a', strval($textNodes[$i]));
+            $this->assertEquals($chars[$i + 1], strval($textNodes[$i + 1]));
+
+            $this->assertFalse($textNodes[$i]->isWhiteBefore());
+            $this->assertFalse($textNodes[$i]->isWhiteAfter());
+            $this->assertFalse($textNodes[$i + 1]->isWhiteBefore());
+            $this->assertFalse($textNodes[$i + 1]->isWhiteAfter());
+        }
+    }
+
+    /**
+     * @group unit
+     */
+    public function testUnitCharacters3(): void
+    {
+        $chars = 'a/a.a!a,a;a?a=a\'a"a[a]a{a}a(a)a&a|a\\a-a_a+a*a:';
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $tree->characters(null, $chars);
+        $tree->endDocument();
+
+        $refProp = new ReflectionProperty($tree, 'textNodes');
+        $refProp->setAccessible(true);
+        $textNodes = $refProp->getValue($tree);
+
+        $chars = str_split($chars);
+
+        for ($i = 0, $max = count($chars); $i < $max; $i += 2) {
+            $this->assertEquals('a', strval($textNodes[$i]));
+            $this->assertEquals($chars[$i + 1], strval($textNodes[$i + 1]));
+
+            $this->assertFalse($textNodes[$i]->isWhiteBefore());
+            $this->assertFalse($textNodes[$i]->isWhiteAfter());
+            $this->assertFalse($textNodes[$i + 1]->isWhiteBefore());
+            $this->assertFalse($textNodes[$i + 1]->isWhiteAfter());
+        }
+    }
+
+    /**
+     * @group unit
+     */
+    public function testUnitCharacters4(): void
+    {
+        $chars = "a a\na\ra\ta";
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $tree->characters(null, $chars);
+        $tree->endDocument();
+
+        $refProp = new ReflectionProperty($tree, 'textNodes');
+        $refProp->setAccessible(true);
+        $textNodes = $refProp->getValue($tree);
+
+        $chars = str_split($chars);
+
+        for ($i = 0, $max = 5; $i < $max; $i += 1) {
+            $this->assertEquals('a', strval($textNodes[$i]));
+
+            if ($i == 0) {
+                $this->assertFalse($textNodes[$i]->isWhiteBefore());
+            } else {
+                $this->assertTrue($textNodes[$i]->isWhiteBefore());
+            }
+
+            if ($i == $max - 1) {
+                $this->assertFalse($textNodes[$i]->isWhiteAfter());
+            } else {
+                $this->assertTrue($textNodes[$i]->isWhiteAfter());
+            }
+        }
+    }
+
+    /**
      * @expectedException RuntimeException
+     * @group unit
      */
     public function testCharactersException(): void
     {
@@ -374,6 +651,27 @@ class DomTreeBuilderTest extends TestCase
             $this->assertEquals(8004, $e->getCode());
             throw $e;
         }
+    }
+
+    /**
+     * @group unit
+     */
+    public function testAddSeparatingNode(): void
+    {
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, true);
+        $tree->startElement(null, 'div', []);
+        $tree->startElement(null, 'p', []);
+        $tree->characters(null, 'test');
+        $tree->endElement(null, 'p');
+        $tree->endElement(null, 'div');
+
+        $refProp = new ReflectionProperty($tree, 'textNodes');
+        $refProp->setAccessible(true);
+        $value = $refProp->getValue($tree);
+
+        $this->assertTrue(end($value) instanceof SeparatingNode);
     }
 
     /**

@@ -34,11 +34,11 @@ class DelimiterAtom extends TextAtom
             case '?':
             case ' ':
             case '=':
-            case '\'':
+            case "'":
             case '"':
-            case '\t':
-            case '\r':
-            case '\n':
+            case "\t":
+            case "\r":
+            case "\n":
             case '[':
             case ']':
             case '{':
