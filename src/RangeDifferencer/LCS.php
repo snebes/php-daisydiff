@@ -159,33 +159,14 @@ abstract class LCS
         $M = $topL2 - $bottomL2 + 1;
 
         $delta  = $N - $M;
-        $isEven = false;
-
-        if (($delta % 2) == 1) {
-            $isEven = false;
-        } else {
-            $isEven = true;
-        }
+        $isEven = boolval(($delta % 2) == 0);
 
         $limit = min($this->maxDifferences, intval(ceil(($N + $M + 1) / 2)));
 
-        // a 0 or 1 that we add to the start offset to make it odd/even
-        $valueToAddForward = 0;
-
         // Offset to make it odd/even.
-        if (($M & 1) == 1) {
-            $valueToAddForward = 1;
-        } else {
-            $valueToAddForward = 0;
-        }
-
-        $valueToAddBackward = 0;
-
-        if (($N & 1) == 1) {
-            $valueToAddBackward = 1;
-        } else {
-            $valueToAddBackward = 0;
-        }
+        // a 0 or 1 that we add to the start offset to make it odd/even
+        $valueToAddForward  = $M % 2;
+        $valueToAddBackward = $N % 2;
 
         $startForward  = -$M;
         $endForward    = $N;
@@ -309,7 +290,7 @@ abstract class LCS
         $delta = $N - $M;
         $forwardStartDiag = 0;
 
-        if (($M & 1) == ($limit & 1)) {
+        if (($M % 2) == ($limit % 2)) {
             $forwardStartDiag = max(-$M, -$limit);
         } else {
             $forwardStartDiag = max(1 - $M, -$limit);
@@ -318,7 +299,7 @@ abstract class LCS
         $forwardEndDiag    = min($N, $limit);
         $backwardStartDiag = 0;
 
-        if (($N & 1) == ($limit & 1)) {
+        if (($N % 2) == ($limit % 2)) {
             $backwardStartDiag = max(-$N, -$limit);
         } else {
             $backwardStartDiag = max(1 - $N, -$limit);
