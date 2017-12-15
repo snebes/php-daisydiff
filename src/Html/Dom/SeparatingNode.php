@@ -23,6 +23,8 @@ class SeparatingNode extends TextNode
      */
     public function equals(?Node $other): bool
     {
-        return $other === $this;
+        // No other separator is equal to this one. This has the effect that text nodes separated by such a separator
+        // can never be treated as a text sequence by the RangeDifferencer/TextNodeComparator.
+        return $other == $this;
     }
 }
