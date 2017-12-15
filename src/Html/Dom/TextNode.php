@@ -25,6 +25,7 @@ class TextNode extends Node
         parent::__construct($parent);
 
         $this->s = $s;
+        $this->modification = new Modification(ModificationType::NONE, ModificationType::NONE);
     }
 
     /**
@@ -52,10 +53,10 @@ class TextNode extends Node
     public function getMinimalDeletedSet(int $id): iterable
     {
         $nodes = [];
+        $modification = $this->getModification();
 
-        if (!is_null($this->getModification()) &&
-            $this->getModification()->getType() == ModificationType::REMOVED &&
-            $this->getModification()->getid() == $id) {
+        if (!is_null($modification) && $modification->getType() == ModificationType::REMOVED &&
+            $modification->getId() == $id) {
             $nodes = [$this];
         }
 
@@ -92,8 +93,8 @@ class TextNode extends Node
             return false;
         }
 
-        $sThis  = str_replace("\n", ' ', $this->getText());
-        $sOther = str_replace("\n", ' ', $other->getText());
+        $sThis  = str_replace('\n', ' ', $this->getText());
+        $sOther = str_replace('\n', ' ', $other->getText());
 
         return $sThis == $sOther;
     }
@@ -101,12 +102,8 @@ class TextNode extends Node
     /**
      * @return Modification
      */
-    public function getModification(): Modification
+    public function getModification(): ?Modification
     {
-        if (!$this->modification instanceof Modification) {
-            $this->modification = new Modification(ModificationType::NONE, ModificationType::NONE);
-        }
-
         return $this->modification;
     }
 

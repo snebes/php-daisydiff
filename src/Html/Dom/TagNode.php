@@ -72,7 +72,7 @@ class TagNode extends Node implements IteratorAggregate
     {
         parent::setRoot($root);
 
-        foreach ($this->children as $child) {
+        foreach ($this as $child) {
             $child->setRoot($root);
         }
 
@@ -89,7 +89,7 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function getIndexOf(Node $child): int
     {
-        $key = array_search($child, $this->children, true);
+        $key = array_search($child, $this->children, false);
 
         if (false === $key) {
             return -1;

@@ -21,6 +21,15 @@ class HtmlDifferTest extends TestCase
         $this->assertContains('<p> This is a <ins class="diff-html-added"', $result);
     }
 
+//    public function simpleTextAddWithAncestor(): void
+//    {
+//        $ancestor = '<p> This is a book</p>';
+//        $oldText  = '<p> This is a blue book</p>';
+//        $newText  = '<p> This is a big blue book</p>';
+//
+//        $result = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
+//    }
+
     public function testSimpleTextRemove(): void
     {
         $oldText = '<p> This is a blue book</p>';
@@ -39,7 +48,7 @@ class HtmlDifferTest extends TestCase
         $result = HtmlTestFixture::diff($oldText, $newText);
 
         $this->assertContains('<p> This is a <del class="diff-html-removed"', $result);
-        $this->assertContains('blue</del> <ins class="diff-html-added"', $result);
+        $this->assertContains('blue </del><ins class="diff-html-added"', $result);
     }
 
     public function testAttributeAdd(): void

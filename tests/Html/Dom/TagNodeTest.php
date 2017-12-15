@@ -52,10 +52,15 @@ class TagNodeTest extends TestCase
     {
         $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
-        $leaf = new TagNode($root, 'leaf');
+        $root->addChild($intermediate, 0);
 
-        $root->addChild($intermediate);
+        $leaf = new TagNode($root, 'leaf');
         $root->addChild($leaf, 1);
+
+        try {
+            $root->addChild(null, 4);
+        } catch (TypeError $e) {
+        }
 
         $this->assertEquals($leaf, $root->getChild(1));
     }
@@ -68,7 +73,7 @@ class TagNodeTest extends TestCase
         $root = new TagNode(null, 'root');
 
         try {
-            $root->addChild(null, 4);
+            $root->addChild(null, 1);
         } catch (TypeError $e) {
             $this->assertEquals(0, $e->getCode());
             throw $e;

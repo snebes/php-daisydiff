@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
  */
 class WhiteSpaceNodeTest extends TestCase
 {
-    public function testCopyTree(): void
+    public function testWhiteSpaceNode(): void
     {
         $root = new TagNode(null, 'root');
         $textNode = new TextNode($root, 'contents of root node');

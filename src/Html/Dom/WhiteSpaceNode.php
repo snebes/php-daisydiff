@@ -15,22 +15,21 @@ class WhiteSpaceNode extends TextNode
     {
         parent::__construct($parent, $s);
 
-/*
         if ($like instanceof TextNode) {
             $newModification = clone $like->getModification();
             $newModification->setFirstOfId(false);
 
             $this->setModification($newModification);
         }
-*/
     }
 
     /**
+     * @param  string $c
      * @return bool
      */
     public static function isWhiteSpace(string $c): bool
     {
-        switch ($c) {
+        switch ($c[0]) {
             case ' ':
             case "\t":
             case "\r":
