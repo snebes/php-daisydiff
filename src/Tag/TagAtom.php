@@ -24,11 +24,14 @@ class TagAtom implements AtomInterface
             throw new RuntimeException('The given string is not a valid tag.');
         }
 
+        // Remove the < and >.
         $s = mb_substr($s, 1, -1);
 
-        if (false !== ($pos = mb_strpos($s, ' ')) && $pos > 0) {
+        if (false !== ($pos = mb_strpos($s, ' '))) {
+            // Save q-name.
             $this->identifier = mb_substr($s, 0, $pos);
-            // TODO check if the +1 is ok!
+
+            // Save attributes.
             $this->internalIdentifiers = mb_substr($s, $pos + 1);
         } else {
             $this->identifier = $s;

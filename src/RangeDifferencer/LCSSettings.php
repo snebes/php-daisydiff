@@ -8,7 +8,7 @@ namespace DaisyDiff\RangeDifferencer;
 final class LCSSettings
 {
     /** @var float */
-    private $tooLong = 100000000.0;
+    private $tooLong = 10000000.0;
 
     /** @var float */
     private $powLimit = 1.5;

@@ -154,7 +154,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
      * @param  int                $leftStart
      * @param  int                $leftEnd
      * @param  int                $rightStart
-     * @param  int                $leftEnd
+     * @param  int                $rightEnd
      * @param  TextNodeComparator $leftComparator
      * @return void
      */
@@ -180,6 +180,8 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
         while ($i < $rightEnd) {
             $acThis  = new AncestorComparator($this->getTextNode($i)->getParentTree());
             $acOther = new AncestorComparator($leftComparator->getTextNode($j)->getParentTree());
+
+            /** @var AncestorComparatorResult */
             $result  = $acThis->getResult($acOther);
 
             if ($result->isChanged()) {

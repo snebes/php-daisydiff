@@ -45,20 +45,19 @@ class TagComparator implements AtomSplitterInterface
 
         for ($i = 0; $i < mb_strlen($s); $i++) {
             $c = $s[$i];
-            $tag = mb_substr($s, $i, mb_strpos($s, '>', $i) + 1);
 
-            if ($c == '<' && TagAtom::isValidTag($tag)) {
+            if ($c == '<' && TagAtom::isValidTag(mb_substr($s, $i, mb_strpos($s, '>', $i) + 1 - $i))) {
                 // A tag.
-                if (mb_strlen($currentWord) > 0) {
+                if (strlen($currentWord) > 0) {
                     $this->atoms[] = new TextAtom($currentWord);
                     $currentWord = '';
                 }
 
                 $end = mb_strpos($s, '>', $i);
-                $this->atoms[] = new TagAtom(mb_substr($s, $i, $end + 1));
+                $this->atoms[] = new TagAtom(mb_substr($s, $i, $end + 1 - $i));
                 $i = $end;
             }
-            elseif (DelimiterAtom::isValidDelimiter('' . $c)) {
+            elseif (DelimiterAtom::isValidDelimiter($c)) {
                 // A delimiter.
                 if (mb_strlen($currentWord) > 0) {
                     $this->atoms[] = new TextAtom($currentWord);
@@ -73,7 +72,7 @@ class TagComparator implements AtomSplitterInterface
             }
         }
 
-        if (mb_strlen($currentWord) > 0) {
+        if (strlen($currentWord) > 0) {
             $this->atoms[] = new TextAtom($currentWord);
         }
     }

@@ -85,18 +85,11 @@ class TextNode extends Node
      */
     public function isSameText(?Node $other): bool
     {
-        if (is_null($other)) {
+        if (is_null($other) || !$other instanceof TextNode) {
             return false;
         }
 
-        if (!$other instanceof TextNode) {
-            return false;
-        }
-
-        $sThis  = str_replace('\n', ' ', $this->getText());
-        $sOther = str_replace('\n', ' ', $other->getText());
-
-        return $sThis == $sOther;
+        return str_replace('\n', ' ', $this->getText()) === str_replace('\n', ' ', $other->getText());
     }
 
     /**

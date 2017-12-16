@@ -69,7 +69,7 @@ class DelimiterAtom extends TextAtom
      * @param  string $s
      * @return bool
      */
-    private function isValidDelimiterAtom(string $s): bool
+    private function isValidDelimiterAtom(?string $s): bool
     {
         return self::isValidDelimiter($s);
     }

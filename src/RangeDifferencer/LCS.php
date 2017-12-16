@@ -10,7 +10,7 @@ namespace DaisyDiff\RangeDifferencer;
 abstract class LCS
 {
     /** @var int */
-    protected $maxDifferences;
+    protected $maxDifferences = 0;
 
     /** @var int */
     protected $length = 0;
@@ -159,14 +159,14 @@ abstract class LCS
         $M = $topL2 - $bottomL2 + 1;
 
         $delta  = $N - $M;
-        $isEven = boolval(($delta % 2) == 0);
+        $isEven = ($delta & 1) == 1? false : true;
 
-        $limit = min($this->maxDifferences, intval(ceil(($N + $M + 1) / 2)));
+        $limit = min($this->maxDifferences, intval((($N + $M + 1) / 2)));
 
         // Offset to make it odd/even.
         // a 0 or 1 that we add to the start offset to make it odd/even
-        $valueToAddForward  = $M % 2;
-        $valueToAddBackward = $N % 2;
+        $valueToAddForward  = ($M & 1) == 1? 1 : 0;
+        $valueToAddBackward = ($N & 1) == 1? 1 : 0;
 
         $startForward  = -$M;
         $endForward    = $N;
@@ -290,7 +290,7 @@ abstract class LCS
         $delta = $N - $M;
         $forwardStartDiag = 0;
 
-        if (($M % 2) == ($limit % 2)) {
+        if (($M & 1) == ($limit & 1)) {
             $forwardStartDiag = max(-$M, -$limit);
         } else {
             $forwardStartDiag = max(1 - $M, -$limit);
@@ -299,7 +299,7 @@ abstract class LCS
         $forwardEndDiag    = min($N, $limit);
         $backwardStartDiag = 0;
 
-        if (($N % 2) == ($limit % 2)) {
+        if (($N & 1) == ($limit & 1)) {
             $backwardStartDiag = max(-$N, -$limit);
         } else {
             $backwardStartDiag = max(1 - $N, -$limit);
@@ -367,7 +367,7 @@ abstract class LCS
         }
 
         // Return the middle diagonal with maximum progress.
-        return $maxProgress[intval(ceil($numProgress / 2))];
+        return $maxProgress[intval(floor($numProgress / 2))];
     }
 
     /**

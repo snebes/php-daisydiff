@@ -84,18 +84,18 @@ class TagNode extends Node implements IteratorAggregate
      * object in the children collection. If the parameter is from a different tree, then this method attempts to return
      * the index of first semantically equivalent node to the parameter.
      *
-     * @param  Node $child
+     * @param  Node $node
      * @return int
      */
-    public function getIndexOf(Node $child): int
+    public function getIndexOf(Node $node): int
     {
-        $key = array_search($child, $this->children, false);
-
-        if (false === $key) {
-            return -1;
+        foreach ($this->children as $key => $child) {
+            if ($child === $node) {
+                return $key;
+            }
         }
 
-        return $key;
+        return -1;
     }
 
     /**
@@ -171,7 +171,7 @@ class TagNode extends Node implements IteratorAggregate
      * Considers tags from different trees equal if they have same name and equivalent attributes. No attention paid to
      * the content (children) of the tag. Considers tags from the same tree equal if it is the same object.
      *
-     * @param  Node $obj
+     * @param  TagNode $tagNode
      * @return bool
      */
     public function equals(TagNode $tagNode): bool
@@ -208,7 +208,7 @@ class TagNode extends Node implements IteratorAggregate
      * Returns true if this tag is similar to the given other tag. The tags may be from different trees. If the tag name
      * and attributes are the same, the result will be true.
      *
-     * @param  Node $another
+     * @param  Node $other
      * @return bool
      */
     protected function isSimilarTag(Node $other): bool
@@ -274,7 +274,7 @@ class TagNode extends Node implements IteratorAggregate
         // By default, we think that all children are in the deleted set until we prove otherwise.
         $hasNotDeletedDescendant = false;
 
-        foreach ($this->children as $child) {
+        foreach ($this as $child) {
             $childrenChildren = $child->getMinimalDeletedSet($id);
             $nodes = array_merge($nodes, $childrenChildren);
 
@@ -387,10 +387,10 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function removeChild(Node $node): self
     {
-        $index = array_search($node, $this->children, true);
-
-        if (false !== $index) {
-            array_splice($this->children, $index, 1);
+        foreach ($this->children as $key => $child) {
+            if ($child === $node) {
+                array_splice($this->children, $key, 1);
+            }
         }
 
         return $this;
