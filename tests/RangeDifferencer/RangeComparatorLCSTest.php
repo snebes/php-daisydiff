@@ -147,9 +147,6 @@ class RangeComparatorLCSTest extends TestCase
         $this->assertFalse($refMethod->invoke($comp,0, 3));
     }
 
-    /**
-     * @group incomplete
-     */
     public function testGetDifferencesExample1(): void
     {
         $oldText = "<p> This is a blue book</p> \n <div style=\"example\">This book is about food</div>";

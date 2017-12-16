@@ -158,6 +158,10 @@ abstract class LCS
         $N = $topL1 - $bottomL1 + 1;
         $M = $topL2 - $bottomL2 + 1;
 
+//        var_dump("\n\n\n");
+//        var_dump($V);
+//        var_dump(sprintf('N: %d M: %d bottom: %d, %d top: %d, %d', $N, $M, $bottomL1, $bottomL2, $topL1, $topL2));
+
         $delta  = $N - $M;
         $isEven = ($delta & 1) == 1? false : true;
 
@@ -197,6 +201,8 @@ abstract class LCS
                 $snake[1] = $y + $bottomL2;
                 $snake[2] = 0;
 
+//                var_dump(sprintf('1 x: %d y: %d k: %d d: %d', $x, $y, $k, $d));
+
                 while ($x < $N && $y < $M && $this->isRangeEqual($x + $bottomL1, $y + $bottomL2)) {
                     $x++;
                     $y++;
@@ -205,7 +211,11 @@ abstract class LCS
 
                 $V[0][$limit + $k] = $x;
 
+//                var_dump(sprintf('%d %d %d %d', $x, $V[1][$limit + $k - $delta], $k, $delta));
+
                 if (!$isEven && $k >= $delta - $d + 1 && $k <= $delta + $d - 1 && $x >= $V[1][$limit + $k - $delta]) {
+//                    var_dump(sprintf('Returning: %d', 2 * $d - 1));
+
                     return intval(2 * $d - 1);
                 }
 
@@ -236,6 +246,8 @@ abstract class LCS
                 $y = $x - $k - $delta;
                 $snake[2] = 0;
 
+//                var_dump(sprintf('2 x: %d y: %d k: %d d: %d', $x, $y, $k, $d));
+
                 while ($x > 0 && $y > 0 && $this->isRangeEqual($x - 1 + $bottomL1, $y - 1 + $bottomL2)) {
                     $x--;
                     $y--;
@@ -245,6 +257,8 @@ abstract class LCS
                 $V[1][$limit + $k] = $x;
 
                 if ($isEven && $k >= -$delta - $d && $k <= $d - $delta && $x <= $V[0][$limit + $k + $delta]) {
+//                    var_dump(sprintf('Returning: %d', 2 * $d));
+
                     $snake[0] = $bottomL1 + $x;
                     $snake[1] = $bottomL2 + $y;
 
@@ -265,7 +279,11 @@ abstract class LCS
         // Computing the true LCS is too expensive, instead find the diagonal with the most progress and pretend a
         // middle snake of length 0 occurs there.
         /** @var int[] */
-        $mostProgress = $this->findMostProgress($M, $N, $limit, $V);
+//        var_dump($M);
+//        var_dump($N);
+//        var_dump($limit);
+//        var_dump($V);
+        $mostProgress = static::findMostProgress($M, $N, $limit, $V);
 
         $snake[0] = $bottomL1 + $mostProgress[0];
         $snake[1] = $bottomL2 + $mostProgress[1];
@@ -285,7 +303,7 @@ abstract class LCS
      * @param  int[][] $V
      * @return int[]
      */
-    protected function findMostProgress(int $M, int $N, int $limit, array $V): iterable
+    protected static function findMostProgress(int $M, int $N, int $limit, array $V): iterable
     {
         $delta = $N - $M;
         $forwardStartDiag = 0;

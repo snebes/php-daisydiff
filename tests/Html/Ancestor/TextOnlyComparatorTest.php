@@ -67,9 +67,6 @@ class TextOnlyComparatorTest extends TestCase
         $this->assertFalse($comp->skipRangeComparison(0, 1, $comp));
     }
 
-    /**
-     * @group incomplete
-     */
     public function testGetMatchRatio(): void
     {
         $root = new TagNode(null, 'root');
