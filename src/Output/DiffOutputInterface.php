@@ -12,7 +12,7 @@ interface DiffOutputInterface
     /**
      * Parses a Node Tree and produces an output format.
      *
-     * @param  TagNode $root
+     * @param  TagNode $node
      * @return void
      */
     public function generateOutput(TagNode $node): void;

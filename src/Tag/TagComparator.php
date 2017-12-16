@@ -130,11 +130,11 @@ class TagComparator implements AtomSplitterInterface
      */
     public function rangesEqual(int $thisIndex, RangeComparatorInterface $other, int $otherIndex): bool
     {
-        if (!$other instanceof TagComparator) {
-            return false; // @codeCoverageIgnore
+        if ($other instanceof TagComparator) {
+            return $other->getAtom($otherIndex)->equalsIdentifier($this->getAtom($thisIndex));
         }
 
-        return $other->getAtom($otherIndex)->equalsIdentifier($this->getAtom($thisIndex));
+        return false; // @codeCoverageIgnore
     }
 
     /**

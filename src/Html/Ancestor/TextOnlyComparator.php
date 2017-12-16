@@ -57,11 +57,11 @@ class TextOnlyComparator implements RangeComparatorInterface
      */
     public function rangesEqual(int $owni, RangeComparatorInterface $other, int $otheri): bool
     {
-        if (!$other instanceof TextOnlyComparator) {
-            return false; // @codeCoverageIgnore
+        if ($other instanceof TextOnlyComparator) {
+            return $this->getLeaf($owni)->isSameText($other->getLeaf($otheri));
         }
 
-        return $this->getLeaf($owni)->isSameText($other->getLeaf($otheri));
+        return false; // @codeCoverageIgnore
     }
 
     /**

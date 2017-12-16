@@ -42,11 +42,11 @@ class AncestorComparator implements RangeComparatorInterface
      */
     public function rangesEqual(int $thisIndex, RangeComparatorInterface $other, int $otherIndex): bool
     {
-        if (!$other instanceof AncestorComparator) {
-            return false; // @codeCoverageIgnore
+        if ($other instanceof AncestorComparator) {
+            return $other->getAncestor($otherIndex)->isSameTag($this->getAncestor($thisIndex));
         }
 
-        return $other->getAncestor($otherIndex)->isSameTag($this->getAncestor($thisIndex));
+        return false; // @codeCoverageIgnore
     }
 
     /**
