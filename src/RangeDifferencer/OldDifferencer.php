@@ -29,7 +29,7 @@ final class OldDifferencer
      * @param  RangeComparatorInterface $right
      * @return RangeDifferences[]
      */
-    public static function findDifferences(RangeComparatorInterface $left, RangeComparatorInterface $right): ?iterable
+    public static function findDifferences(RangeComparatorInterface $left, RangeComparatorInterface $right): iterable
     {
         // Assert that both RangeComparatorInterface are of the same class.
         assert(get_class($right) == get_class($left));
@@ -73,7 +73,9 @@ final class OldDifferencer
             // $d is the current edit distance.
 
             if ($right->skipRangeComparison($d, $maxDiagonal, $left)) {
-                return [];
+                // This condition always returns false, so the following code is never executed.
+                // It should be something we already found.
+                return []; // @codeCoverageIgnore
             }
 
             // For each relevant diagonal (-d, -d+2, ... d-2, d)

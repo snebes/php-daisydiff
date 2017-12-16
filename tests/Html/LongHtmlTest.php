@@ -2,17 +2,7 @@
 
 namespace DaisyDiff\Html;
 
-use DaisyDiff\Html\Ancestor\ChangeText;
-use DaisyDiff\Html\Dom\DomTreeBuilder;
-use DaisyDiff\Html\Dom\ImageNode;
-use DaisyDiff\Html\Dom\TagNode;
-use DaisyDiff\Html\Dom\TextNode;
-use DaisyDiff\Html\Modification\Modification;
-use DaisyDiff\Html\Modification\ModificationType;
-use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use StdClass;
 
 /**
  * Unit tests for handling long lines of HTML.

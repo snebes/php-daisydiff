@@ -4,7 +4,6 @@ namespace DaisyDiff\Html;
 
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 
 /**
  * HtmlDiffer Tests.
@@ -84,14 +83,11 @@ class HtmlDifferTest extends TestCase
 
     public function testScore(): void
     {
-        $refClass = new ReflectionClass(HtmlDiffer::class);
-        $differ = $refClass->newInstanceWithoutConstructor();
-
-        $this->assertEquals(2.7, $differ->score(2, 5, 10), '', 0.5);
-        $this->assertEquals(0, $differ->score(0, 0, 4, 20), '', 0.5);
-        $this->assertEquals(0, $differ->score(1, 2, 0, 0, 9), '', 0.5);
-        $this->assertEquals(0.6, $differ->score(0, 2, 0, 2), '', 0.5);
-        $this->assertEquals(3.3, $differ->score(7, 6, 8), '', 0.5);
+        $this->assertEquals(2.7, HtmlDiffer::score(2, 5, 10), '', 0.5);
+        $this->assertEquals(0, HtmlDiffer::score(0, 0, 4, 20), '', 0.5);
+        $this->assertEquals(0, HtmlDiffer::score(1, 2, 0, 0, 9), '', 0.5);
+        $this->assertEquals(0.6, HtmlDiffer::score(0, 2, 0, 2), '', 0.5);
+        $this->assertEquals(3.3, HtmlDiffer::score(7, 6, 8), '', 0.5);
     }
 
     /**
@@ -99,11 +95,8 @@ class HtmlDifferTest extends TestCase
      */
     public function testScoreException(): void
     {
-        $refClass = new ReflectionClass(HtmlDiffer::class);
-        $differ = $refClass->newInstanceWithoutConstructor();
-
         try {
-            $differ->score(1, 2);
+            HtmlDiffer::score(1, 2);
         } catch (OutOfBoundsException $e) {
             $this->assertEquals('Need at least 3 numbers.', $e->getMessage());
             throw $e;

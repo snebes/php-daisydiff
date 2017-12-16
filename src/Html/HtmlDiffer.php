@@ -124,7 +124,7 @@ class HtmlDiffer
      * @param  int[] ...$numbers
      * @return float
      */
-    public function score(int ...$numbers): float
+    public static function score(int ...$numbers): float
     {
         if (count($numbers) < 3) {
             throw new OutOfBoundsException('Need at least 3 numbers.');
