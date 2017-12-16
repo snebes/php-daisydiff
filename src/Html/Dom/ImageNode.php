@@ -17,8 +17,10 @@ class ImageNode extends TextNode
      */
     public function __construct(?TagNode $parent, ?array $attributes)
     {
-        $this->attributes = array_merge(['src' => ''], (array) $attributes);
-        parent::__construct($parent, '<img>' . mb_strtolower($this->attributes['src']) . '</img>');
+        $this->attributes = $attributes ?? [];
+
+        $src = array_key_exists('src', $this->attributes)? mb_strtolower($this->attributes['src']) : '';
+        parent::__construct($parent, "<img>{$src}</img>");
     }
 
     /**
@@ -26,11 +28,7 @@ class ImageNode extends TextNode
      */
     public function isSameText(?Node $other): bool
     {
-        if (is_null($other)) {
-            return false;
-        }
-
-        if (!$other instanceof ImageNode) {
+        if (is_null($other) || !$other instanceof ImageNode) {
             return false;
         }
 

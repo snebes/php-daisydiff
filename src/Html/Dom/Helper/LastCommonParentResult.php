@@ -31,13 +31,11 @@ class LastCommonParentResult
 
     /**
      * @param  TagNode $parent
-     * @return self
+     * @return void
      */
-    public function setLastCommonParent(?TagNode $parent): self
+    public function setLastCommonParent(?TagNode $parent): void
     {
         $this->parent = $parent;
-
-        return $this;
     }
 
     /**
@@ -49,13 +47,11 @@ class LastCommonParentResult
     }
 
     /**
-     * @return self
+     * @return void
      */
-    public function setSplittingNeeded(): self
+    public function setSplittingNeeded(): void
     {
         $this->splittingNeeded = true;
-
-        return $this;
     }
 
     /**
@@ -68,13 +64,11 @@ class LastCommonParentResult
 
     /**
      * @param  int $depth
-     * @return self
+     * @return void
      */
-    public function setLastCommonParentDepth(int $depth): self
+    public function setLastCommonParentDepth(int $depth): void
     {
         $this->lastCommonParentDepth = $depth;
-
-        return $this;
     }
 
     /**
@@ -86,13 +80,11 @@ class LastCommonParentResult
     }
 
     /**
-     * @param  int $depth
-     * @return self
+     * @param  int $index
+     * @return void
      */
-    public function setIndexInLastCommonParent(int $index): self
+    public function setIndexInLastCommonParent(int $index): void
     {
         $this->indexInLastCommonParent = $index;
-
-        return $this;
     }
 }
