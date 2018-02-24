@@ -8,7 +8,7 @@ $oldText = file_get_contents('old.html');
 $newText = file_get_contents('new.html');
 
 $differ = new DaisyDiff();
-$result = $differ->diffHtml($oldText, $newText);
+$result = $differ->diff($oldText, $newText);
 
 file_put_contents('output.html', $result);
 

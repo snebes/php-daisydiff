@@ -2,6 +2,7 @@
 
 namespace DaisyDiff\RangeDifferencer;
 
+use ArrayObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use ReflectionProperty;
@@ -12,48 +13,48 @@ use ReflectionProperty;
 class LCSTest extends TestCase
 {
     /**
-     * @group unit
+     * @param  int $length1
+     * @param  int $length2
+     * @param  int $b1
+     * @param  int $t1
+     * @param  int $b2
+     * @param  int $t2
+     * @return int
      */
-    public function testLongestCommonSequence1(): void
+    public function lcsRecHelper(int $length1, int $length2, int $b1, int $t1, int $b2, int $t2): int
     {
-        $fixture = new LCSFixture(0, 0);
+        $lcs    = new LCSFixture($length1, $length2);
+        $snake  = [0, 0, 0];
+        $V      = array_fill(0, 2, array_fill(0, $length1 + $length2 + 1, 0));
+        $params = [$b1, $t1, $b2, $t2, &$V, &$snake];
 
-        $this->assertEquals(0, $fixture->getLength());
+        $method = new ReflectionMethod($lcs, 'lcsRec');
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($lcs, $params);
     }
 
-    /**
-     * @group unit
-     */
-    public function testLongestCommonSequence2(): void
+    public function testLcsRec1(): void
     {
-        $fixture  = new LCSFixture(0, 0);
-        $settings = new LCSSettings();
+        $bottom1 = 0;
+        $top1    = 1;
+        $bottom2 = 0;
+        $top2    = 1;
+        $length1 = 3;
+        $length2 = 3;
 
-        $this->assertEquals(0, $fixture->getLength1());
-        $this->assertEquals(0, $fixture->getLength2());
-        $this->assertEquals(0, $fixture->longestCommonSequence($settings));
-
-        $fixture->setLength1(5);
-        $this->assertEquals(0, $fixture->longestCommonSequence($settings));
-
-        $fixture->setLength1(0);
-        $fixture->setLength2(10);
-        $this->assertEquals(0, $fixture->longestCommonSequence($settings));
+        $this->assertEquals(0, $this->lcsRecHelper($length1, $length2, $bottom1, $top1, $bottom2, $top2));
     }
 
-    /**
-     * @group unit
-     */
-    public function testFindMiddleSnake1(): void
+    public function testLcsRec2(): void
     {
-        $fixture = new LCSFixture(5, 10);
+        $bottom1 = 0;
+        $top1    = 46;
+        $bottom2 = 0;
+        $top2    = 44;
+        $length1 = 49;
+        $length2 = 47;
 
-        $V = array_fill(0, 2, array_fill(0, 10, 0));
-        $snake = [0, 0, 0];
-
-        $refMethod = new ReflectionMethod($fixture, 'findMiddleSnake');
-        $refMethod->setAccessible(true);
-
-//        $refMethod->invokeArgs($fixture, [0, 0, 0, 0, &$V, &$snake]);
+        $this->assertEquals(7, $this->lcsRecHelper($length1, $length2, $bottom1, $top1, $bottom2, $top2));
     }
 }
