@@ -23,6 +23,7 @@ class HtmlTestFixture
      * @param  string $oldText
      * @param  string $newText
      * @return string
+     * @throws
      */
     public static function diff(string $oldText, string $newText): string
     {

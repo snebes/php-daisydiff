@@ -28,7 +28,7 @@ class TextLine
      */
     public function sameText(TextLine $l): bool
     {
-        return 0 == strcmp(strval($this), strval($l));
+        return 0 == strcmp($this->text(), $l->text());
     }
 
     /**
@@ -39,6 +39,11 @@ class TextLine
     public function lineNumber(): int
     {
         return $this->number;
+    }
+
+    public function text(): string
+    {
+        return $this->text;
     }
 
     /**

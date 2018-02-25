@@ -85,7 +85,7 @@ class TextLineLCS extends LCS
      */
     protected function initializeLcs(int $lcsLength): void
     {
-        $this->lcs = array_fill(0, 2, array_fill(0, $lcsLength, 0));
+        $this->lcs = array_fill(0, 2, array_fill(0, $lcsLength, null));
     }
 
     /**
@@ -102,7 +102,7 @@ class TextLineLCS extends LCS
      */
     private function compactAndShiftLCS(array $lcsSide, int $len, array $original): array
     {
-        $result = [];
+        $result = array_fill(0, $len, null);
 
         if (0 == $len) {
             return $result;
@@ -134,8 +134,59 @@ class TextLineLCS extends LCS
         return $result;
     }
 
-    public function getTextLines(string $text): array
+    /**
+     * Breaks the given text up into lines and returns an array of TextLine objects each corresponding to a single line,
+     * ordered according to the line number. That is result[i].lineNumber() == i and is the i'th line in text (starting
+     * from 0) Note: there are 1 more lines than there are newline characters in text. Corollary 1: if the last
+     * character is newline, the last line is empty Corollary 2: the empty string is 1 line.
+     *
+     * @param  string $text
+     * @return TextLine[]
+     */
+    public static function getTextLines(string $text): array
     {
+        $lines   = [];
+        $begin   = 0;
+        $end     = self::getEOL($text, 0);
+        $lineNum = 0;
 
+        while ($end != -1) {
+            $lines[] = new TextLine($lineNum++, substr($text, $begin, $end - $begin));
+            $begin   = $end + 1;
+            $end     = self::getEOL($text, $begin);
+
+            if ($end == $begin && $text[$begin - 1] == "\r" && $text[$begin] == "\n") {
+                // We have \r\n, skip it.
+                $begin = $end + 1;
+                $end   = self::getEOL($text, $begin);
+            }
+        }
+
+        // This is the last line, no more newline characters, so take the rest of the string.
+        $lines[] = new TextLine($lineNum++, substr($text, $begin));
+
+        return $lines;
+    }
+
+    /**
+     * Returns the index of the next end of line marker ('\n' or '\r') after start.
+     *
+     * @param  string $text
+     * @param  int $start
+     * @return int
+     */
+    private static function getEOL(string $text, int $start): int
+    {
+        $max = strlen($text);
+
+        for ($i = $start; $i < $max; $i++) {
+            $c = substr($text, $i, 1);
+
+            if ($c == "\n" || $c == "\r") {
+                return $i;
+            }
+        }
+
+        return -1;
     }
 }

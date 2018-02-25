@@ -53,10 +53,12 @@ abstract class LCS
         }
 
         $this->maxDifferences = intval(ceil(($length1 + $length2 + 1) / 2.0)); // ceil((N+M)/2);
+//        printf("maxDifferences: %s\n", $this->maxDifferences);
 
         if (floatval($length1 * $length2) > self::TOO_LONG) {
             // Limit complexity to D^POW_LIMIT for long sequences
             $this->maxDifferences = intval(pow($this->maxDifferences, self::POW_LIMIT - 1.0));
+//            printf("maxDifferences2: %s\n", $this->maxDifferences);
         }
 
         $this->initializeLcs($length1);
@@ -65,25 +67,38 @@ abstract class LCS
         $forwardBound = 0;
         $max = min($length1, $length2);
 
+//        printf("max: %s\n", $max);
+
         for (; $forwardBound < $max && $this->isRangeEqual($forwardBound, $forwardBound); $forwardBound++) {
             $this->setLcs($forwardBound, $forwardBound);
+
+//            printf("forwardBound: %s\n", $forwardBound);
         }
 
         $backBoundL1 = $length1 - 1;
         $backBoundL2 = $length2 - 1;
+
+//        printf("backBoundL1: %s\n", $backBoundL1);
+//        printf("backBoundL2: %s\n", $backBoundL2);
 
         while ($backBoundL1 >= $forwardBound && $backBoundL2 >= $forwardBound &&
                 $this->isRangeEqual($backBoundL1, $backBoundL2)) {
             $this->setLcs($backBoundL1, $backBoundL2);
             $backBoundL1--;
             $backBoundL2--;
+
+//            printf("backBoundL1: %s\n", $backBoundL1);
+//            printf("backBoundL2: %s\n", $backBoundL2);
         }
 
         $V     = array_fill(0, 2, array_fill(0, $length1 + $length2 + 1, 0));
         $snake = array_fill(0, 3, 0);
 
         $lcsRec = $this->lcsRec($forwardBound, $backBoundL1, $forwardBound, $backBoundL2, $V, $snake);
+//        printf("lcsRec: %s\n", $lcsRec);
+
         $this->length = $forwardBound + $length1 - $backBoundL1 - 1 + $lcsRec;
+//        printf("this->length: %s\n", $this->length);
     }
 
     /**

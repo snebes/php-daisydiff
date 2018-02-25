@@ -2,10 +2,9 @@
 
 namespace DaisyDiff\RangeDifferencer;
 
-use ArrayObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 use ReflectionMethod;
-use ReflectionProperty;
 
 /**
  * LCS Tests
@@ -20,6 +19,7 @@ class LCSTest extends TestCase
      * @param  int $b2
      * @param  int $t2
      * @return int
+     * @throws ReflectionException
      */
     public function lcsRecHelper(int $length1, int $length2, int $b1, int $t1, int $b2, int $t2): int
     {
