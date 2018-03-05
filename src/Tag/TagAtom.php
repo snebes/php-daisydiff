@@ -2,7 +2,7 @@
 
 namespace DaisyDiff\Tag;
 
-use RuntimeException;
+use InvalidArgumentException;
 
 /**
  * An atom that represents a closing or opening tag.
@@ -10,28 +10,26 @@ use RuntimeException;
 class TagAtom implements AtomInterface
 {
     /** @var string */
-    private $identifier;
+    private $identifier = '';
 
     /** @var string */
     private $internalIdentifiers = '';
 
     /**
      * @param  string $s
+     * @throws InvalidArgumentException
      */
     public function __construct(string $s)
     {
         if (!$this->isValidAtom($s)) {
-            throw new RuntimeException('The given string is not a valid tag.');
+            throw new InvalidArgumentException('The given string is not a valid tag.');
         }
 
         // Remove the < and >.
         $s = mb_substr($s, 1, -1);
 
         if (false !== ($pos = mb_strpos($s, ' '))) {
-            // Save q-name.
-            $this->identifier = mb_substr($s, 0, $pos);
-
-            // Save attributes.
+            $this->identifier          = mb_substr($s, 0, $pos);
             $this->internalIdentifiers = mb_substr($s, $pos + 1);
         } else {
             $this->identifier = $s;
@@ -65,15 +63,19 @@ class TagAtom implements AtomInterface
         return
             0 == mb_strrpos($s, '<') &&
             mb_strpos($s, '>') == mb_strlen($s) - 1 &&
-            mb_strlen($s) >= 3
-        ;
+            mb_strlen($s) >= 3;
     }
 
     /** {@inheritdoc} */
     public function getFullText(): string
     {
-        $s = sprintf('<%s%s>', $this->identifier,
-            $this->hasInternalIdentifiers()? " {$this->internalIdentifiers}" : '');
+        $s = sprintf('<%s', $this->identifier);
+
+        if ($this->hasInternalIdentifiers()) {
+            $s .= sprintf(' %s', $this->internalIdentifiers);
+        }
+
+        $s .= '>';
 
         return $s;
     }

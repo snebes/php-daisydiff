@@ -15,7 +15,7 @@ class TextAtom implements AtomInterface
     /**
      * @param  string|null $s
      */
-    public function __construct(?string $s)
+    public function __construct(string $s)
     {
         if (!$this->isValidAtom($s)) {
             throw new RuntimeException('The given String is not a valid Text Atom.');
@@ -49,7 +49,7 @@ class TextAtom implements AtomInterface
     }
 
     /** {@inheritdoc} */
-    public function isValidAtom(?string $s): bool
+    public function isValidAtom(string $s): bool
     {
         return !empty($s);
     }

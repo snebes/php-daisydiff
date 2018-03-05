@@ -16,9 +16,9 @@ interface AtomSplitterInterface extends RangeComparatorInterface
     public function getAtom(int $i): AtomInterface;
 
     /**
-     * @param  int $startAtom
-     * @param  int $endAtom
+     * @param  int      $startAtom
+     * @param  int|null $endAtom
      * @return string
      */
-    public function substring(int $startAtom, int $endAtom = -1): string;
+    public function substring(int $startAtom, ?int $endAtom = null): string;
 }

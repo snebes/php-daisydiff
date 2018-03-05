@@ -8,9 +8,9 @@ namespace DaisyDiff\Tag;
 class DelimiterAtom extends TextAtom
 {
     /**
-     * @param  string $c
+     * @param string $c
      */
-    public function __construct(?string $c)
+    public function __construct(string $c)
     {
         parent::__construct('' . $c);
     }
@@ -26,6 +26,7 @@ class DelimiterAtom extends TextAtom
         }
 
         switch ($s) {
+            // Basic Delimiters.
             case '/':
             case '.':
             case '!':
@@ -39,6 +40,7 @@ class DelimiterAtom extends TextAtom
             case "\t":
             case "\r":
             case "\n":
+            // Extra Delimiters.
             case '[':
             case ']':
             case '{':
@@ -60,7 +62,7 @@ class DelimiterAtom extends TextAtom
     }
 
     /** {@inheritdoc} */
-    public function isValidAtom(?string $s): bool
+    public function isValidAtom(string $s): bool
     {
         return parent::isValidAtom($s) && self::isValidDelimiterAtom($s);
     }

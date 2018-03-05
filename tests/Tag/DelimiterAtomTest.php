@@ -34,14 +34,12 @@ class DelimiterAtomTest extends TestCase
         $input = '<p>This is a blue book</p>';
         $delimInput = '&';
         $empty = '';
-        $nullString = null;
 
         $delimiterAtom = new DelimiterAtom(' ');
 
         $this->assertFalse($delimiterAtom->isValidAtom($input));
         $this->assertTrue($delimiterAtom->isValidAtom($delimInput));
         $this->assertFalse($delimiterAtom->isValidAtom($empty));
-        $this->assertFalse($delimiterAtom->isValidAtom($nullString));
     }
 
     /**
