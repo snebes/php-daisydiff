@@ -97,7 +97,6 @@ class TagDiffer implements TextDifferInterface
 
         if (mb_strlen($s) > 0) {
             $this->output->addClearPart($s);
-            $s = '';
         }
 
         if ($beginLeft < $endLeft) {
@@ -134,9 +133,6 @@ class TagDiffer implements TextDifferInterface
             if ($rightAtom2 < $rightComparator2->getRangeCount()) {
                 $this->output->addClearPart($rightComparator2->substring($rightAtom2));
             }
-
-//            $beginLeft++;
-//            $beginRight++;
         }
     }
 

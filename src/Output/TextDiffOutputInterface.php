@@ -11,19 +11,16 @@ interface TextDiffOutputInterface
 {
     /**
      * @param  string $text
-     * @throws Exception
      */
     public function addClearPart(string $text): void;
 
     /**
      * @param  string $text
-     * @throws Exception
      */
     public function addRemovedPart(string $text): void;
 
     /**
      * @param  string $text
-     * @throws Exception
      */
     public function addAddedPart(string $text): void;
 }

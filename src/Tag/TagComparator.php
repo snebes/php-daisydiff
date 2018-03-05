@@ -48,7 +48,7 @@ class TagComparator implements AtomSplitterInterface
 
             if ($c == '<' && TagAtom::isValidTag(mb_substr($s, $i, mb_strpos($s, '>', $i) + 1 - $i))) {
                 // A tag.
-                if (strlen($currentWord) > 0) {
+                if (mb_strlen($currentWord) > 0) {
                     $this->atoms[] = new TextAtom($currentWord);
                     $currentWord = '';
                 }

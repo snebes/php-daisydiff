@@ -17,6 +17,7 @@ class ArgumentComparator implements AtomSplitterInterface
 
     /**
      * @param string $s
+     * @throws Exception
      */
     public function __construct(string $s)
     {

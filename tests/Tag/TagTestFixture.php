@@ -2,6 +2,7 @@
 
 namespace DaisyDiff\Tag;
 
+use ArrayObject;
 use DaisyDiff\Output\TextDiffOutputInterface;
 
 /**
@@ -10,17 +11,28 @@ use DaisyDiff\Output\TextDiffOutputInterface;
 class TagTestFixture
 {
     /** @var TextOperation[] */
-    private $results = [];
+    private $results;
 
     /**
-     * @param string $oldText
-     * @param string $newText
+     * Default values.
+     */
+    public function __construct()
+    {
+        $this->results = new ArrayObject();
+    }
+
+    /**
+     * @param  string $oldText
+     * @param  string $newText
+     * @return void
+     * @throws
      */
     public function performTagDiff(string $oldText, string $newText): void
     {
         $oldComp = new TagComparator($oldText);
         $newComp = new TagComparator($newText);
-
+print_r($oldComp);
+print_r($newComp);
         $output = new DummyOutput($this->results);
         $differ = new TagDiffer($output);
         $differ->diff($oldComp, $newComp);
@@ -71,7 +83,7 @@ class TagTestFixture
      */
     public function getResults(): array
     {
-        return $this->results;
+        return $this->results->getArrayCopy();
     }
 }
 
@@ -112,7 +124,7 @@ class TextOperation
      */
     public function getType(): int
     {
-        return $this->text;
+        return $this->type;
     }
 
     /**
@@ -133,9 +145,9 @@ class DummyOutput implements TextDiffOutputInterface
     private $results;
 
     /**
-     * @param array $results
+     * @param ArrayObject $results
      */
-    public function __construct(array &$results)
+    public function __construct(ArrayObject $results)
     {
         $this->results = $results;
     }
@@ -148,6 +160,8 @@ class DummyOutput implements TextDiffOutputInterface
         $operation = new TextOperation();
         $operation->setText($text);
         $operation->setType(TextOperation::ADD_TEXT);
+
+        $this->results[] = $operation;
     }
 
     /**
@@ -158,6 +172,8 @@ class DummyOutput implements TextDiffOutputInterface
         $operation = new TextOperation();
         $operation->setText($text);
         $operation->setType(TextOperation::REMOVE_TEXT);
+
+        $this->results[] = $operation;
     }
 
     /**
@@ -168,5 +184,7 @@ class DummyOutput implements TextDiffOutputInterface
         $operation = new TextOperation();
         $operation->setText($text);
         $operation->setType(TextOperation::NO_CHANGE);
+
+        $this->results[] = $operation;
     }
 }
