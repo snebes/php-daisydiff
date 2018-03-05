@@ -9,21 +9,16 @@
             "email": "snebes@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "DaisyDiff\\": "src/"
+        }
+    },
     "require": {
         "php": ">=7.1.0",
         "psr/log": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.6|^6.1"
-    },
-    "autoload": {
-        "psr-4": {
-            "DaisyDiff\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "DaisyDiff\\": ["src/", "tests/"]
-        }
     }
 }

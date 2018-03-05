@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace DaisyDiff\RangeDifferencer;
+namespace DaisyDiff\RangeDifferencer\Core;
 
 /**
  * LCS - Longest Common Sequence - Common Methods.
@@ -9,11 +9,17 @@ namespace DaisyDiff\RangeDifferencer;
  */
 abstract class LCS
 {
-    /** @var int */
-    protected $maxDifferences = 0;
+    /** @const float */
+    const TOO_LONG = 100000000.0;
+
+    /** @const float */
+    const POW_LIMIT = 1.5;
 
     /** @var int */
-    protected $length = 0;
+    private $maxDifferences = 0;
+
+    /** @var int */
+    private $length = 0;
 
     /**
      * @return int
@@ -34,24 +40,25 @@ abstract class LCS
      * After this method is called, the longest common subsequence is available by calling getResult() where result[0]
      * is composed of entries from l1 and result[1] is composed of entries from l2
      *
-     * @param  LCSSettings $settings
      * @return void
      */
-    public function longestCommonSequence(LCSSettings $settings): void
+    public function longestCommonSubsequence(): void
     {
         $length1 = $this->getLength1();
         $length2 = $this->getLength2();
 
-        if ($length1 == 0 || $length2 == 0) {
+        if (0 == $length1 || 0 == $length2) {
             $this->length = 0;
             return;
         }
 
         $this->maxDifferences = intval(ceil(($length1 + $length2 + 1) / 2.0)); // ceil((N+M)/2);
+//        printf("maxDifferences: %s\n", $this->maxDifferences);
 
-        if (floatval($length1 * $length2) > $settings->getTooLong()) {
+        if (floatval($length1 * $length2) > self::TOO_LONG) {
             // Limit complexity to D^POW_LIMIT for long sequences
-            $this->maxDifferences = intval(pow($this->maxDifferences, $settings->getPowLimit() - 1.0));
+            $this->maxDifferences = intval(pow($this->maxDifferences, self::POW_LIMIT - 1.0));
+//            printf("maxDifferences2: %s\n", $this->maxDifferences);
         }
 
         $this->initializeLcs($length1);
@@ -60,25 +67,38 @@ abstract class LCS
         $forwardBound = 0;
         $max = min($length1, $length2);
 
+//        printf("max: %s\n", $max);
+
         for (; $forwardBound < $max && $this->isRangeEqual($forwardBound, $forwardBound); $forwardBound++) {
             $this->setLcs($forwardBound, $forwardBound);
+
+//            printf("forwardBound: %s\n", $forwardBound);
         }
 
         $backBoundL1 = $length1 - 1;
         $backBoundL2 = $length2 - 1;
+
+//        printf("backBoundL1: %s\n", $backBoundL1);
+//        printf("backBoundL2: %s\n", $backBoundL2);
 
         while ($backBoundL1 >= $forwardBound && $backBoundL2 >= $forwardBound &&
                 $this->isRangeEqual($backBoundL1, $backBoundL2)) {
             $this->setLcs($backBoundL1, $backBoundL2);
             $backBoundL1--;
             $backBoundL2--;
+
+//            printf("backBoundL1: %s\n", $backBoundL1);
+//            printf("backBoundL2: %s\n", $backBoundL2);
         }
 
         $V     = array_fill(0, 2, array_fill(0, $length1 + $length2 + 1, 0));
         $snake = array_fill(0, 3, 0);
 
         $lcsRec = $this->lcsRec($forwardBound, $backBoundL1, $forwardBound, $backBoundL2, $V, $snake);
+//        printf("lcsRec: %s\n", $lcsRec);
+
         $this->length = $forwardBound + $length1 - $backBoundL1 - 1 + $lcsRec;
+//        printf("this->length: %s\n", $this->length);
     }
 
     /**
@@ -93,7 +113,7 @@ abstract class LCS
      * @param  int[]   $snake
      * @return int
      */
-    protected function lcsRec(int $bottomL1, int $topL1, int $bottomL2, int $topL2, array &$V, array &$snake): int
+    private function lcsRec(int $bottomL1, int $topL1, int $bottomL2, int $topL2, array &$V, array &$snake): int
     {
         // Check that both sequences are non-empty.
         if ($bottomL1 > $topL1 || $bottomL2 > $topL2) {
@@ -104,7 +124,7 @@ abstract class LCS
         $d = $this->findMiddleSnake($bottomL1, $topL1, $bottomL2, $topL2, $V, $snake);
 
         // Need to store these so we don't lose them when they're overwritten by the recursion.
-        $len = $snake[2];
+        $len    = $snake[2];
         $startx = $snake[0];
         $starty = $snake[1];
 
@@ -147,7 +167,7 @@ abstract class LCS
      * @param  int[]   $snake
      * @return int
      */
-    protected function findMiddleSnake(
+    private function findMiddleSnake(
         int $bottomL1,
         int $topL1,
         int $bottomL2,
@@ -158,14 +178,10 @@ abstract class LCS
         $N = $topL1 - $bottomL1 + 1;
         $M = $topL2 - $bottomL2 + 1;
 
-//        var_dump("\n\n\n");
-//        var_dump($V);
-//        var_dump(sprintf('N: %d M: %d bottom: %d, %d top: %d, %d', $N, $M, $bottomL1, $bottomL2, $topL1, $topL2));
-
         $delta  = $N - $M;
         $isEven = ($delta & 1) == 1? false : true;
 
-        $limit = min($this->maxDifferences, intval((($N + $M + 1) / 2)));
+        $limit = min($this->maxDifferences, intval(ceil(($N + $M + 1) / 2.0)));
 
         // Offset to make it odd/even.
         // a 0 or 1 that we add to the start offset to make it odd/even
@@ -187,8 +203,6 @@ abstract class LCS
 
             // Compute forward furthest reaching paths.
             for ($k = $startDiag; $k <= $endDiag; $k += 2) {
-                $x = 0;
-
                 if ($k == -$d || ($k < $d && $V[0][$limit + $k - 1] < $V[0][$limit + $k + 1])) {
                     $x = $V[0][$limit + $k + 1];
                 } else {
@@ -201,8 +215,6 @@ abstract class LCS
                 $snake[1] = $y + $bottomL2;
                 $snake[2] = 0;
 
-//                var_dump(sprintf('1 x: %d y: %d k: %d d: %d', $x, $y, $k, $d));
-
                 while ($x < $N && $y < $M && $this->isRangeEqual($x + $bottomL1, $y + $bottomL2)) {
                     $x++;
                     $y++;
@@ -211,11 +223,7 @@ abstract class LCS
 
                 $V[0][$limit + $k] = $x;
 
-//                var_dump(sprintf('%d %d %d %d', $x, $V[1][$limit + $k - $delta], $k, $delta));
-
                 if (!$isEven && $k >= $delta - $d + 1 && $k <= $delta + $d - 1 && $x >= $V[1][$limit + $k - $delta]) {
-//                    var_dump(sprintf('Returning: %d', 2 * $d - 1));
-
                     return intval(2 * $d - 1);
                 }
 
@@ -235,8 +243,6 @@ abstract class LCS
 
             // Compute backward furthest reaching paths.
             for ($k = $startDiag; $k <= $endDiag; $k += 2) {
-                $x = 0;
-
                 if ($k == $d || ($k != -$d && $V[1][$limit + $k - 1] < $V[1][$limit + $k + 1])) {
                     $x = $V[1][$limit + $k - 1];
                 } else {
@@ -245,8 +251,6 @@ abstract class LCS
 
                 $y = $x - $k - $delta;
                 $snake[2] = 0;
-
-//                var_dump(sprintf('2 x: %d y: %d k: %d d: %d', $x, $y, $k, $d));
 
                 while ($x > 0 && $y > 0 && $this->isRangeEqual($x - 1 + $bottomL1, $y - 1 + $bottomL2)) {
                     $x--;
@@ -257,8 +261,6 @@ abstract class LCS
                 $V[1][$limit + $k] = $x;
 
                 if ($isEven && $k >= -$delta - $d && $k <= $d - $delta && $x <= $V[0][$limit + $k + $delta]) {
-//                    var_dump(sprintf('Returning: %d', 2 * $d));
-
                     $snake[0] = $bottomL1 + $x;
                     $snake[1] = $bottomL2 + $y;
 
@@ -279,10 +281,6 @@ abstract class LCS
         // Computing the true LCS is too expensive, instead find the diagonal with the most progress and pretend a
         // middle snake of length 0 occurs there.
         /** @var int[] */
-//        var_dump($M);
-//        var_dump($N);
-//        var_dump($limit);
-//        var_dump($V);
         $mostProgress = static::findMostProgress($M, $N, $limit, $V);
 
         $snake[0] = $bottomL1 + $mostProgress[0];
@@ -303,10 +301,9 @@ abstract class LCS
      * @param  int[][] $V
      * @return int[]
      */
-    protected static function findMostProgress(int $M, int $N, int $limit, array $V): iterable
+    private static function findMostProgress(int $M, int $N, int $limit, array $V): array
     {
         $delta = $N - $M;
-        $forwardStartDiag = 0;
 
         if (($M & 1) == ($limit & 1)) {
             $forwardStartDiag = max(-$M, -$limit);
@@ -314,8 +311,7 @@ abstract class LCS
             $forwardStartDiag = max(1 - $M, -$limit);
         }
 
-        $forwardEndDiag    = min($N, $limit);
-        $backwardStartDiag = 0;
+        $forwardEndDiag = min($N, $limit);
 
         if (($N & 1) == ($limit & 1)) {
             $backwardStartDiag = max(-$N, -$limit);
@@ -385,18 +381,18 @@ abstract class LCS
         }
 
         // Return the middle diagonal with maximum progress.
-        return $maxProgress[intval(floor($numProgress / 2))];
+        return $maxProgress[intval(round($numProgress / 2.0))];
     }
 
     /**
      * @return int
      */
-    abstract public function getLength1(): int;
+    abstract protected function getLength1(): int;
 
     /**
      * @return int
      */
-    abstract public function getLength2(): int;
+    abstract protected function getLength2(): int;
 
     /**
      * @param  int $i1

@@ -8,16 +8,16 @@ namespace DaisyDiff\RangeDifferencer;
 class LCSFixture extends LCS
 {
     /** @var int */
-    private $length1 = 5;
+    private $length1 = 0;
 
     /** @var int */
-    private $length2 = 10;
+    private $length2 = 0;
 
     /**
      * @param  int $length1
      * @param  int $length2
      */
-    public function __construct(int $length1, int $length2)
+    public function __construct(int $length1 = 0, int $length2 = 0)
     {
         $this->length1 = $length1;
         $this->length2 = $length2;
@@ -29,26 +29,10 @@ class LCSFixture extends LCS
         return $this->length1;
     }
 
-    /**
-     * @param  int $value
-     */
-    public function setLength1(int $value): void
-    {
-        $this->length1 = $value;
-    }
-
     /** {@inheritdoc} */
     public function getLength2(): int
     {
         return $this->length2;
-    }
-
-    /**
-     * @param  int $value
-     */
-    public function setLength2(int $value): void
-    {
-        $this->length2 = $value;
     }
 
     /** {@inheritdoc} */
@@ -60,12 +44,10 @@ class LCSFixture extends LCS
     /** {@inheritdoc} */
     protected function setLcs(int $sl1, int $sl2): void
     {
-
     }
 
     /** {@inheritdoc} */
     protected function initializeLcs(int $lcsLength): void
     {
-
     }
 }

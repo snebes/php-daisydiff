@@ -5,7 +5,7 @@ namespace DaisyDiff\RangeDifferencer;
 /**
  * For breaking an object to compare into a sequence of comparable entities.
  *
- * It is used by <code>RangeDifferencer</code> to find longest sequences of matching and non-matching ranges.
+ * It is used by RangeDifferencer to find longest sequences of matching and non-matching ranges.
  *
  * For example, to compare two text documents and find longest common sequences of matching and non-matching lines, the
  * implementation must break the document into lines. getRangeCount would return the number of lines in the document,

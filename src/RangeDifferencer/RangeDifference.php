@@ -6,8 +6,8 @@ namespace DaisyDiff\RangeDifferencer;
  * Description of a change between two or three ranges of comparable entities.
  *
  * RangeDifference objects are the elements of a compare result returned from the RangeDifferencer find* methods.
- * Clients use these objects as they are returned from the differencer. This class is not intended to be instantiated or
- * subclassed outside of the Compare framework.
+ * Clients use these objects as they are returned from the differencer. This class is not intended to be instantiated
+ * outside of the Compare framework.
  *
  * Note: A range in the RangeDifference object is given as a start index and length in terms of comparable entities.
  * However, these entity indices and counts are not necessarily character positions. For example, if an entity
@@ -15,35 +15,59 @@ namespace DaisyDiff\RangeDifferencer;
  */
 class RangeDifference
 {
-    /** @var RangeDifferenceType */
-    private $fKind;
+    /** Two-way change constant indicating no change. */
+    const NOCHANGE = 0;
 
-    /** @var float */
-    public $fLeftStart;
+    /** Two-way change constant indicating two-way change (same as RIGHT) */
+    const CHANGE = 2;
 
-    /** @var float */
-    public $fLeftLength;
+    /** Three-way change constant indicating a change in both right and left. */
+    const CONFLICT = 1;
 
-    /** @var float */
-    public $fRightStart;
+    /** Three-way change constant indicating a change in right. */
+    const RIGHT = 2;
 
-    /** @var float */
-    public $fRightLength;
-
-    /** @var float */
-    public $lAncestorStart;
-
-    /** @var float */
-    public $lAncestorLength;
+    /** Three-way change constant indicating a change in left. */
+    const LEFT = 3;
 
     /**
-     * @param  RangeDifferenceType $kind
-     * @parma  float               $rightStart
-     * @parma  float               $rightLength
-     * @parma  float               $leftStart
-     * @parma  float               $leftLength
-     * @parma  float               $ancestorStart
-     * @parma  float               $ancestorLength
+     * Three-way change constant indicating the same change in both right and left, that is only the ancestor is
+     * different.
+     */
+    const ANCESTOR = 4;
+
+    /** Constant indicating an unknown change kind. */
+    const ERROR = 5;
+
+    /** @var int */
+    private $kind = 0;
+
+    /** @var int */
+    private $leftStart = 0;
+
+    /** @var int */
+    private $leftLength = 0;
+
+    /** @var int */
+    private $rightStart = 0;
+
+    /** @var int */
+    private $rightLength = 0;
+
+    /** @var int */
+    private $ancestorStart = 0;
+
+    /** @var int */
+    private $ancestorLength = 0;
+
+    /**
+     * @param int $kind
+     * @param int $rightStart
+     * @param int $rightLength
+     * @param int $leftStart
+     * @param int $leftLength
+     * @param int $ancestorStart
+     * @param int $ancestorLength
      */
     public function __construct(
         int $kind,
@@ -54,101 +78,123 @@ class RangeDifference
         int $ancestorStart = 0,
         int $ancestorLength = 0
     ) {
-        $this->fKind            = $kind;
-        $this->fRightStart      = $rightStart;
-        $this->fRightLength     = $rightLength;
-        $this->fLeftStart       = $leftStart;
-        $this->fLeftLength      = $leftLength;
-        $this->lAncestorStart   = $ancestorStart;
-        $this->lAncestorLength  = $ancestorLength;
+        $this->kind           = $kind;
+        $this->rightStart     = $rightStart;
+        $this->rightLength    = $rightLength;
+        $this->leftStart      = $leftStart;
+        $this->leftLength     = $leftLength;
+        $this->ancestorStart  = $ancestorStart;
+        $this->ancestorLength = $ancestorLength;
     }
 
     /**
+     * Returns the kind of difference.
+     *
      * @return int
      */
     public function kind(): int
     {
-        return $this->fKind;
+        return $this->kind;
     }
 
     /**
+     * Returns the start index of the entity range on the ancestor side.
+     *
      * @return int
      */
     public function ancestorStart(): int
     {
-        return $this->lAncestorStart;
+        return $this->ancestorStart;
     }
 
     /**
+     * Returns the number of entities on the ancestor side.
+     *
      * @return int
      */
     public function ancestorLength(): int
     {
-        return $this->lAncestorLength;
+        return $this->ancestorLength;
     }
 
     /**
+     * Returns the end index of the entity range on the ancestor side.
+     *
      * @return int
      */
     public function ancestorEnd(): int
     {
-        return $this->lAncestorStart + $this->lAncestorLength;
+        return $this->ancestorStart + $this->ancestorLength;
     }
 
     /**
+     * Returns the start index of the entity range on the right side.
+     *
      * @return int
      */
     public function rightStart(): int
     {
-        return $this->fRightStart;
+        return $this->rightStart;
     }
 
     /**
+     * Returns the number of entities on the right side.
+     *
      * @return int
      */
     public function rightLength(): int
     {
-        return $this->fRightLength;
+        return $this->rightLength;
     }
 
     /**
+     * Returns the end index of the entity range on the right side.
+     *
      * @return int
      */
     public function rightEnd(): int
     {
-        return $this->fRightStart + $this->fRightLength;
+        return $this->rightStart + $this->rightLength;
     }
 
     /**
+     * Returns the start index of the entity range on the left side.
+     *
      * @return int
      */
     public function leftStart(): int
     {
-        return $this->fLeftStart;
+        return $this->leftStart;
     }
 
     /**
+     * Returns the number of entities on the left side.
+     *
      * @return int
      */
     public function leftLength(): int
     {
-        return $this->fLeftLength;
+        return $this->leftLength;
     }
 
     /**
+     * Returns the end index of the entity range on the left side.
+     *
      * @return int
      */
     public function leftEnd(): int
     {
-        return $this->fLeftStart + $this->fLeftLength;
+        return $this->leftStart + $this->leftLength;
     }
 
     /**
+     * Returns the maximum number of entities in the left, right, and ancestor sides of this range.
+     *
      * @return int
      */
     public function maxLength(): int
     {
-        return max($this->fRightLength, $this->fLeftLength, $this->lAncestorLength);
+        return max($this->rightLength, $this->leftLength, $this->ancestorLength);
     }
 
     /**
@@ -158,13 +204,13 @@ class RangeDifference
     public function equals(RangeDifference $other): bool
     {
         return
-            $this->fKind == $other->kind() &&
-            $this->fLeftStart == $other->leftStart() &&
-            $this->fLeftLength == $other->leftLength() &&
-            $this->fRightStart == $other->rightStart() &&
-            $this->fRightLength == $other->rightLength() &&
-            $this->lAncestorStart == $other->ancestorStart() &&
-            $this->lAncestorLength == $other->ancestorLength()
+            $this->kind == $other->kind() &&
+            $this->leftStart == $other->leftStart() &&
+            $this->leftLength == $other->leftLength() &&
+            $this->rightStart == $other->rightStart() &&
+            $this->rightLength == $other->rightLength() &&
+            $this->ancestorStart == $other->ancestorStart() &&
+            $this->ancestorLength == $other->ancestorLength()
         ;
     }
 
@@ -173,14 +219,42 @@ class RangeDifference
      */
     public function __toString(): string
     {
-        $str = sprintf('Left: %s Right: %s',
-            $this->toRangeString($this->fLeftStart, $this->fLeftLength),
-            $this->toRangeString($this->fRightStart, $this->fRightLength)
+        $str = 'RangeDifference {';
+
+        switch ($this->kind) {
+            case self::NOCHANGE:
+                $str .= 'NOCHANGE';
+                break;
+            case self::CHANGE:
+                $str .= 'CHANGE/RIGHT';
+                break;
+            case self::CONFLICT:
+                $str .= 'CONFLICT';
+                break;
+            case self::LEFT:
+                $str .= 'LEFT';
+                break;
+            case self::ERROR:
+                $str .= 'ERROR';
+                break;
+            case self::ANCESTOR:
+                $str .= 'ANCESTOR';
+                break;
+            default:
+                break;
+        }
+
+        $str .= ', ';
+        $str .= sprintf('Left: %s Right: %s',
+            $this->toRangeString($this->leftStart, $this->leftLength),
+            $this->toRangeString($this->rightStart, $this->rightLength)
         );
 
-        if ($this->lAncestorLength > 0 || $this->lAncestorStart > 0) {
-            $str .= sprintf(' Ancestor: %s', $this->toRangeString($this->lAncestorStart, $this->lAncestorLength));
+        if ($this->ancestorLength > 0 || $this->ancestorStart > 0) {
+            $str .= sprintf(' Ancestor: %s', $this->toRangeString($this->ancestorStart, $this->ancestorLength));
         }
+
+        $str .= '}';
 
         return $str;
     }
