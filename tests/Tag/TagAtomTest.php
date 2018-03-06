@@ -2,8 +2,8 @@
 
 namespace DaisyDiff\Tag;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 /**
  * TagAtom Tests.
@@ -35,15 +35,15 @@ class TagAtomTest extends TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException InvalidArgumentException
      */
     public function testTagAtomException(): void
     {
         $example  = '<p><b>Hello</b></p>';
 
         try {
-            $exampleAtom = new TagAtom($example);
-        } catch (RuntimeException $e) {
+            new TagAtom($example);
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals('The given string is not a valid tag.', $e->getMessage());
             throw $e;
         }

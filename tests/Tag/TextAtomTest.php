@@ -28,14 +28,12 @@ class TextAtomTest extends TestCase
         $input = '<p>This is a blue book</p>';
         $delimInput = '&';
         $empty = '';
-        $nullString = null;
 
         $atom = new TextAtom("' '");
 
         $this->assertTrue($atom->isValidAtom($input));
         $this->assertTrue($atom->isValidAtom($delimInput));
         $this->assertFalse($atom->isValidAtom($empty));
-        $this->assertFalse($atom->isValidAtom($nullString));
     }
 
     /**
@@ -44,7 +42,7 @@ class TextAtomTest extends TestCase
     public function testIsValidAtomException(): void
     {
         try {
-            new TextAtom(null);
+            new TextAtom('');
         } catch (RuntimeException $e) {
             $this->assertEquals('The given String is not a valid Text Atom.', $e->getMessage());
             throw $e;

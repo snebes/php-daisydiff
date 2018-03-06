@@ -4,15 +4,26 @@ namespace DaisyDiff\Tag;
 
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
+use ReflectionMethod;
+use RuntimeException;
 
 /**
  * TagComparator Tests.
  */
 class TagComparatorTest extends TestCase
 {
-    public function testGenerateAtoms(): void
+    public function testGetAtoms(): void
     {
         $input = '<p>This is a blue book</p>';
+        $comparator = new TagComparator($input);
+
+        $this->assertEquals(11, count($comparator->getAtoms()));
+    }
+
+    public function testGenerateAtoms(): void
+    {
+        $input = '<p>This is a blue book</p> test';
         $comparator = new TagComparator($input);
 
         $this->assertEquals('TagAtom: <p>', strval($comparator->getAtom(0)));
@@ -26,7 +37,7 @@ class TagComparatorTest extends TestCase
      */
     public function testGenerateAtomsNull(): void
     {
-        $input = null;
+        $input = '';
         $comparator = new TagComparator($input);
 
         try {
@@ -64,6 +75,24 @@ class TagComparatorTest extends TestCase
             $comparator->getAtom(-1);
         } catch (OutOfBoundsException $e) {
             $this->assertEquals('Index: -1, Size: 12', $e->getMessage());
+            throw $e;
+        }
+    }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testGenerateAtomsTwice(): void
+    {
+        $input = '<p>test</p>';
+        $comparator = new TagComparator($input);
+
+        try {
+            $refMethod = new ReflectionMethod($comparator, 'generateAtoms');
+            $refMethod->setAccessible(true);
+            $refMethod->invoke($comparator, $input);
+        } catch (ReflectionException $e) {
+        } catch (RuntimeException $e) {
             throw $e;
         }
     }
