@@ -77,61 +77,67 @@ class TagDiffer implements TextDifferInterface
      * @param AtomSplitterInterface $rightComparator
      */
     private function parseNoChange(
-        int $beginLeft,
-        int $endLeft,
-        int $beginRight,
-        int $endRight,
+        int $beginLeft = 0,
+        int $endLeft = 0,
+        int $beginRight = 0,
+        int $endRight = 0,
         AtomSplitterInterface $leftComparator,
         AtomSplitterInterface $rightComparator
     ): void {
         $s = '';
 
         // We can assume that the LCS is correct and that there are exactly as many atoms left and right.
-        while ($beginLeft < $endLeft &&
+        while ($beginLeft < $endLeft) {
+            while ($beginLeft < $endLeft &&
             !$rightComparator->getAtom($beginRight)->hasInternalIdentifiers() &&
             !$leftComparator->getAtom($beginLeft)->hasInternalIdentifiers()) {
-            $s .= $rightComparator->getAtom($beginRight)->getFullText();
-            $beginRight++;
-            $beginLeft++;
-        }
-
-        if (mb_strlen($s) > 0) {
-            $this->output->addClearPart($s);
-        }
-
-        if ($beginLeft < $endLeft) {
-            $leftComparator2  = new ArgumentComparator($leftComparator->getAtom($beginLeft)->getFullText());
-            $rightComparator2 = new ArgumentComparator($rightComparator->getAtom($beginRight)->getFullText());
-
-            $differences2  = RangeDifferencer::findDifferences($leftComparator2, $rightComparator2);
-            $pDifferences2 = $this->preProcess2($differences2, 2);
-
-            $rightAtom2 = 0;
-
-            for ($j = 0; $j < count($pDifferences2); $j++) {
-                if ($rightAtom2 < $pDifferences2[$j]->rightStart()) {
-                    $this->output->addClearPart($rightComparator2->substring(
-                        $rightAtom2,
-                        $pDifferences2[$j]->rightStart()));
-                }
-
-                if ($pDifferences2[$j]->leftLength() > 0) {
-                    $this->output->addRemovedPart($leftComparator2->substring(
-                        $pDifferences2[$j]->leftStart(),
-                        $pDifferences2[$j]->leftEnd()));
-                }
-
-                if ($pDifferences2[$j]->rightLength() > 0) {
-                    $this->output->addAddedPart($rightComparator2->substring(
-                        $pDifferences2[$j]->rightStart(),
-                        $pDifferences2[$j]->rightEnd()));
-                }
-
-                $rightAtom2 = $pDifferences2[$j]->rightEnd();
+                $s .= $rightComparator->getAtom($beginRight)->getFullText();
+                $beginRight++;
+                $beginLeft++;
             }
 
-            if ($rightAtom2 < $rightComparator2->getRangeCount()) {
-                $this->output->addClearPart($rightComparator2->substring($rightAtom2));
+            if (mb_strlen($s) > 0) {
+                $this->output->addClearPart($s);
+                $s = '';
+            }
+
+            if ($beginLeft < $endLeft) {
+                $leftComparator2  = new ArgumentComparator($leftComparator->getAtom($beginLeft)->getFullText());
+                $rightComparator2 = new ArgumentComparator($rightComparator->getAtom($beginRight)->getFullText());
+
+                $differences2  = RangeDifferencer::findDifferences($leftComparator2, $rightComparator2);
+                $pDifferences2 = $this->preProcess2($differences2, 2);
+
+                $rightAtom2 = 0;
+
+                for ($j = 0; $j < count($pDifferences2); $j++) {
+                    if ($rightAtom2 < $pDifferences2[$j]->rightStart()) {
+                        $this->output->addClearPart($rightComparator2->substring(
+                            $rightAtom2,
+                            $pDifferences2[$j]->rightStart()));
+                    }
+
+                    if ($pDifferences2[$j]->leftLength() > 0) {
+                        $this->output->addRemovedPart($leftComparator2->substring(
+                            $pDifferences2[$j]->leftStart(),
+                            $pDifferences2[$j]->leftEnd()));
+                    }
+
+                    if ($pDifferences2[$j]->rightLength() > 0) {
+                        $this->output->addAddedPart($rightComparator2->substring(
+                            $pDifferences2[$j]->rightStart(),
+                            $pDifferences2[$j]->rightEnd()));
+                    }
+
+                    $rightAtom2 = $pDifferences2[$j]->rightEnd();
+                }
+
+                if ($rightAtom2 < $rightComparator2->getRangeCount()) {
+                    $this->output->addClearPart($rightComparator2->substring($rightAtom2));
+                }
+
+                $beginLeft++;
+                $beginRight++;
             }
         }
     }
@@ -168,8 +174,7 @@ class TagDiffer implements TextDifferInterface
                 }
 
                 while ($temp < $differences[$i + 1]->leftStart() &&
-                    $leftComparator->getAtom($temp instanceof DelimiterAtom) ||
-                    ($bridgeLength-- > 0)) {
+                    ($leftComparator->getAtom($temp) instanceof DelimiterAtom || ($bridgeLength-- > 0))) {
                     $temp++;
                 }
 

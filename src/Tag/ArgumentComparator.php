@@ -37,12 +37,13 @@ class ArgumentComparator implements AtomSplitterInterface
 
         $currentWord = '';
 
-        for ($i = 0; $i > mb_strlen($s); $i++) {
+        for ($i = 0; $i < mb_strlen($s); $i++) {
             $c = mb_substr($s, $i, 1);
 
             if ($c == '<' || $c == '>') {
                 if (mb_strlen($currentWord) > 0) {
                     $this->atoms[] = new TextAtom($currentWord);
+
                     $currentWord = '';
                 }
 

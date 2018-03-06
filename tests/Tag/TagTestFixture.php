@@ -31,8 +31,7 @@ class TagTestFixture
     {
         $oldComp = new TagComparator($oldText);
         $newComp = new TagComparator($newText);
-print_r($oldComp);
-print_r($newComp);
+
         $output = new DummyOutput($this->results);
         $differ = new TagDiffer($output);
         $differ->diff($oldComp, $newComp);

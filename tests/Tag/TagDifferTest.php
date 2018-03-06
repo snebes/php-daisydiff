@@ -108,16 +108,16 @@ class TagDifferTest extends TestCase
     /**
      * Strange out of bounds exception. See issue 22 in Google code project
      */
-//    public function testStrangeOBException(): void
-//    {
-//        $oldText = '<p>hello</p>';
-//        $newText = '<p>hello in the end</p><p>New</p>';
-//
-//        $tagTest = new TagTestFixture();
-//        $tagTest->performTagDiff($oldText, $newText);
-//
-//        $this->assertEquals(3, count($tagTest->getResults()));
-//        $this->assertEquals($oldText, $tagTest->getReconstructedOriginalText());
-//        $this->assertEquals($newText, $tagTest->getReconstructedModifiedText());
-//    }
+    public function testStrangeOBException(): void
+    {
+        $oldText = '<p>hello</p>';
+        $newText = '<p>hello in the end</p><p>New</p>';
+
+        $tagTest = new TagTestFixture();
+        $tagTest->performTagDiff($oldText, $newText);
+
+        $this->assertEquals(3, count($tagTest->getResults()));
+        $this->assertEquals($oldText, $tagTest->getReconstructedOriginalText());
+        $this->assertEquals($newText, $tagTest->getReconstructedModifiedText());
+    }
 }

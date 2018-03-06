@@ -27,7 +27,7 @@ class HtmlTestFixture
      */
     public static function diff(string $oldText, string $newText): string
     {
-        // Parse $old XML.
+        // Parse $oldText.
         $oldHandler = new DomTreeBuilder();
         $oldHandler->startDocument();
         $oldXml = sprintf('<?xml version="1.0" encoding="UTF-8"?><body>%s</body>', $oldText);

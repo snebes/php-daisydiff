@@ -51,7 +51,7 @@ class TagAtom implements AtomInterface
     /** {@inheritdoc} */
     public function hasInternalIdentifiers(): bool
     {
-        return mb_strlen($this->internalIdentifiers) > 0;
+        return !empty($this->internalIdentifiers);
     }
 
     /**
