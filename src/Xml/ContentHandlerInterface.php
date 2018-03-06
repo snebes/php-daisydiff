@@ -1,18 +1,18 @@
 <?php declare(strict_types=1);
 
-namespace DaisyDiff\Html;
+namespace DaisyDiff\Xml;
 
 /**
- * ContentHandlerInterface
+ * SAX ContentHandlerInterface
  */
 interface ContentHandlerInterface
 {
     /**
-     * @param  string   $qName
-     * @param  iterable $attributes
+     * @param  string       $qName
+     * @param  AttributeBag $attributeBag
      * @return void
      */
-    public function startElement(string $qName, iterable $attributes): void;
+    public function startElement(string $qName, AttributeBag $attributeBag = null): void;
 
     /**
      * @param  string $qName

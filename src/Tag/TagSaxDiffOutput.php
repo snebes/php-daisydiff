@@ -3,6 +3,8 @@
 namespace DaisyDiff\Tag;
 
 use DaisyDiff\Output\TextDiffOutputInterface;
+use DaisyDiff\Xml\AttributeBag;
+use DaisyDiff\Xml\ContentHandlerInterface;
 
 /**
  * Outputs the diff result as HTML elements to a SAX ContentHandler. The startDocument and endDocument events are not
@@ -10,6 +12,7 @@ use DaisyDiff\Output\TextDiffOutputInterface;
  */
 class TagSaxDiffOutput implements TextDiffOutputInterface
 {
+    /** @var ContentHandlerInterface */
     private $consumer;
 
     /** @var bool */
@@ -21,7 +24,10 @@ class TagSaxDiffOutput implements TextDiffOutputInterface
     /** @var int */
     private $addedId = 1;
 
-    public function __construct($consumer)
+    /**
+     * @param ContentHandlerInterface $consumer
+     */
+    public function __construct(ContentHandlerInterface $consumer)
     {
         $this->consumer = $consumer;
     }
@@ -41,37 +47,37 @@ class TagSaxDiffOutput implements TextDiffOutputInterface
         for ($i = 0; $i < count($c); $i++) {
             switch ($c[$i]) {
                 case "\n":
-                    $this->consumer->startElement('', 'br', 'br', []);
-                    $this->consumer->endElement('', 'br', 'br');
-                    $this->consumer->characters(["\n"], 0, 1);
+                    $this->consumer->startElement('br');
+                    $this->consumer->endElement('br');
+                    $this->consumer->characters("\n");
                     break;
 
                 case '<':
                     if (false === $this->insideTag) {
-                        $attrs = [
+                        $attrs = new AttributeBag([
                             'class' => 'diff-tag-html',
-                        ];
-                        $this->consumer->startElement('', 'span', 'span', $attrs);
+                        ]);
+                        $this->consumer->startElement('span', $attrs);
                         $this->insideTag = true;
                     } else {
-                        $this->consumer->endElement('', 'span', 'span');
+                        $this->consumer->endElement('span');
                         $this->insideTag = false;
                     }
 
-                    $this->consumer->characters('<', 0, 1);
+                    $this->consumer->characters('<');
                     break;
 
                 case '>':
-                    $this->consumer->characters('>', 0, 1);
+                    $this->consumer->characters('>');
 
                     if (true === $this->insideTag) {
-                        $this->consumer->endElement('', 'span', 'span');
+                        $this->consumer->endElement('span');
                         $this->insideTag = false;
                     }
                     break;
 
                 default:
-                    $this->consumer($c, i, 1);
+                    $this->consumer->characters($c[$i]);
                     break;
             }
         }
@@ -82,16 +88,16 @@ class TagSaxDiffOutput implements TextDiffOutputInterface
      */
     public function addRemovedPart(string $text): void
     {
-        $attrs = [
+        $attrs = new AttributeBag([
             'class' => 'diff-tag-removed',
             'id'    => 'removed' . $this->removedId,
             'title' => '#removed' . $this->removedId,
-        ];
+        ]);
         $this->removedId++;
 
-        $this->consumer->startElement('', 'span', 'span', $attrs);
+        $this->consumer->startElement('span', $attrs);
         $this->addBasicText($text);
-        $this->consumer->endElement('', 'span', 'span');
+        $this->consumer->endElement('span');
     }
 
     /**
@@ -99,15 +105,15 @@ class TagSaxDiffOutput implements TextDiffOutputInterface
      */
     public function addAddedPart(string $text): void
     {
-        $attrs = [
+        $attrs = new AttributeBag([
             'class' => 'diff-tag-added',
             'id'    => 'removed' . $this->addedId,
             'title' => '#removed' . $this->addedId,
-        ];
+        ]);
         $this->addedId++;
 
-        $this->consumer->startElement('', 'span', 'span', $attrs);
+        $this->consumer->startElement('span', $attrs);
         $this->addBasicText($text);
-        $this->consumer->endElement('', 'span', 'span');
+        $this->consumer->endElement('span');
     }
 }
