@@ -2,6 +2,8 @@
 
 namespace DaisyDiff\Html;
 use DaisyDiff\Html\Ancestor\ChangeText;
+use DaisyDiff\Xml\AttributeBag;
+use DaisyDiff\Xml\ContentHandlerInterface;
 use DaisyDiff\Xml\Xml;
 
 /**
@@ -21,7 +23,7 @@ class DelegatingContentHandler implements ContentHandlerInterface
     }
 
     /** {@inheritdoc} */
-    public function startElement(string $qName, iterable $attributes): void
+    public function startElement(string $qName, AttributeBag $attributes = null): void
     {
         $this->changeText->addHtml(Xml::openElement($qName, $attributes));
     }

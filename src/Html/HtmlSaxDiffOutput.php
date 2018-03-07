@@ -8,7 +8,8 @@ use DaisyDiff\Html\Dom\TextNode;
 use DaisyDiff\Html\Modification\Modification;
 use DaisyDiff\Html\Modification\ModificationType;
 use DaisyDiff\Output\DiffOutputInterface;
-use SebastianBergmann\Diff\Output\DiffOutputBuilderInterface;
+use DaisyDiff\Xml\AttributeBag;
+use DaisyDiff\Xml\ContentHandlerInterface;
 
 /**
  * Takes a branch root and creates an HTML file for it.
@@ -35,7 +36,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
     public function generateOutput(TagNode $node): void
     {
         if (0 != strcasecmp($node->getQName(), 'img') && 0 != strcasecmp($node->getQName(), 'body')) {
-            $this->handler->startElement($node->getQName(), $node->getAttributes());
+            $this->handler->startElement($node->getQName(), new AttributeBag($node->getAttributes()));
         }
 
         $newStarted = false;
@@ -98,7 +99,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
                     }
 
                     $this->addAttributes($mod, $attrs);
-                    $this->handler->startElement('ins', $attrs);
+                    $this->handler->startElement('ins', new AttributeBag($attrs));
 
                     $newStarted = true;
                 }
@@ -110,7 +111,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
                     }
 
                     $this->addAttributes($mod, $attrs);
-                    $this->handler->startElement('span', $attrs);
+                    $this->handler->startElement('span', new AttributeBag($attrs));
 
                     $changeStarted = true;
                     $changeText = $mod->getChanges();
@@ -123,7 +124,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
                     }
 
                     $this->addAttributes($mod, $attrs);
-                    $this->handler->startElement('del', $attrs);
+                    $this->handler->startElement('del', new AttributeBag($attrs));
 
                     $remStarted = true;
                 }
@@ -135,7 +136,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
                     }
 
                     $this->addAttributes($mod, $attrs);
-                    $this->handler->startElement('span', $attrs);
+                    $this->handler->startElement('span', new AttributeBag($attrs));
 
                     $conflictStarted = true;
                 }

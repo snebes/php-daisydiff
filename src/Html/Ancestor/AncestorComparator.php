@@ -4,6 +4,7 @@ namespace DaisyDiff\Html\Ancestor;
 
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
+use DaisyDiff\RangeDifferencer\RangeDifference;
 use DaisyDiff\RangeDifferencer\RangeDifferencer;
 use OutOfBoundsException;
 
@@ -90,7 +91,7 @@ class AncestorComparator implements RangeComparatorInterface
         $result = new AncestorComparatorResult();
 
         /** @var RangeDifference[] */
-        $differences = RangeDifferencer::findDifferences(null, $other, $this);
+        $differences = RangeDifferencer::findDifferences($other, $this);
 
         if (0 == count($differences)) {
             return $result;

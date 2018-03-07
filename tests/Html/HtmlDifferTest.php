@@ -29,37 +29,37 @@ class HtmlDifferTest extends TestCase
 //        $result = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
 //    }
 
-//    public function testSimpleTextRemove(): void
-//    {
-//        $oldText = '<p> This is a blue book</p>';
-//        $newText = '<p> This is a book</p>';
-//
-//        $result = HtmlTestFixture::diff($oldText, $newText);
-//
-//        $this->assertContains('<p> This is a <del class="diff-html-removed"', $result);
-//    }
-//
-//    public function testSimpleTextChange(): void
-//    {
-//        $oldText = '<p> This is a blue book</p>';
-//        $newText = '<p> This is a green book</p>';
-//
-//        $result = HtmlTestFixture::diff($oldText, $newText);
-//
-//        $this->assertContains('<p> This is a <del class="diff-html-removed"', $result);
-//        $this->assertContains('blue </del><ins class="diff-html-added"', $result);
-//    }
-//
-//    public function testAttributeAdd(): void
-//    {
-//        $oldText = '<p> This is a blue book</p>';
-//        $newText = '<p id="sample"> This is a blue book</p>';
-//
-//        $result = HtmlTestFixture::diff($oldText, $newText);
-//
-//        $this->assertContains('<span class="diff-html-changed"', $result);
-//    }
-//
+    public function testSimpleTextRemove(): void
+    {
+        $oldText = '<p> This is a blue book</p>';
+        $newText = '<p> This is a book</p>';
+
+        $result = HtmlTestFixture::diff($oldText, $newText);
+
+        $this->assertContains('<p> This is a <del class="diff-html-removed"', $result);
+    }
+
+    public function testSimpleTextChange(): void
+    {
+        $oldText = '<p> This is a blue book</p>';
+        $newText = '<p> This is a green book</p>';
+
+        $result = HtmlTestFixture::diff($oldText, $newText);
+
+        $this->assertContains('<p> This is a <del class="diff-html-removed"', $result);
+        $this->assertContains('blue </del><ins class="diff-html-added"', $result);
+    }
+
+    public function testAttributeAdd(): void
+    {
+        $oldText = '<p> This is a blue book</p>';
+        $newText = '<p id="sample"> This is a blue book</p>';
+
+        $result = HtmlTestFixture::diff($oldText, $newText);
+
+        $this->assertContains('<span class="diff-html-changed"', $result);
+    }
+
 //    public function testTagAdd(): void
 //    {
 //        $oldText = '<p> This is a blue book</p>';
