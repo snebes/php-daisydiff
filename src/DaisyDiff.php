@@ -8,6 +8,9 @@ use DaisyDiff\Html\Dom\DomTreeBuilder;
 use DaisyDiff\Html\HtmlDiffer;
 use DaisyDiff\Html\HtmlSaxDiffOutput;
 use DaisyDiff\Html\TextNodeComparator;
+use DaisyDiff\Tag\TagComparator;
+use DaisyDiff\Tag\TagDiffer;
+use DaisyDiff\Tag\TagSaxDiffOutput;
 use Exception;
 use Psr\Log\LoggerInterface;
 
@@ -19,6 +22,9 @@ class DaisyDiff
     /** @var LoggerInterface */
     private $logger;
 
+    /**
+     * @param LoggerInterface|null $logger
+     */
     public function __construct(?LoggerInterface $logger = null)
     {
         $this->logger = $logger;
@@ -58,5 +64,15 @@ class DaisyDiff
         $differ->diff($leftComparator, $rightComparator);
 
         return strval($content);
+    }
+
+    public function diffTag(string $oldText, string $newText): void
+    {
+        $oldComp = new TagComparator($oldText);
+        $newComp = new TagComparator($newText);
+
+        $output = new TagSaxDiffOutput(null);
+        $differ = new TagDiffer($output);
+        $differ->diff($oldComp, $newComp);
     }
 }
