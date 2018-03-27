@@ -9,15 +9,15 @@ namespace DaisyDiff\Html\Dom;
 class ImageNode extends TextNode
 {
     /** @var array */
-    private $attributes;
+    private $attributes = [];
 
     /**
-     * @param  TagNode $parent
-     * @param  array   $attributes
+     * @param TagNode $parent
+     * @param array   $attributes
      */
-    public function __construct(?TagNode $parent, ?array $attributes)
+    public function __construct(?TagNode $parent, array $attributes = [])
     {
-        $this->attributes = $attributes ?? [];
+        $this->attributes = $attributes;
 
         $src = array_key_exists('src', $this->attributes)? mb_strtolower($this->attributes['src']) : '';
         parent::__construct($parent, "<img>{$src}</img>");
@@ -28,7 +28,7 @@ class ImageNode extends TextNode
      */
     public function isSameText(?Node $other): bool
     {
-        if (is_null($other) || !$other instanceof ImageNode) {
+        if (null == $other || !$other instanceof ImageNode) {
             return false;
         }
 
@@ -38,7 +38,7 @@ class ImageNode extends TextNode
     /**
      * @return array
      */
-    public function getAttributes(): iterable
+    public function getAttributes(): array
     {
         return $this->attributes;
     }

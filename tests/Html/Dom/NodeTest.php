@@ -89,7 +89,7 @@ class NodeTest extends TestCase
         $leaf = new TagNode($root, 'leaf');
         $leaf->setParent($middle);
 
-        $this->assertEquals($leaf->getParent(), $middle);
+        $this->assertEquals($middle, $leaf->getParent());
         $leaf->setParent(null);
         $this->assertNull($leaf->getParent());
     }
@@ -109,21 +109,23 @@ class NodeTest extends TestCase
         $middle = new TagNode($root, 'middle');
         $root->addChild($middle);
 
-        $leafNode = new TagNode($middle, 'leaf');
-        $middle->addChild($leafNode);
+        $leaf = new TagNode($middle, 'leaf');
+        $middle->addChild($leaf);
 
-        $this->assertFalse($leafNode->inPre());
+        $this->assertFalse($leaf->inPre());
     }
 
     public function testIsWhiteBeforeAfter(): void
     {
         $root = new TagNode(null, 'root');
-        $intermediate = new TagNode($root, 'intermediate');
+        $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
 
         $this->assertFalse($root->isWhiteBefore());
         $intermediate->setWhiteBefore(true);
         $this->assertTrue($intermediate->isWhiteBefore());
+
+        $this->assertFalse($root->isWhiteAfter());
         $root->setWhiteAfter(true);
         $this->assertTrue($root->isWhiteAfter());
     }

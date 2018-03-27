@@ -100,12 +100,12 @@ class TagNodeTest extends TestCase
 
     public function testSetRoot(): void
     {
+        $refMethod = new ReflectionMethod(TagNode::class, 'setRoot');
+        $refMethod->setAccessible(true);
+
         $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $leaf = new TagNode($intermediate, 'leaf');
-
-        $refMethod = new ReflectionMethod(TagNode::class, 'setRoot');
-        $refMethod->setAccessible(true);
 
         $intermediate->addChild($leaf);
         $refMethod->invoke($intermediate, $root);
@@ -213,15 +213,15 @@ class TagNodeTest extends TestCase
 
     public function testIsSimilarTag(): void
     {
+        $refMethod = new ReflectionMethod(TagNode::class, 'isSimilarTag');
+        $refMethod->setAccessible(true);
+
         $root1 = new TagNode(null, 'root');
         $root2 = new TagNode(null, 'root');
         $intermediate = new TagNode(null, 'middle');
         $root = new TagNode(null, 'root');
         $textNode = new TextNode($root, 'Content of the root node');
         $whiteSpaceNode = new WhiteSpaceNode($root, 'root', $textNode);
-
-        $refMethod = new ReflectionMethod(TagNode::class, 'isSimilarTag');
-        $refMethod->setAccessible(true);
 
         $this->assertFalse($refMethod->invoke($root2, $whiteSpaceNode));
         $this->assertTrue($refMethod->invoke($root1, $root2));
@@ -230,10 +230,10 @@ class TagNodeTest extends TestCase
 
     public function testGetOpeningTag(): void
     {
-        $html  = '<table width="500" height="175">';
+        $html  = '<table class="table" width="500">';
         $attrs = [
-            'width'  => 500,
-            'height' => 175,
+            'class' => 'table',
+            'width' => 500,
         ];
 
         $root = new TagNode(null, 'table', $attrs);
@@ -251,6 +251,7 @@ class TagNodeTest extends TestCase
         $root->addChild($intermediate);
 
         $this->assertEquals('</middle>', $intermediate->getClosingTag());
+        $this->assertEquals('</root>', $root->getClosingTag());
     }
 
     public function testIsBlockLevel(): void
@@ -261,22 +262,6 @@ class TagNodeTest extends TestCase
 
         $this->assertFalse($intermediate->isBlockLevel());
         $this->assertTrue($root->isBlockLevel());
-
-        $this->assertFalse(TagNode::isBlockLevelStatic($intermediate));
-        $this->assertTrue(TagNode::isBlockLevelStatic($root->getQName()));
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testIsBlockLevelException(): void
-    {
-        try {
-            $this->assertFalse(TagNode::isBlockLevelStatic(null));
-        } catch (InvalidArgumentException $e) {
-            $this->assertEquals('Only string or Node values allowed.', $e->getMessage());
-            throw $e;
-        }
     }
 
     public function testIsInline(): void
@@ -287,9 +272,6 @@ class TagNodeTest extends TestCase
 
         $this->assertTrue($intermediate->isInline());
         $this->assertFalse($root->isInline());
-
-        $this->assertFalse(TagNode::isInlineStatic($root));
-        $this->assertTrue(TagNode::isInlineStatic($intermediate->getQName()));
     }
 
     public function testCopyTree(): void
@@ -306,12 +288,13 @@ class TagNodeTest extends TestCase
         $this->assertEquals($root, $root->copyTree());
     }
 
+    // TODO: verify this test
     public function testGetMatchRatio(): void
     {
         $root = new TagNode(null, 'root');
-        $textNode = new TextNode($root, 'Content of the root node');
+//        $textNode = new TextNode($root, 'Content of the root node');
         $intermediate = new TagNode($root, 'root');
-        $text = new TextNode($intermediate, 'Content of the intermdeiate node');
+//        $text = new TextNode($intermediate, 'Content of the intermdeiate node');
 
         $this->assertEquals(0.25, $root->getMatchRatio($intermediate), '', 0.1);
     }

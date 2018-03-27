@@ -8,7 +8,6 @@ use DaisyDiff\Xml\Xml;
 use InvalidArgumentException;
 use IteratorAggregate;
 use OutOfBoundsException;
-use Traversable;
 
 /**
  * Node that can contain other nodes. Represents an HTML tag.
@@ -16,7 +15,7 @@ use Traversable;
 class TagNode extends Node implements IteratorAggregate
 {
     /** @var Node[] */
-    private $children = [];
+    protected $children = [];
 
     /** @var string */
     private $qName;
@@ -27,7 +26,7 @@ class TagNode extends Node implements IteratorAggregate
     /**
      * @param  TagNode $parent
      * @param  string  $qName
-     * @param  array   $attributeBag
+     * @param  array   $attributes
      */
     public function __construct(?TagNode $parent, string $qName, array $attributes = [])
     {
@@ -72,7 +71,7 @@ class TagNode extends Node implements IteratorAggregate
     {
         parent::setRoot($root);
 
-        foreach ($this as $child) {
+        foreach ($this->children as $child) {
             $child->setRoot($root);
         }
 
@@ -101,7 +100,6 @@ class TagNode extends Node implements IteratorAggregate
     /**
      * @param  int $index
      * @return Node
-     *
      * @throws OutOfBoundsException
      */
     public function getChild(int $index): Node
@@ -116,9 +114,9 @@ class TagNode extends Node implements IteratorAggregate
     /**
      * IteratorAggregate::getIterator()
      *
-     * @return Traversable
+     * @return ArrayIterator
      */
-    public function getIterator(): Traversable
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->children);
     }
@@ -144,11 +142,11 @@ class TagNode extends Node implements IteratorAggregate
     }
 
     /**
-     * @return iterable
+     * @return array
      */
-    public function getAttributes(): iterable
+    public function getAttributes(): array
     {
-        return $this->attributes;
+        return $this->attributes ?? [];
     }
 
     /**
@@ -160,7 +158,7 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function isSameTag(?TagNode $other): bool
     {
-        if (is_null($other)) {
+        if (null === $other) {
             return false;
         }
 
@@ -199,9 +197,9 @@ class TagNode extends Node implements IteratorAggregate
      */
     private function hasSameAttributes(array $otherAttributes): bool
     {
-        $diff = array_diff_assoc($otherAttributes, $this->attributes);
-
-        return empty($diff);
+        // http://php.net/manual/en/language.operators.array.php
+        // $a == $b is TRUE if $a and $b have the same key/value pairs.
+        return $this->getAttributes() == $otherAttributes;
     }
 
     /**
@@ -216,7 +214,7 @@ class TagNode extends Node implements IteratorAggregate
         $result = false;
 
         if ($other instanceof TagNode) {
-            if (0 == strcasecmp($this->getQName(), $other->getQName())) {
+            if (0 === strcasecmp($this->getQName(), $other->getQName())) {
                 $result = $this->hasSameAttributes($other->getAttributes());
             }
         }
@@ -262,7 +260,7 @@ class TagNode extends Node implements IteratorAggregate
      * @param  int $id
      * @return Node[]
      */
-    public function getMinimalDeletedSet(int $id): iterable
+    public function getMinimalDeletedSet(int $id): array
     {
         $nodes = [];
 
@@ -274,12 +272,13 @@ class TagNode extends Node implements IteratorAggregate
         // By default, we think that all children are in the deleted set until we prove otherwise.
         $hasNotDeletedDescendant = false;
 
-        foreach ($this as $child) {
+        foreach ($this->children as $child) {
             $childrenChildren = $child->getMinimalDeletedSet($id);
             $nodes = array_merge($nodes, $childrenChildren);
 
             if (!$hasNotDeletedDescendant &&
                 !(1 == count($childrenChildren) && in_array($child, $childrenChildren, true))) {
+                // This child is not entirely deleted.
                 $hasNotDeletedDescendant = true;
             }
         }
@@ -328,7 +327,7 @@ class TagNode extends Node implements IteratorAggregate
             $i = 0;
             $numChildren = count($this->children);
 
-            while ($i < $numChildren && $this->children[$i] != $split) {
+            while ($i < $numChildren && $this->children[$i] !== $split) {
                 $this->children[$i]->setParent($part1);
                 $part1->addChild($this->children[$i]);
                 $i++;
@@ -397,8 +396,8 @@ class TagNode extends Node implements IteratorAggregate
     }
 
     /** @var string[] */
-    public static $blocks = [
-        'html', 'body','p','blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'pre', 'div', 'ul', 'ol', 'li',
+    private static $blocks = [
+        'html', 'body', 'p', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'pre', 'div', 'ul', 'ol', 'li',
         'table', 'tbody', 'tr', 'td', 'th', 'br', 'thead', 'tfoot',
     ];
 
@@ -422,26 +421,26 @@ class TagNode extends Node implements IteratorAggregate
      * @param  mixed $value
      * @return bool
      */
-    public static function isBlockLevelStatic($value): bool
-    {
-        if (is_string($value)) {
-            return in_array(mb_strtolower($value), self::$blocks);
-        }
-        elseif ($value instanceof Node) {
-            return in_array(mb_strtolower($value->getQName()), self::$blocks);
-        }
-
-        throw new InvalidArgumentException('Only string or Node values allowed.');
-    }
+//    public static function isBlockLevelStatic($value): bool
+//    {
+//        if (is_string($value)) {
+//            return in_array(mb_strtolower($value), self::$blocks);
+//        }
+//        elseif ($value instanceof Node) {
+//            return in_array(mb_strtolower($value->getQName()), self::$blocks);
+//        }
+//
+//        throw new InvalidArgumentException('Only string or Node values allowed.');
+//    }
 
     /**
      * @param  mixed $value
      * @return bool
      */
-    public static function isInlineStatic($value): bool
-    {
-        return !self::isBlockLevelStatic($value);
-    }
+//    public static function isInlineStatic($value): bool
+//    {
+//        return !self::isBlockLevelStatic($value);
+//    }
 
     /**
      * {@inheritdoc}
@@ -452,7 +451,7 @@ class TagNode extends Node implements IteratorAggregate
         $newThis->setWhiteBefore($this->isWhiteBefore());
         $newThis->setWhiteAfter($this->isWhiteAfter());
 
-        foreach ($this as $child) {
+        foreach ($this->children as $child) {
             $newChild = $child->copyTree();
             $newChild->setParent($newThis);
             $newThis->addChild($newChild);

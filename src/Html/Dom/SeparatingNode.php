@@ -11,7 +11,7 @@ namespace DaisyDiff\Html\Dom;
 class SeparatingNode extends TextNode
 {
     /**
-     * @param  TagNode $parent
+     * @param TagNode $parent
      */
     public function __construct(?TagNode $parent)
     {
@@ -25,6 +25,6 @@ class SeparatingNode extends TextNode
     {
         // No other separator is equal to this one. This has the effect that text nodes separated by such a separator
         // can never be treated as a text sequence by the RangeDifferencer/TextNodeComparator.
-        return $other == $this;
+        return $other === $this;
     }
 }
