@@ -15,7 +15,6 @@ class LongHtmlTest extends TestCase
         $newText = '<html> <body> <A HREF="../../javax/realtime/BsyncEventHandler.html#AsyncEventHandler(javax.realtime.SchedulingParameter, b)">AsyncEventHandler</A> </body> </html>';
 
         $result = HtmlTestFixture::diff($oldText, $newText);
-
         $this->assertContains('diff-html-changed', $result);
     }
 }

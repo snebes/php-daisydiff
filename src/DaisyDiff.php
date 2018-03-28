@@ -34,26 +34,21 @@ class DaisyDiff
      * @param  string $old
      * @param  string $new
      * @return string
-     *
      * @throws Exception
      */
     public function diff(string $old, string $new): string
     {
         // Parse $old XML.
         $oldHandler = new DomTreeBuilder();
-        $oldHandler->startDocument();
         $sax1 = new SAXReader($oldHandler, $this->logger);
         $sax1->parse($old);
-        $oldHandler->endDocument();
 
         // Parse $new XML.
         $newHandler = new DomTreeBuilder();
-        $newHandler->startDocument();
         $sax2 = new SAXReader($newHandler, $this->logger);
         $sax2->parse($new);
-        $newHandler->endDocument();
 
-        // Diff.
+        // Comparators.
         $leftComparator  = new TextNodeComparator($oldHandler);
         $rightComparator = new TextNodeComparator($newHandler);
 
@@ -66,13 +61,23 @@ class DaisyDiff
         return strval($content);
     }
 
-    public function diffTag(string $oldText, string $newText): void
+    /**
+     * @param  string $oldText
+     * @param  string $newText
+     * @return string
+     * @throws Exception
+     */
+    public function diffTag(string $oldText, string $newText): string
     {
         $oldComp = new TagComparator($oldText);
         $newComp = new TagComparator($newText);
 
-        $output = new TagSaxDiffOutput(null);
-        $differ = new TagDiffer($output);
+        $content = new ChangeText(50);
+        $handler = new DelegatingContentHandler($content);
+        $output  = new TagSaxDiffOutput($handler);
+        $differ  = new TagDiffer($output);
         $differ->diff($oldComp, $newComp);
+
+        return strval($content);
     }
 }

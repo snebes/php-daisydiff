@@ -2,6 +2,8 @@
 
 namespace DaisyDiff\Html;
 
+require 'HtmlTestFixture.php';
+
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 
@@ -16,18 +18,18 @@ class HtmlDifferTest extends TestCase
         $newText = '<p> This is a big blue book</p>';
 
         $result = HtmlTestFixture::diff($oldText, $newText);
-
         $this->assertContains('<p> This is a <ins class="diff-html-added"', $result);
     }
 
-//    public function simpleTextAddWithAncestor(): void
-//    {
-//        $ancestor = '<p> This is a book</p>';
-//        $oldText  = '<p> This is a blue book</p>';
-//        $newText  = '<p> This is a big blue book</p>';
-//
-//        $output = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
-//    }
+    public function testSimpleTextAddWithAncestor(): void
+    {
+        $ancestor = '<p> This is a book</p>';
+        $oldText  = '<p> This is a blue book</p>';
+        $newText  = '<p> This is a big blue book</p>';
+
+        $result = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
+        $this->assertContains('<p> This is a <ins class="diff-html-added"', $result);
+    }
 
     public function testSimpleTextRemove(): void
     {
@@ -35,20 +37,18 @@ class HtmlDifferTest extends TestCase
         $newText = '<p> This is a book</p>';
 
         $result = HtmlTestFixture::diff($oldText, $newText);
-
         $this->assertContains('<p> This is a <del class="diff-html-removed"', $result);
     }
 
-//    public function simpleTextRemoveWithAncestor(): void
-//    {
-//        $ancestor = '<p> This is a big blue book</p>';
-//        $oldText  = '<p> This is a blue book</p>';
-//        $newText  = '<p> This is a book</p>';
-//
-//        $output = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
-//
-//        $this->assertContains('<span class="diff-html-removed"', $output);
-//    }
+    public function testSimpleTextRemoveWithAncestor(): void
+    {
+        $ancestor = '<p> This is a big blue book</p>';
+        $oldText  = '<p> This is a blue book</p>';
+        $newText  = '<p> This is a book</p>';
+
+        $result = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
+        $this->assertContains('<del class="diff-html-removed"', $result);
+    }
 
     public function testSimpleTextChange(): void
     {
@@ -56,22 +56,20 @@ class HtmlDifferTest extends TestCase
         $newText = '<p> This is a green book</p>';
 
         $result = HtmlTestFixture::diff($oldText, $newText);
-
         $this->assertContains('<p> This is a <del class="diff-html-removed"', $result);
         $this->assertContains('blue </del><ins class="diff-html-added"', $result);
     }
 
-//    public function simpleTextChangeWithAncestor(): void
-//    {
-//        $ancestor = '<p>This is a red book</p>';
-//        $oldText  = '<p> This is a blue book</p>';
-//        $newText  = '<p> This is a green book</p>';
-//
-//        $output = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
-//
-//        $this->assertContains('<span class="diff-html-removed"', $output);
-//        $this->assertContains('<span class="diff-html-added"', $output);
-//    }
+    public function testSimpleTextChangeWithAncestor(): void
+    {
+        $ancestor = '<p>This is a red book</p>';
+        $oldText  = '<p> This is a blue book</p>';
+        $newText  = '<p> This is a green book</p>';
+
+        $result = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
+        $this->assertContains('<del class="diff-html-removed"', $result);
+        $this->assertContains('<ins class="diff-html-added"', $result);
+    }
 
     public function testAttributeAdd(): void
     {
@@ -79,20 +77,18 @@ class HtmlDifferTest extends TestCase
         $newText = '<p id="sample"> This is a blue book</p>';
 
         $result = HtmlTestFixture::diff($oldText, $newText);
-
         $this->assertContains('<span class="diff-html-changed"', $result);
     }
 
-//    public function simpleAttributeAddWithAncestor(): void
-//    {
-//        $ancestor = '<p class="example"> This is a blue book</p>';
-//        $oldText  = '<p> This is a blue book</p>';
-//        $newText  = '<p id="sample"> This is a blue book</p>';
-//
-//        $output = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
-//
-//        $this->assertContains('<span class="diff-html-changed"', $output);
-//    }
+    public function testSimpleAttributeAddWithAncestor(): void
+    {
+        $ancestor = '<p class="example"> This is a blue book</p>';
+        $oldText  = '<p> This is a blue book</p>';
+        $newText  = '<p id="sample"> This is a blue book</p>';
+
+        $result = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
+        $this->assertContains('<span class="diff-html-changed"', $result);
+    }
 
     public function testTagAdd(): void
     {
@@ -100,20 +96,18 @@ class HtmlDifferTest extends TestCase
         $newText = '<p> This is a <b>blue</b> book</p>';
 
         $result = HtmlTestFixture::diff($oldText, $newText);
-
         $this->assertContains('<p> This is a <b><span class="diff-html-changed"', $result);
     }
 
-//    public function testTagAddWithAncestor(): void
-//    {
-//        $ancestor = 'This is a <b>blue</b> book';
-//        $oldText  = '<p> This is a blue book</p>';
-//        $newText  = '<p> This is a <b>blue</b> book</p>';
-//
-//        $output = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
-//
-//        $this->assertContains('<p> This is a <b><span class="diff-html-changed"', $output);
-//    }
+    public function testTagAddWithAncestor(): void
+    {
+        $ancestor = 'This is a <b>blue</b> book';
+        $oldText  = '<p> This is a blue book</p>';
+        $newText  = '<p> This is a <b>blue</b> book</p>';
+
+        $result = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
+        $this->assertContains('<span class="diff-html-changed"', $result);
+    }
 
     public function testTwiceChangeText(): void
     {
@@ -121,21 +115,20 @@ class HtmlDifferTest extends TestCase
         $newText = '<p> This is a red table</p>';
 
         $result = HtmlTestFixture::diff($oldText, $newText);
-
         $this->assertContains('<p> This is a <del class="diff-html-removed"', $result);
         $this->assertContains('<ins class="diff-html-added"', $result);
     }
 
+    // TODO: check this vs. java version.
 //    public function testTwiceChangeTextWithAncestor(): void
 //    {
 //        $ancestor = '<p> This is a blue book</p>';
 //        $oldText  = '<p> This is a blue book</p>';
 //        $newText  = '<p> This is a red table</p>';
 //
-//        $output = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
-//
-//        $this->assertContains('<del class="diff-html-removed"', $output);
-//        $this->assertContains('<ins class="diff-html-added"', $output);
+//        $result = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
+//        $this->assertContains('<del class="diff-html-removed"', $result);
+//        $this->assertContains('<ins class="diff-html-added"', $result);
 //    }
 
     public function testScore(): void

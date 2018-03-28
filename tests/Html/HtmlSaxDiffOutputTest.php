@@ -38,6 +38,7 @@ class HtmlSaxDiffOutputTest extends TestCase
      * @param  string $name
      * @param  array  $params
      * @return mixed
+     * @throws
      */
     private function executeMethod($instance, string $name, array $params)
     {
@@ -115,6 +116,9 @@ class HtmlSaxDiffOutputTest extends TestCase
         return strval($this->content);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGenerateOutputExample1(): void
     {
         $html = new TagNode(null, 'html');
@@ -138,6 +142,9 @@ class HtmlSaxDiffOutputTest extends TestCase
         $this->assertContains($newText, $result);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGenerateOutputExample2(): void
     {
         $attrs = ['span' => 'diff-tag-html'];
@@ -162,6 +169,9 @@ class HtmlSaxDiffOutputTest extends TestCase
         $this->assertContains('contents of html page', $result);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGenerateOutputExample3(): void
     {
         $html = new TagNode(null, 'html');
@@ -184,6 +194,9 @@ class HtmlSaxDiffOutputTest extends TestCase
         $this->assertContains('<ins class="diff-html-added"', $result);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGenerateOutputExample4(): void
     {
         $html = new TagNode(null, 'html');
@@ -205,6 +218,9 @@ class HtmlSaxDiffOutputTest extends TestCase
         $this->assertContains('<del class="diff-html-removed" id="removed-diff--1" previous="first-diff" changeId="removed-diff--1" next="last-diff"', $result);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGenerateOutputExample5(): void
     {
         $html = new TagNode(null, 'html');
@@ -225,6 +241,9 @@ class HtmlSaxDiffOutputTest extends TestCase
         $this->assertContains('<span class="diff-html-changed"', $result);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGenerateOutputExample6(): void
     {
         $attrs = ['src' => 'diff-tag-html'];
@@ -249,6 +268,9 @@ class HtmlSaxDiffOutputTest extends TestCase
         $this->assertContains('<p id="sample">', $result);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGenerateOutputExample7(): void
     {
         $attrs = ['src' => 'diff-tag-html'];
@@ -271,6 +293,9 @@ class HtmlSaxDiffOutputTest extends TestCase
         $this->assertContains($oldText, $result);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGenerateOutputExample8(): void
     {
         $attrs = ['src' => 'diff-tag-html'];
@@ -294,6 +319,9 @@ class HtmlSaxDiffOutputTest extends TestCase
         $this->assertContains('<ins class="diff-html-added"', $result);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGenerateOutputExample9(): void
     {
         $attrs = ['src' => 'diff-tag-html'];
@@ -319,6 +347,9 @@ class HtmlSaxDiffOutputTest extends TestCase
         $this->assertContains('<del class="diff-html-removed"', $result);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGenerateOutputExample10(): void
     {
         $attrs = ['src' => 'diff-tag-html'];

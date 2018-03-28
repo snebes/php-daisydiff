@@ -70,7 +70,7 @@ final class RangeDifferencer
         ?LCSSettings $settings = null
     ): array {
         if (null == $ancestor) {
-            return self::findDifferences($left, $right);
+            return self::findDifferences($left, $right, $settings);
         }
 
         $leftAncestorScript  = [];
@@ -114,7 +114,6 @@ final class RangeDifferencer
 
             $changeRangeStart = $startThread->getDifference()->leftStart();
             $changeRangeEnd   = $startThread->getDifference()->leftEnd();
-
             $startThread->next();
 
             // Check for overlapping changes with other thread merge overlapping changes with this range.
@@ -139,7 +138,7 @@ final class RangeDifferencer
         // Remove sentinal, the first item in the array.
         array_shift($diff3);
 
-        return $diff3;
+        return array_values($diff3);
     }
 
     /**
