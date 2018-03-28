@@ -61,17 +61,116 @@ final class RangeDifferencer
      * @param  RangeComparatorInterface $ancestor
      * @param  RangeComparatorInterface $left
      * @param  RangeComparatorInterface $right
+     * @param  LCSSettings              $settings
      * @return RangeDifference[]
      */
     public static function findDifferences3(
         ?RangeComparatorInterface $ancestor,
         RangeComparatorInterface $left,
-        RangeComparatorInterface $right
+        RangeComparatorInterface $right,
+        ?LCSSettings $settings = null
     ): array {
         if (is_null($ancestor)) {
             return self::findDifferences($left, $right);
         }
 
         throw new RuntimeException('This is not implemented.');
+    }
+
+    /**
+     * @param  RangeComparatorInterface $left
+     * @param  RangeComparatorInterface $right
+     * @param  LCSSettings|null         $settings
+     * @return RangeDifference[]
+     */
+    public static function findRanges(
+        RangeComparatorInterface $left,
+        RangeComparatorInterface $right,
+        ?LCSSettings $settings = null
+    ): array {
+        $in  = self::findDifferences($left, $right, $settings);
+        $out = [];
+
+        $mstart = 0;
+        $ystart = 0;
+
+        for ($i = 0, $iMax = count($in); $i < $iMax; $i++) {
+            $es = $in[$i];
+            $rd = new RangeDifference(RangeDifference::NOCHANGE,
+                $mstart, $es->rightStart() - $mstart,
+                $ystart, $es->leftStart() - $ystart);
+
+            if ($rd->maxLength() != 0) {
+                $out[] = $rd;
+            }
+
+            $out[] = $es;
+
+            $mstart = $es->rightEnd();
+            $ystart = $es->leftEnd();
+        }
+
+        $rd = new RangeDifference(RangeDifference::NOCHANGE,
+            $mstart, $right->getRangeCount() - $mstart,
+            $ystart, $left->getRangeCount() - $ystart);
+
+        if ($rd->maxLength() > 0) {
+            $out[] = $rd;
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param  RangeComparatorInterface|null $ancestor
+     * @param  RangeComparatorInterface      $left
+     * @param  RangeComparatorInterface      $right
+     * @param  LCSSettings|null              $settings
+     * @return array
+     */
+    public static function findRanges3(
+        ?RangeComparatorInterface $ancestor,
+        RangeComparatorInterface $left,
+        RangeComparatorInterface $right,
+        ?LCSSettings $settings = null
+    ): array {
+        if (null == $ancestor) {
+            return self::findRanges($left, $right, $settings);
+        }
+
+        $in  = self::findDifferences3($ancestor, $left, $right, $settings);
+        $out = [];
+
+        $mstart = 0;
+        $ystart = 0;
+        $astart = 0;
+
+        for ($i = 0, $iMax = count($in); $i < $iMax; $i++) {
+            $es = $in[$i];
+            $rd = new RangeDifference(RangeDifference::NOCHANGE,
+                $mstart, $es->rightStart() - $mstart,
+                $ystart, $es->leftStart() - $ystart,
+                $astart, $es->ancestorStart() - $astart);
+
+            if ($rd->maxLength() > 0) {
+                $out[] = $rd;
+            }
+
+            $out[] = $es;
+
+            $mstart = $es->rightEnd();
+            $ystart = $es->leftEnd();
+            $astart = $es->ancestorEnd();
+        }
+
+        $rd = new RangeDifference(RangeDifference::NOCHANGE,
+            $mstart, $es->getRangeCount() - $mstart,
+            $ystart, $es->getRangeCount() - $ystart);
+
+        if ($rd->maxLength() > 0) {
+            $out[] = $rd;
+        }
+
+        return $out;
     }
 }
