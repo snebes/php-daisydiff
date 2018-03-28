@@ -3,23 +3,17 @@
 namespace DaisyDiff\RangeDifferencer\Core;
 
 /**
- * LCS - Longest Common Sequence - Common Methods.
+ * LCS - Longest Common Subsequence - Common Methods.
  *
  * Used to determine the change set responsible for each line.
  */
 abstract class LCS
 {
-    /** @const float */
-    const TOO_LONG = 100000000.0;
-
-    /** @const float */
-    const POW_LIMIT = 1.5;
+    /** @var int */
+    protected $maxDifferences = 0;
 
     /** @var int */
-    private $maxDifferences = 0;
-
-    /** @var int */
-    private $length = 0;
+    protected $length = 0;
 
     /**
      * @return int
@@ -40,9 +34,10 @@ abstract class LCS
      * After this method is called, the longest common subsequence is available by calling getResult() where result[0]
      * is composed of entries from l1 and result[1] is composed of entries from l2
      *
+     * @param  LCSSettings $settings
      * @return void
      */
-    public function longestCommonSubsequence(): void
+    public function longestCommonSubsequence(LCSSettings $settings): void
     {
         $length1 = $this->getLength1();
         $length2 = $this->getLength2();
@@ -52,53 +47,40 @@ abstract class LCS
             return;
         }
 
-        $this->maxDifferences = intval(ceil(($length1 + $length2 + 1) / 2.0)); // ceil((N+M)/2);
-//        printf("maxDifferences: %s\n", $this->maxDifferences);
+        $this->maxDifferences = intval(ceil(($length1 + $length2 + 1) / 2)); // ceil((N+M)/2);
 
-        if (floatval($length1 * $length2) > self::TOO_LONG) {
+        if (floatval($length1 * $length2) > $settings->getTooLong()) {
             // Limit complexity to D^POW_LIMIT for long sequences
-            $this->maxDifferences = intval(pow($this->maxDifferences, self::POW_LIMIT - 1.0));
-//            printf("maxDifferences2: %s\n", $this->maxDifferences);
+            $this->maxDifferences = intval(pow($this->maxDifferences, $settings->getPowLimit() - 1.0));
         }
 
         $this->initializeLcs($length1);
 
         // The common prefixes and suffixes are always part of some LCS, include them now to reduce our search space.
-        $forwardBound = 0;
         $max = min($length1, $length2);
 
-//        printf("max: %s\n", $max);
-
-        for (; $forwardBound < $max && $this->isRangeEqual($forwardBound, $forwardBound); $forwardBound++) {
+        for ($forwardBound = 0;
+             $forwardBound < $max && $this->isRangeEqual($forwardBound, $forwardBound);
+             $forwardBound++) {
             $this->setLcs($forwardBound, $forwardBound);
-
-//            printf("forwardBound: %s\n", $forwardBound);
         }
 
         $backBoundL1 = $length1 - 1;
         $backBoundL2 = $length2 - 1;
 
-//        printf("backBoundL1: %s\n", $backBoundL1);
-//        printf("backBoundL2: %s\n", $backBoundL2);
-
-        while ($backBoundL1 >= $forwardBound && $backBoundL2 >= $forwardBound &&
-                $this->isRangeEqual($backBoundL1, $backBoundL2)) {
+        while ($backBoundL1 >= $forwardBound &&
+               $backBoundL2 >= $forwardBound &&
+               $this->isRangeEqual($backBoundL1, $backBoundL2)) {
             $this->setLcs($backBoundL1, $backBoundL2);
             $backBoundL1--;
             $backBoundL2--;
-
-//            printf("backBoundL1: %s\n", $backBoundL1);
-//            printf("backBoundL2: %s\n", $backBoundL2);
         }
 
-        $V     = array_fill(0, 2, array_fill(0, $length1 + $length2 + 1, 0));
-        $snake = array_fill(0, 3, 0);
-
+        $V      = array_fill(0, 2, array_fill(0, $length1 + $length2 + 1, 0));
+        $snake  = array_fill(0, 3, 0);
         $lcsRec = $this->lcsRec($forwardBound, $backBoundL1, $forwardBound, $backBoundL2, $V, $snake);
-//        printf("lcsRec: %s\n", $lcsRec);
 
         $this->length = $forwardBound + $length1 - $backBoundL1 - 1 + $lcsRec;
-//        printf("this->length: %s\n", $this->length);
     }
 
     /**
@@ -113,7 +95,7 @@ abstract class LCS
      * @param  int[]   $snake
      * @return int
      */
-    private function lcsRec(int $bottomL1, int $topL1, int $bottomL2, int $topL2, array &$V, array &$snake): int
+    protected function lcsRec(int $bottomL1, int $topL1, int $bottomL2, int $topL2, array &$V, array &$snake): int
     {
         // Check that both sequences are non-empty.
         if ($bottomL1 > $topL1 || $bottomL2 > $topL2) {
@@ -167,7 +149,7 @@ abstract class LCS
      * @param  int[]   $snake
      * @return int
      */
-    private function findMiddleSnake(
+    protected function findMiddleSnake(
         int $bottomL1,
         int $topL1,
         int $bottomL2,
@@ -181,7 +163,7 @@ abstract class LCS
         $delta  = $N - $M;
         $isEven = ($delta & 1) == 1? false : true;
 
-        $limit = min($this->maxDifferences, intval(ceil(($N + $M + 1) / 2.0)));
+        $limit = min($this->maxDifferences, intval(ceil(($N + $M + 1) / 2)));
 
         // Offset to make it odd/even.
         // a 0 or 1 that we add to the start offset to make it odd/even
@@ -281,7 +263,7 @@ abstract class LCS
         // Computing the true LCS is too expensive, instead find the diagonal with the most progress and pretend a
         // middle snake of length 0 occurs there.
         /** @var int[] */
-        $mostProgress = static::findMostProgress($M, $N, $limit, $V);
+        $mostProgress = $this->findMostProgress($M, $N, $limit, $V);
 
         $snake[0] = $bottomL1 + $mostProgress[0];
         $snake[1] = $bottomL2 + $mostProgress[1];
@@ -301,7 +283,7 @@ abstract class LCS
      * @param  int[][] $V
      * @return int[]
      */
-    private static function findMostProgress(int $M, int $N, int $limit, array $V): array
+    protected function findMostProgress(int $M, int $N, int $limit, array &$V): array
     {
         $delta = $N - $M;
 
@@ -321,7 +303,7 @@ abstract class LCS
 
         $backwardEndDiag = min($M, $limit);
         $maxProgress = array_fill(0,
-            intval(ceil(max($forwardEndDiag - $forwardStartDiag, $backwardEndDiag - $backwardStartDiag) / 2.0 + 1)),
+            intval(max($forwardEndDiag - $forwardStartDiag, $backwardEndDiag - $backwardStartDiag) / 2 + 1),
             [0, 0, 0]);
         $numProgress = 0;
         // the 1st entry is current, it is initialized with 0s.
@@ -381,7 +363,7 @@ abstract class LCS
         }
 
         // Return the middle diagonal with maximum progress.
-        return $maxProgress[intval(round($numProgress / 2.0))];
+        return $maxProgress[intval($numProgress / 2)];
     }
 
     /**

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DaisyDiff\Tag;
 
@@ -75,6 +75,7 @@ class TagDiffer implements TextDifferInterface
      * @param int                   $endRight
      * @param AtomSplitterInterface $leftComparator
      * @param AtomSplitterInterface $rightComparator
+     * @throws
      */
     private function parseNoChange(
         int $beginLeft = 0,
@@ -84,6 +85,8 @@ class TagDiffer implements TextDifferInterface
         AtomSplitterInterface $leftComparator,
         AtomSplitterInterface $rightComparator
     ): void {
+        assert($endRight);
+
         $s = '';
 
         // We can assume that the LCS is correct and that there are exactly as many atoms left and right.

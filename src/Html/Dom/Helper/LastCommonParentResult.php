@@ -30,12 +30,12 @@ class LastCommonParentResult
     }
 
     /**
-     * @param  TagNode $parent
+     * @param  TagNode $value
      * @return void
      */
-    public function setLastCommonParent(?TagNode $parent): void
+    public function setLastCommonParent(?TagNode $value): void
     {
-        $this->parent = $parent;
+        $this->parent = $value;
     }
 
     /**
@@ -63,12 +63,12 @@ class LastCommonParentResult
     }
 
     /**
-     * @param  int $depth
+     * @param  int $value
      * @return void
      */
-    public function setLastCommonParentDepth(int $depth): void
+    public function setLastCommonParentDepth(int $value): void
     {
-        $this->lastCommonParentDepth = $depth;
+        $this->lastCommonParentDepth = $value;
     }
 
     /**
@@ -80,11 +80,11 @@ class LastCommonParentResult
     }
 
     /**
-     * @param  int $index
+     * @param  int $value
      * @return void
      */
-    public function setIndexInLastCommonParent(int $index): void
+    public function setIndexInLastCommonParent(int $value): void
     {
-        $this->indexInLastCommonParent = $index;
+        $this->indexInLastCommonParent = $value;
     }
 }

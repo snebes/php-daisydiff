@@ -8,16 +8,10 @@ namespace DaisyDiff\Html\Ancestor;
 class ChangeText
 {
     /** @var int */
-    private $maxNumCharsPerLine;
+    private $maxNumCharsPerLine = 0;
 
     /** @var string */
-    private $text;
-
-    /** @var string */
-    private $newLine = '<br/>';
-
-    /** @var int */
-    private $charsThisLine = 0;
+    private $text = '';
 
     /**
      * @param  int $maxNumCharsPerLine

@@ -15,6 +15,8 @@ class TextNodeTest extends TestCase
     {
         $root = new TagNode(null, 'root');
         $textRoot = new TextNode($root, 'contents of root node');
+
+        /** @var TextNode $copyRoot */
         $copyRoot = $textRoot->copyTree();
 
         $this->assertEquals($textRoot->getText(), $copyRoot->getText());

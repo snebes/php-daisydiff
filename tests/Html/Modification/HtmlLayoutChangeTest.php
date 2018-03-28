@@ -2,10 +2,7 @@
 
 namespace DaisyDiff\Html\Modification;
 
-use DaisyDiff\Html\Dom\TagNode;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
 
 /**
  * HtmlLayoutChange Tests.

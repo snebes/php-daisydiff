@@ -4,6 +4,7 @@ namespace DaisyDiff\Html;
 
 use DaisyDiff\Html\Ancestor\ChangeText;
 use DaisyDiff\Html\Dom\DomTreeBuilder;
+use DaisyDiff\SAXReader;
 use Exception;
 
 /**
@@ -29,41 +30,13 @@ class HtmlTestFixture
     {
         // Parse $oldText.
         $oldHandler = new DomTreeBuilder();
-        $oldHandler->startDocument();
-        $oldXml = sprintf('<?xml version="1.0" encoding="UTF-8"?><body>%s</body>', $oldText);
+        $oldSax     = new SAXReader($oldHandler);
+        $oldSax->parse($oldText);
 
-        $xmlParser = xml_parser_create('UTF-8');
-        xml_set_element_handler($xmlParser, [$oldHandler, 'startElement'], [$oldHandler, 'endElement']);
-        xml_set_character_data_handler($xmlParser, [$oldHandler, 'characters']);
-        xml_parser_set_option($xmlParser, XML_OPTION_CASE_FOLDING, false);
-
-        if (!xml_parse($xmlParser, $oldXml, true)) {
-            $error = xml_error_string(xml_get_error_code($xmlParser));
-            $line  = xml_get_current_line_number($xmlParser);
-
-            throw new Exception("XML Error: {$error} at line {$line}\n");
-        }
-
-        xml_parser_free($xmlParser);
-
-        // Parse $new XML.
+        // Parse $newText.
         $newHandler = new DomTreeBuilder();
-        $newHandler->startDocument();
-        $newXml = sprintf('<?xml version="1.0" encoding="UTF-8"?><body>%s</body>', $newText);
-
-        $xmlParser = xml_parser_create('UTF-8');
-        xml_set_element_handler($xmlParser, [$newHandler, 'startElement'], [$newHandler, 'endElement']);
-        xml_set_character_data_handler($xmlParser, [$newHandler, 'characters']);
-        xml_parser_set_option($xmlParser, XML_OPTION_CASE_FOLDING, false);
-
-        if (!xml_parse($xmlParser, $newXml, true)) {
-            $error = xml_error_string(xml_get_error_code($xmlParser));
-            $line  = xml_get_current_line_number($xmlParser);
-
-            throw new Exception("XML Error: {$error} at line {$line}\n");
-        }
-
-        xml_parser_free($xmlParser);
+        $newSax     = new SAXReader($newHandler);
+        $newSax->parse($newText);
 
         // Diff.
         $leftComparator  = new TextNodeComparator($oldHandler);
@@ -74,6 +47,44 @@ class HtmlTestFixture
         $output  = new HtmlSaxDiffOutput($handler, 'test');
         $differ  = new HtmlDiffer($output);
         $differ->diff($leftComparator, $rightComparator);
+
+        return strval($content);
+    }
+
+    /**
+     * @param  string $ancestor
+     * @param  string $oldText
+     * @param  string $newText
+     * @return string
+     * @throws
+     */
+    public static function diff3(string $ancestor, string $oldText, string $newText): string
+    {
+        // Parse $ancestor.
+        $ancestorHandler = new DomTreeBuilder();
+        $ancestorSax     = new SAXReader($ancestorHandler);
+        $ancestorSax->parse($ancestor);
+
+        // Parse $oldText.
+        $oldHandler = new DomTreeBuilder();
+        $oldSax     = new SAXReader($oldHandler);
+        $oldSax->parse($oldText);
+
+        // Parse $newText.
+        $newHandler = new DomTreeBuilder();
+        $newSax     = new SAXReader($newHandler);
+        $newSax->parse($newText);
+
+        // Diff.
+        $ancestorComparator = new TextNodeComparator($ancestorHandler);
+        $leftComparator     = new TextNodeComparator($oldHandler);
+        $rightComparator    = new TextNodeComparator($newHandler);
+
+        $content = new ChangeText(55);
+        $handler = new DelegatingContentHandler($content);
+        $output  = new HtmlSaxDiffOutput($handler, 'test');
+        $differ  = new HtmlDiffer($output);
+        $differ->diff3($ancestorComparator, $leftComparator, $rightComparator);
 
         return strval($content);
     }

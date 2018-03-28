@@ -12,7 +12,7 @@ class BodyNode extends TagNode
      */
     public function __construct()
     {
-        parent::__construct(null, 'body');
+        parent::__construct(null, 'body', []);
     }
 
     /**
@@ -22,7 +22,7 @@ class BodyNode extends TagNode
     {
         $newThis = new static();
 
-        foreach ($this as $child) {
+        foreach ($this->children as $child) {
             $newChild = $child->copyTree();
             $newChild->setParent($newThis);
             $newThis->addChild($newChild);
@@ -34,11 +34,11 @@ class BodyNode extends TagNode
     /**
      * {@inheritdoc}
      */
-    public function getMinimalDeletedSet(int $id): iterable
+    public function getMinimalDeletedSet(int $id): array
     {
         $nodes = [];
 
-        foreach ($this as $child) {
+        foreach ($this->children as $child) {
             $childrenChildren = $child->getMinimalDeletedSet($id);
             $nodes = array_merge($nodes, $childrenChildren);
         }

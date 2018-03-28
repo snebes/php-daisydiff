@@ -11,14 +11,14 @@ use DaisyDiff\Html\Modification\ModificationType;
 class TextNode extends Node
 {
     /** @var string */
-    private $s;
+    private $s = '';
 
     /** @var Modification */
     private $modification;
 
     /**
-     * @param  TagNode $parent
-     * @param  string  $s
+     * @param TagNode $parent
+     * @param string  $s
      */
     public function __construct(?TagNode $parent, string $s)
     {
@@ -50,12 +50,12 @@ class TextNode extends Node
     /**
      * {@inheritdoc}
      */
-    public function getMinimalDeletedSet(int $id): iterable
+    public function getMinimalDeletedSet(int $id): array
     {
         $nodes = [];
         $modification = $this->getModification();
 
-        if (!is_null($modification) && $modification->getType() == ModificationType::REMOVED &&
+        if (null !== $modification && $modification->getType() == ModificationType::REMOVED &&
             $modification->getId() == $id) {
             $nodes = [$this];
         }
@@ -85,11 +85,14 @@ class TextNode extends Node
      */
     public function isSameText(?Node $other): bool
     {
-        if (is_null($other) || !$other instanceof TextNode) {
+        if (null == $other || !$other instanceof TextNode) {
             return false;
         }
 
-        return str_replace('\n', ' ', $this->getText()) === str_replace('\n', ' ', $other->getText());
+        $a = str_replace("\n", ' ', $this->getText());
+        $b = str_replace("\n", ' ', $other->getText());
+
+        return 0 == strcmp($a, $b);
     }
 
     /**

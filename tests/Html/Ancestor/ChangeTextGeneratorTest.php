@@ -58,7 +58,7 @@ class ChangeTextGeneratorTest extends TestCase
         $htmlLayoutChanges = [];
         $this->assertEquals($htmlLayoutChanges, $textGenerator->getHtmlLayoutChanges());
 
-        $differences = RangeDifferencer::findDifferences(null, $other, $comp);
+        $differences = RangeDifferencer::findDifferences($other, $comp, null);
         $changedText = '<ul class="changelist"><li>Moved out of a <b>html page</b>.</li><li>Moved out of a <b>html document</b>.</li><li><b>!diff-root!</b> added.</li><li><b>!diff-middle!</b> added.</li></ul>';
 
         $this->assertEquals($changedText, strval($textGenerator->getChanged($differences)));

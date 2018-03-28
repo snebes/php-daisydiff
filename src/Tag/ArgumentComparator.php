@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DaisyDiff\Tag;
 
@@ -43,8 +43,6 @@ class ArgumentComparator implements AtomSplitterInterface
             if ($c == '<' || $c == '>') {
                 if (mb_strlen($currentWord) > 0) {
                     $this->atoms[] = new TextAtom($currentWord);
-
-                    $currentWord = '';
                 }
 
                 $this->atoms[] = new TextAtom('' . $c);

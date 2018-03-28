@@ -6,7 +6,6 @@ use DaisyDiff\Html\Dom\DomTreeBuilder;
 use DaisyDiff\Xml\Sanitizer;
 use Exception;
 use Psr\Log\LoggerInterface;
-use tidy;
 
 /**
  * SAXReader implementation.
@@ -37,6 +36,8 @@ class SAXReader
      */
     public function parse(string $xml): void
     {
+        $this->contentHandler->startDocument();
+
         // Wrap xml in valid block.
         $clean = sprintf('<?xml version="1.0" encoding="UTF-8"?>%s<body>%s</body>', Sanitizer::getDocType(), $xml);
 
@@ -64,5 +65,7 @@ class SAXReader
 
         xml_parser_free($parser);
         unset($parser);
+
+        $this->contentHandler->endDocument();
     }
 }

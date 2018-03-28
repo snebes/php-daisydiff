@@ -2,7 +2,9 @@
 
 namespace DaisyDiff\Html;
 
+use DaisyDiff\Html\Modification\ModificationType;
 use DaisyDiff\Output\DiffOutputInterface;
+use DaisyDiff\RangeDifferencer\Core\LCSSettings;
 use DaisyDiff\RangeDifferencer\RangeDifference;
 use DaisyDiff\RangeDifferencer\RangeDifferencer;
 use OutOfBoundsException;
@@ -25,15 +27,110 @@ class HtmlDiffer
     }
 
     /**
+     * @param  TextNodeComparator $ancestorComparator
+     * @param  TextNodeComparator $leftComparator
+     * @param  TextNodeComparator $rightComparator
+     * @return void
+     * @throws
+     */
+    public function diff3(
+        TextNodeComparator $ancestorComparator,
+        TextNodeComparator $leftComparator,
+        TextNodeComparator $rightComparator
+    ): void {
+        $settings = new LCSSettings();
+        $settings->setUseGreedyMethod(false);
+
+        /** @var RangeDifference[] $differences */
+        $differences = RangeDifferencer::findDifferences3(
+            $ancestorComparator, $leftComparator, $rightComparator, $settings);
+        $pDifferences = $this->preProcess($differences);
+
+        $currentIndexAncestor = 0;
+        $currentIndexLeft     = 0;
+        $currentIndexRight    = 0;
+
+        foreach ($pDifferences as $d) {
+            $tempKind = $d->kind();
+
+            if (RangeDifference::ANCESTOR == $tempKind) {
+                // Ignore, we won't show pseudo-conflicts currently (left and right have the same change).
+                continue;
+            }
+
+            if ($d->leftStart() > $currentIndexLeft) {
+                $ancestorComparator->handlePossibleChangedPart(
+                    $currentIndexLeft, $d->leftStart(),
+                    $currentIndexAncestor, $d->ancestorStart(),
+                    $leftComparator);
+            }
+
+            if ($d->rightStart() > $currentIndexRight) {
+                $ancestorComparator->handlePossibleChangedPart(
+                    $currentIndexRight, $d->rightStart(),
+                    $currentIndexAncestor, $d->ancestorStart(),
+                    $rightComparator);
+            }
+
+            if (RangeDifference::CONFLICT == $tempKind || RangeDifference::LEFT == $tempKind) {
+                // Conflicts and changes on the left side.
+                if ($d->leftLength() > 0) {
+                    $ancestorComparator->markAsDeleted(
+                        $d->leftStart(), $d->leftEnd(), $leftComparator,
+                        $d->ancestorStart(), $d->ancestorEnd(), ModificationType::ADDED);
+                }
+            }
+
+            if (RangeDifference::CONFLICT == $tempKind || RangeDifference::RIGHT == $tempKind) {
+                // Conflicts and changes on the right side.
+                if ($d->rightLength() > 0) {
+                    $ancestorComparator->markAsDeleted(
+                        $d->rightStart(), $d->rightEnd(), $rightComparator,
+                        $d->ancestorStart(), $d->ancestorEnd(), ModificationType::ADDED);
+                }
+            }
+
+            $ancestorComparator->markAsNew($d->ancestorStart(), $d->ancestorEnd(), ModificationType::REMOVED);
+
+            $currentIndexAncestor = $d->ancestorEnd();
+            $currentIndexLeft     = $d->leftEnd();
+            $currentIndexRight    = $d->rightEnd();
+        }
+
+        if ($currentIndexLeft < $leftComparator->getRangeCount()) {
+            $ancestorComparator->handlePossibleChangedPart(
+                $currentIndexLeft, $leftComparator->getRangeCount(),
+                $currentIndexAncestor, $ancestorComparator->getRangeCount(),
+                $leftComparator);
+        }
+
+        if ($currentIndexRight < $rightComparator->getRangeCount()) {
+            $ancestorComparator->handlePossibleChangedPart(
+                $currentIndexRight, $rightComparator->getRangeCount(),
+                $currentIndexAncestor, $ancestorComparator->getRangeCount(),
+                $rightComparator);
+        }
+
+        $ancestorComparator->expandWhiteSpace();
+        $this->output->generateOutput($ancestorComparator->getBodyNode());
+    }
+
+    /**
      * Compares two Node Trees.
      *
      * @param  TextNodeComparator $leftComparator
      * @param  TextNodeComparator $rightComparator
      * @return void
+     * @throws
      */
     public function diff(TextNodeComparator $leftComparator, TextNodeComparator $rightComparator): void
     {
-        $differences = RangeDifferencer::findDifferences($leftComparator, $rightComparator);
+        // Configure LCS.
+        $settings = new LCSSettings();
+        $settings->setUseGreedyMethod(true);
+
+        /** @var RangeDifference[] $differences */
+        $differences = RangeDifferencer::findDifferences($leftComparator, $rightComparator, $settings);
 
         /** @var RangeDifference[] */
         $pDifferences = $this->preProcess($differences);
@@ -69,7 +166,6 @@ class HtmlDiffer
         }
 
         $rightComparator->expandWhiteSpace();
-
         $this->output->generateOutput($rightComparator->getBodyNode());
     }
 
@@ -77,12 +173,12 @@ class HtmlDiffer
      * @param  RangeDifference[] $differences
      * @return RangeDifference[]
      */
-    private function preProcess(array $differences): iterable
+    private function preProcess(array $differences): array
     {
         /** @var RangeDifference[] */
         $newRanges = [];
 
-        for ($i = 0; $i < count($differences); $i++) {
+        for ($i = 0, $iMax = count($differences); $i < $iMax; $i++) {
             $ancestorStart = $differences[$i]->ancestorStart();
             $ancestorEnd   = $differences[$i]->ancestorEnd();
             $leftStart     = $differences[$i]->leftStart();
@@ -95,16 +191,18 @@ class HtmlDiffer
             $leftLength     = $leftEnd - $leftStart;
             $rightLength    = $rightEnd - $rightStart;
 
-            while  ($i + 1 < count($differences) &&
-                    $differences[$i + 1]->kind() == $kind &&
-                    $this->score($leftLength, $differences[$i + 1]->leftLength(),
-                                $rightLength, $differences[$i + 1]->rightLength()) > ($differences[$i + 1]->leftStart() - $leftEnd)) {
-                $leftEnd        = $differences[$i + 1]->leftEnd();
-                $rightEnd       = $differences[$i + 1]->rightEnd();
-                $ancestorEnd    = $differences[$i + 1]->ancestorEnd();
+            while  ($i + 1 < $iMax
+                    && $differences[$i + 1]->kind() == $kind
+                    && $this->score($leftLength, $differences[$i + 1]->leftLength(),
+                                    $rightLength, $differences[$i + 1]->rightLength()) > ($differences[$i + 1]->leftStart() - $leftEnd)) {
+                $ancestorEnd = $differences[$i + 1]->ancestorEnd();
+                $leftEnd     = $differences[$i + 1]->leftEnd();
+                $rightEnd    = $differences[$i + 1]->rightEnd();
+
+                $ancestorLength = $ancestorEnd - $ancestorStart;
                 $leftLength     = $leftEnd - $leftStart;
                 $rightLength    = $rightEnd - $rightStart;
-                $ancestorLength = $ancestorEnd - $ancestorStart;
+
                 $i++;
             }
 

@@ -8,7 +8,6 @@ use DaisyDiff\Html\Dom\TextNode;
 use DaisyDiff\Html\Modification\Modification;
 use DaisyDiff\Html\Modification\ModificationType;
 use DaisyDiff\Output\DiffOutputInterface;
-use DaisyDiff\Xml\AttributeBag;
 use DaisyDiff\Xml\ContentHandlerInterface;
 
 /**
@@ -36,7 +35,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
     public function generateOutput(TagNode $node): void
     {
         if (0 != strcasecmp($node->getQName(), 'img') && 0 != strcasecmp($node->getQName(), 'body')) {
-            $this->handler->startElement($node->getQName(), new AttributeBag($node->getAttributes()));
+            $this->handler->startElement($node->getQName(), $node->getAttributes());
         }
 
         $newStarted = false;
@@ -75,7 +74,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
                 }
                 elseif ($changeStarted && (
                     $mod->getOutputType() != ModificationType::CHANGED ||
-                    !$mod->getChanges() == $changeText ||
+                    $mod->getChanges() != $changeText ||
                     $mod->isFirstOfId())) {
                     $this->handler->endElement('span');
                     $changeStarted = false;
@@ -89,8 +88,8 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
                     $this->handler->endElement('span');
                     $conflictStarted = false;
                 }
-                // No else because a removed part can just be closed and a new part can start.
 
+                // No else because a removed part can just be closed and a new part can start.
                 if (!$newStarted && $mod->getOutputType() == ModificationType::ADDED) {
                     $attrs = ['class' => 'diff-html-added'];
 
@@ -99,7 +98,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
                     }
 
                     $this->addAttributes($mod, $attrs);
-                    $this->handler->startElement('ins', new AttributeBag($attrs));
+                    $this->handler->startElement('ins', $attrs);
 
                     $newStarted = true;
                 }
@@ -111,7 +110,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
                     }
 
                     $this->addAttributes($mod, $attrs);
-                    $this->handler->startElement('span', new AttributeBag($attrs));
+                    $this->handler->startElement('span', $attrs);
 
                     $changeStarted = true;
                     $changeText = $mod->getChanges();
@@ -124,7 +123,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
                     }
 
                     $this->addAttributes($mod, $attrs);
-                    $this->handler->startElement('del', new AttributeBag($attrs));
+                    $this->handler->startElement('del', $attrs);
 
                     $remStarted = true;
                 }
@@ -136,7 +135,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
                     }
 
                     $this->addAttributes($mod, $attrs);
-                    $this->handler->startElement('span', new AttributeBag($attrs));
+                    $this->handler->startElement('span', $attrs);
 
                     $conflictStarted = true;
                 }
@@ -198,39 +197,30 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
     {
         if ($mod->getOutputType() == ModificationType::CHANGED) {
             $changes = $mod->getChanges();
-            $attrs['changes'] = htmlspecialchars($changes );
+            $attrs['changes'] = htmlspecialchars($changes);
         }
 
         // Add previous changes.
-        $previous = '';
-
-        if (is_null($mod->getPrevious())) {
-            $previous = sprintf('first-%s', $this->prefix);
+        if (null == $mod->getPrevious()) {
+            $attrs['previous'] = sprintf('first-%s', $this->prefix);
         } else {
-            $previous = sprintf('%s-%s-%s',
+            $attrs['previous'] = sprintf('%s-%s-%s',
                 $mod->getPrevious()->getOutputType(),
                 $this->prefix,
                 $mod->getPrevious()->getId());
         }
 
-        $attrs['previous'] = $previous;
-
         // Add changeId.
-        $changeId = sprintf('%s-%s-%s', $mod->getOutputType(), $this->prefix, $mod->getId());
-        $attrs['changeId'] = $changeId;
+        $attrs['changeId'] = sprintf('%s-%s-%s', $mod->getOutputType(), $this->prefix, $mod->getId());
 
         // Add next changes.
-        $next = '';
-
-        if (is_null($mod->getNext())) {
-            $next = sprintf('last-%s', $this->prefix);
+        if (null == $mod->getNext()) {
+            $attrs['next'] = sprintf('last-%s', $this->prefix);
         } else {
-            $next = sprintf('%s-%s-%s',
+            $attrs['next'] = sprintf('%s-%s-%s',
                 $mod->getNext()->getOutputType(),
                 $this->prefix,
                 $mod->getNext()->getId());
         }
-
-        $attrs['next'] = $next;
     }
 }

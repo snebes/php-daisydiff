@@ -14,27 +14,30 @@ class OldDifferencerTest extends TestCase
     {
         $oldText = '<p> This is a blue book</p>';
         $newText = '<p> This is a <b>big</b> blue book</p>';
+
         $left  = new TagComparator($oldText);
         $right = new TagComparator($newText);
 
         $differenceRanges = OldDifferencer::findDifferences($left, $right);
-        $this->assertEquals('Left: (8, 0) Right: (8, 4)', strval($differenceRanges[0]));
+        $this->assertContains('Left: (8, 0) Right: (8, 4)', strval($differenceRanges[0]));
     }
 
     public function testFindDifferencesExample2(): void
     {
         $oldText = '<p> This is a blue book</p>';
         $newText = '<p> This is a <b>big</b> blue book</p>';
+
         $left  = new TagComparator($oldText);
         $right = new TagComparator($newText);
 
         $differenceRanges = OldDifferencer::findDifferences($right, $left);
-        $this->assertEquals('Left: (8, 4) Right: (8, 0)', strval($differenceRanges[0]));
+        $this->assertContains('Left: (8, 4) Right: (8, 0)', strval($differenceRanges[0]));
     }
 
     public function testFindDifferencesExample3(): void
     {
         $oldText = '<p> This is a blue book</p>';
+
         $left  = new TagComparator($oldText);
         $right = new TagComparator($oldText);
 

@@ -2,8 +2,10 @@
 
 namespace DaisyDiff\RangeDifferencer;
 
+use DaisyDiff\RangeDifferencer\Core\LCSSettings;
 use DaisyDiff\Tag\TagComparator;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 use ReflectionMethod;
 use ReflectionProperty;
 
@@ -17,13 +19,12 @@ class RangeComparatorLCSTest extends TestCase
         $oldText = '<p> This is a blue book</p>';
         $newText = '<p> This is a <b>big</b> blue book</p>';
 
-        $left  = new TagComparator($oldText);
-        $right = new TagComparator($newText);
-
+        $left     = new TagComparator($oldText);
+        $right    = new TagComparator($newText);
         $settings = new LCSSettings();
-        $rangeDifference = RangeComparatorLCS::findDifferences($settings, $left, $right);
 
-        $this->assertEquals('Left: (8, 0) Right: (8, 4)', strval($rangeDifference[0]));
+        $rangeDifference = RangeComparatorLCS::findDifferences($left, $right, $settings);
+        $this->assertContains('Left: (8, 0) Right: (8, 4)', strval($rangeDifference[0]));
     }
 
     public function testLength(): void
@@ -35,7 +36,6 @@ class RangeComparatorLCSTest extends TestCase
         $right = new TagComparator($newText);
 
         $comp = new RangeComparatorLCS($left, $right);
-
         $this->assertEquals(0, $comp->getLength());
         $this->assertEquals(12, $comp->getLength1());
         $this->assertEquals(16, $comp->getLength2());
@@ -50,7 +50,6 @@ class RangeComparatorLCSTest extends TestCase
         $right = new TagComparator($newText);
 
         $comp = new RangeComparatorLCS($left, $right);
-
         $this->assertEquals(0, $comp->getLength());
         $this->assertEquals(0, $comp->getLength1());
         $this->assertEquals(16, $comp->getLength2());
@@ -65,7 +64,6 @@ class RangeComparatorLCSTest extends TestCase
         $right = new TagComparator($newText);
 
         $comp = new RangeComparatorLCS($left, $right);
-
         $this->assertEquals(0, $comp->getLength());
         $this->assertEquals(0, $comp->getLength1());
         $this->assertEquals(0, $comp->getLength2());
@@ -80,7 +78,6 @@ class RangeComparatorLCSTest extends TestCase
         $right = new TagComparator($newText);
 
         $comp = new RangeComparatorLCS($left, $right);
-
         $this->assertEquals(0, $comp->getLength());
         $this->assertEquals(12, $comp->getLength1());
         $this->assertEquals(0, $comp->getLength2());
@@ -93,19 +90,20 @@ class RangeComparatorLCSTest extends TestCase
 
         $left  = new TagComparator($oldText);
         $right = new TagComparator($newText);
+        $comp  = new RangeComparatorLCS($left, $right);
 
-        $comp = new RangeComparatorLCS($left, $right);
+        try {
+            $refMethod = new ReflectionMethod($comp, 'initializeLcs');
+            $refMethod->setAccessible(true);
+            $refMethod->invoke($comp, 20);
 
-        $refMethod = new ReflectionMethod($comp, 'initializeLcs');
-        $refMethod->setAccessible(true);
-        $refMethod->invoke($comp, 20);
+            $refProp = new ReflectionProperty($comp, 'lcs');
+            $refProp->setAccessible(true);
+            $lcs = $refProp->getValue($comp);
 
-        $refProp = new ReflectionProperty($comp, 'lcs');
-        $refProp->setAccessible(true);
-        $lcs = $refProp->getValue($comp);
-
-        $this->assertEquals(2, count($lcs));
-        $this->assertEquals(20, count($lcs[0]));
+            $this->assertEquals(2, count($lcs));
+            $this->assertEquals(20, count($lcs[0]));
+        } catch (ReflectionException $e) {}
     }
 
     public function testInitializeLCSZero(): void
@@ -115,19 +113,20 @@ class RangeComparatorLCSTest extends TestCase
 
         $left  = new TagComparator($oldText);
         $right = new TagComparator($newText);
+        $comp  = new RangeComparatorLCS($left, $right);
 
-        $comp = new RangeComparatorLCS($left, $right);
+        try {
+            $refMethod = new ReflectionMethod($comp, 'initializeLcs');
+            $refMethod->setAccessible(true);
+            $refMethod->invoke($comp, 0);
 
-        $refMethod = new ReflectionMethod($comp, 'initializeLcs');
-        $refMethod->setAccessible(true);
-        $refMethod->invoke($comp, 0);
+            $refProp = new ReflectionProperty($comp, 'lcs');
+            $refProp->setAccessible(true);
+            $lcs = $refProp->getValue($comp);
 
-        $refProp = new ReflectionProperty($comp, 'lcs');
-        $refProp->setAccessible(true);
-        $lcs = $refProp->getValue($comp);
-
-        $this->assertEquals(2, count($lcs));
-        $this->assertEquals(0, count($lcs[0]));
+            $this->assertEquals(2, count($lcs));
+            $this->assertEquals(0, count($lcs[0]));
+        } catch (ReflectionException $e) {}
     }
 
     public function testIsRangeEqual(): void
@@ -137,14 +136,15 @@ class RangeComparatorLCSTest extends TestCase
 
         $left  = new TagComparator($oldText);
         $right = new TagComparator($newText);
+        $comp  = new RangeComparatorLCS($left, $right);
 
-        $comp = new RangeComparatorLCS($left, $right);
+        try {
+            $refMethod = new ReflectionMethod($comp, 'isRangeEqual');
+            $refMethod->setAccessible(true);
 
-        $refMethod = new ReflectionMethod($comp, 'isRangeEqual');
-        $refMethod->setAccessible(true);
-
-        $this->assertTrue($refMethod->invoke($comp,0, 0));
-        $this->assertFalse($refMethod->invoke($comp,0, 3));
+            $this->assertTrue($refMethod->invoke($comp, 0, 0));
+            $this->assertFalse($refMethod->invoke($comp, 0, 3));
+        } catch (ReflectionException $e) {}
     }
 
     public function testGetDifferencesExample1(): void
@@ -155,12 +155,11 @@ class RangeComparatorLCSTest extends TestCase
         $left  = new TagComparator($oldText);
         $right = new TagComparator($newText);
 
-        $comp = new RangeComparatorLCS($left, $right);
+        $comp  = new RangeComparatorLCS($left, $right);
+        $diffs = $comp->getDifferences();
 
-        $diff = $comp->getDifferences();
-
-        $this->assertEquals(1, count($diff));
-        $this->assertEquals('Left: (0, 26) Right: (0, 16)', strval($diff[0]));
+        $this->assertEquals(1, count($diffs));
+        $this->assertContains('Left: (0, 26) Right: (0, 16)', strval($diffs[0]));
     }
 
     public function testGetDifferencesExample2(): void
@@ -171,24 +170,22 @@ class RangeComparatorLCSTest extends TestCase
         $left  = new TagComparator($oldText);
         $right = new TagComparator($newText);
 
-        $comp = new RangeComparatorLCS($left, $right);
+        $comp  = new RangeComparatorLCS($left, $right);
+        $diffs = $comp->getDifferences();
 
-        $rangeDifference = $comp->getDifferences();
-
-        $this->assertEquals(1, count($rangeDifference));
-        $this->assertEquals('Left: (0, 11) Right: (0, 16)', strval($rangeDifference[0]));
+        $this->assertEquals(1, count($diffs));
+        $this->assertContains('Left: (0, 11) Right: (0, 16)', strval($diffs[0]));
     }
 
     public function testGetDifferencesExample3(): void
     {
         $newText = '<p> This is a <b>big</b> blue book</p>';
-        $right = new TagComparator($newText);
+        $right   = new TagComparator($newText);
 
-        $comp = new RangeComparatorLCS($right, $right);
+        $comp  = new RangeComparatorLCS($right, $right);
+        $diffs = $comp->getDifferences();
 
-        $rangeDifference = $comp->getDifferences();
-
-        $this->assertEquals(1, count($rangeDifference));
-        $this->assertEquals('Left: (0, 16) Right: (0, 16)', strval($rangeDifference[0]));
+        $this->assertEquals(1, count($diffs));
+        $this->assertContains('Left: (0, 16) Right: (0, 16)', strval($diffs[0]));
     }
 }

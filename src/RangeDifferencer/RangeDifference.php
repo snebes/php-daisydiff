@@ -40,25 +40,25 @@ class RangeDifference
     const ERROR = 5;
 
     /** @var int */
-    private $kind = 0;
+    protected $kind = 0;
 
     /** @var int */
-    private $leftStart = 0;
+    protected $leftStart = 0;
 
     /** @var int */
-    private $leftLength = 0;
+    protected $leftLength = 0;
 
     /** @var int */
-    private $rightStart = 0;
+    protected $rightStart = 0;
 
     /** @var int */
-    private $rightLength = 0;
+    protected $rightLength = 0;
 
     /** @var int */
-    private $ancestorStart = 0;
+    protected $ancestorStart = 0;
 
     /** @var int */
-    private $ancestorLength = 0;
+    protected $ancestorLength = 0;
 
     /**
      * @param int $kind
@@ -70,7 +70,7 @@ class RangeDifference
      * @param int $ancestorLength
      */
     public function __construct(
-        int $kind,
+        int $kind = 0,
         int $rightStart = 0,
         int $rightLength = 0,
         int $leftStart = 0,
@@ -204,12 +204,12 @@ class RangeDifference
     public function equals(RangeDifference $other): bool
     {
         return
-            $this->kind == $other->kind() &&
-            $this->leftStart == $other->leftStart() &&
-            $this->leftLength == $other->leftLength() &&
-            $this->rightStart == $other->rightStart() &&
-            $this->rightLength == $other->rightLength() &&
-            $this->ancestorStart == $other->ancestorStart() &&
+            $this->kind           == $other->kind() &&
+            $this->leftStart      == $other->leftStart() &&
+            $this->leftLength     == $other->leftLength() &&
+            $this->rightStart     == $other->rightStart() &&
+            $this->rightLength    == $other->rightLength() &&
+            $this->ancestorStart  == $other->ancestorStart() &&
             $this->ancestorLength == $other->ancestorLength()
         ;
     }

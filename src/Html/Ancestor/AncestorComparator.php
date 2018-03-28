@@ -63,7 +63,8 @@ class AncestorComparator implements RangeComparatorInterface
 
     /**
      * @param  int $i
-     * @return TagNode
+     * @return TagNode|null
+     * @throws OutOfBoundsException
      */
     public function getAncestor(int $i): ?TagNode
     {

@@ -17,26 +17,25 @@ abstract class Node
     protected $root;
 
     /** @var bool */
-    private $whiteBefore = false;
+    protected $whiteBefore = false;
 
     /** @var bool */
-    private $whiteAfter = false;
+    protected $whiteAfter = false;
 
     /**
      * This constructor not only sets the parameter as the parent for the created node, but also appends the created
-     * node to the collection of parant's children.
+     * node to the collection of parent's children.
      *
-     * @param  Node $parent
+     * @param TagNode|null $parent
      */
-    public function __construct(?Node $parent)
+    public function __construct(?TagNode $parent)
     {
         $this->parent = $parent;
 
-        if (!is_null($parent)) {
+        if (null != $parent) {
             $parent->addChild($this);
             $this->root = $parent->getRoot();
-        }
-        elseif ($this instanceof TagNode) {
+        } elseif ($this instanceof TagNode) {
             $this->root = $this;
         }
     }
@@ -44,9 +43,9 @@ abstract class Node
     /**
      * Get the parent node instance.
      *
-     * @return Node|null
+     * @return TagNode|null
      */
-    public function getParent(): ?Node
+    public function getParent(): ?TagNode
     {
         return $this->parent;
     }
@@ -55,13 +54,13 @@ abstract class Node
      * Returns a list of the ancestors that is ordered starting from the root by the depth. Index of an element in that
      * list corresponds its depth (if depth of the root is 0).
      *
-     * @return Node[]
+     * @return TagNode[]
      */
-    public function getParentTree(): iterable
+    public function getParentTree(): array
     {
         $ancestors = [];
 
-        for ($ancestor = $this->getParent(); !is_null($ancestor); $ancestor = $ancestor->getParent()) {
+        for ($ancestor = $this->getParent(); null != $ancestor; $ancestor = $ancestor->getParent()) {
             $ancestors[] = $ancestor;
         }
 
@@ -78,7 +77,7 @@ abstract class Node
      * Returns the "top" ancestor if this node has a parent, or the node itself if there is no parent, and this is a
      * TagNode or null if there is no parents and this node isn't a TagNode.
      *
-     * @return Node|null
+     * @return TagNode|null
      */
     public function getRoot(): ?TagNode
     {
@@ -86,28 +85,29 @@ abstract class Node
     }
 
     /**
+     * @param  int $id
      * @return Node[]
      */
-    abstract public function getMinimalDeletedSet(int $id): iterable;
+    abstract public function getMinimalDeletedSet(int $id): array;
 
     /**
      * @return void
      */
     public function detectIgnorableWhiteSpace(): void
     {
-        // no op.
+        // noop.
     }
 
     /**
      * Descent the ancestors list for both nodes stopping either at the first no-match case or when either of the lists
      * is exhausted.
      *
-     * @param  Node $other
+     * @param  Node|null $other
      * @return LastCommonParentResult
      */
     public function getLastCommonParent(?Node $other): LastCommonParentResult
     {
-        if (is_null($other)) {
+        if (null == $other) {
             throw new InvalidArgumentException('The given TextNode is null.');
         }
 
@@ -165,7 +165,7 @@ abstract class Node
     {
         $this->parent = $parent;
 
-        if (!is_null($parent)) {
+        if (null !== $parent) {
             $this->setRoot($parent->getRoot());
         }
 
@@ -176,7 +176,7 @@ abstract class Node
      * @param  TagNode $root
      * @return self
      */
-    protected function setRoot(TagNode $root): Node
+    protected function setRoot(TagNode $root): self
     {
         $this->root = $root;
 

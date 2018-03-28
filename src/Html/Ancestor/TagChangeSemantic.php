@@ -7,7 +7,7 @@ namespace DaisyDiff\Html\Ancestor;
  */
 final class TagChangeSemantic
 {
-    const MOVED = 'moved';
-    const STYLE = 'style';
+    const MOVED   = 'moved';
+    const STYLE   = 'style';
     const UNKNOWN = 'unknown';
 }

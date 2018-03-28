@@ -19,7 +19,7 @@ class TextNodeComparatorTest extends TestCase
      * @param  TextNodeComparator $comp
      * @return TextNode[]
      */
-    private function getTextNodes(TextNodeComparator $comp): iterable
+    private function getTextNodes(TextNodeComparator $comp): array
     {
         $p = new TagNode(null, 'p');
         $text = new TextNode($p, 'contents of p node');
@@ -62,7 +62,7 @@ class TextNodeComparatorTest extends TestCase
     {
         $tree = new DomTreeBuilder();
         $comp = new TextNodeComparator($tree);
-        $textNodes = $this->getTextNodes($comp);
+        $this->getTextNodes($comp);
 
         $comp->markAsNew(0, 1);
 
@@ -74,7 +74,7 @@ class TextNodeComparatorTest extends TestCase
     {
         $tree = new DomTreeBuilder();
         $comp = new TextNodeComparator($tree);
-        $textNodes = $this->getTextNodes($comp);
+        $this->getTextNodes($comp);
 
         $comp->markAsNew(1, 0);
 
@@ -86,7 +86,7 @@ class TextNodeComparatorTest extends TestCase
     {
         $tree = new DomTreeBuilder();
         $comp = new TextNodeComparator($tree);
-        $textNodes = $this->getTextNodes($comp);
+        $this->getTextNodes($comp);
 
         $comp->markAsNew(0, 1, ModificationType::CHANGED);
 
@@ -98,7 +98,7 @@ class TextNodeComparatorTest extends TestCase
     {
         $tree = new DomTreeBuilder();
         $comp = new TextNodeComparator($tree);
-        $textNodes = $this->getTextNodes($comp);
+        $this->getTextNodes($comp);
 
         $lastModified = $comp->getLastModified();
         $m = new Modification(ModificationType::REMOVED, ModificationType::REMOVED);
@@ -149,7 +149,7 @@ class TextNodeComparatorTest extends TestCase
     {
         $tree = new DomTreeBuilder();
         $comp = new TextNodeComparator($tree);
-        $textNodes = $this->getTextNodes($comp);
+        $this->getTextNodes($comp);
 
         $comp->markAsDeleted(0, 2, $comp, 1);
 
@@ -161,7 +161,7 @@ class TextNodeComparatorTest extends TestCase
     {
         $tree = new DomTreeBuilder();
         $comp = new TextNodeComparator($tree);
-        $textNodes = $this->getTextNodes($comp);
+        $this->getTextNodes($comp);
 
         $comp->markAsDeleted(1, 0, $comp, 2);
 
@@ -189,8 +189,8 @@ class TextNodeComparatorTest extends TestCase
     {
         $tree = new DomTreeBuilder();
         $comp = new TextNodeComparator($tree);
-        $textNodes = $this->getTextNodes($comp);
 
+        $this->getTextNodes($comp);
         $comp->expandWhiteSpace();
 
         $lastModified = $comp->getLastModified();
@@ -201,8 +201,8 @@ class TextNodeComparatorTest extends TestCase
     {
         $tree = new DomTreeBuilder();
         $comp = new TextNodeComparator($tree);
-        $textNodes = $this->getTextNodes($comp);
 
+        $this->getTextNodes($comp);
         $iterator = $comp->getIterator();
 
         $this->assertTrue($iterator->valid());

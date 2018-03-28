@@ -10,16 +10,16 @@ class Xml
     /**
      * Open XML element.
      *
-     * @param  string   $qName
-     * @param  iterable $attributes
+     * @param  string $qName
+     * @param  array  $attributes
      * @return string
      */
-    public static function openElement(string $qName, iterable $attributes = []): string
+    public static function openElement(string $qName, array $attributes = []): string
     {
         $s = '<' . $qName;
 
-        foreach ($attributes as $qName => $value) {
-            $s .= sprintf(' %s="%s"', $qName, $value);
+        foreach ($attributes as $attr => $value) {
+            $s .= sprintf(' %s="%s"', $attr, $value);
         }
 
         $s .= '>';

@@ -11,7 +11,7 @@ namespace DaisyDiff\Html\Modification;
  */
 final class HtmlLayoutChange
 {
-    /** @var HtmlLayoutChangeType */
+    /** @var string */
     private $type;
 
     /** @var string */
@@ -21,7 +21,7 @@ final class HtmlLayoutChange
     private $endingTag = '';
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getType(): ?string
     {
@@ -29,18 +29,18 @@ final class HtmlLayoutChange
     }
 
     /**
-     * @param  string $type
+     * @param  string|null $value
      * @return self
      */
-    public function setType(?string $type): self
+    public function setType(?string $value): self
     {
-        $this->type = $type;
+        $this->type = $value;
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getOpeningTag(): ?string
     {
@@ -48,7 +48,7 @@ final class HtmlLayoutChange
     }
 
     /**
-     * @param  string $value
+     * @param  string|null $value
      * @return self
      */
     public function setOpeningTag(?string $value): self
@@ -59,7 +59,7 @@ final class HtmlLayoutChange
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getEndingTag(): ?string
     {
@@ -67,7 +67,7 @@ final class HtmlLayoutChange
     }
 
     /**
-     * @param  string $value
+     * @param  string|null $value
      * @return self
      */
     public function setEndingTag(?string $value): self
