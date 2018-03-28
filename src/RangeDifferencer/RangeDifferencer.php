@@ -70,11 +70,20 @@ final class RangeDifferencer
         RangeComparatorInterface $right,
         ?LCSSettings $settings = null
     ): array {
-        if (is_null($ancestor)) {
+        if (null == $ancestor) {
             return self::findDifferences($left, $right);
         }
-
-        throw new RuntimeException('This is not implemented.');
+//
+//        $leftAncestorScript  = [];
+//        $rightAncestorScript = self::findDifferences($ancestor, $right, $settings);
+//
+//        if (!empty($rightAncestorScript)) {
+//            $leftAncestorScript = self::findDifferences($ancestor, $left, $settings);
+//        }
+//
+//        if (empty($leftAncestorScript) || empty($rightAncestorScript)) {
+//            return [];
+//        }
     }
 
     /**
