@@ -73,14 +73,14 @@ final class RangeDifferencer
             return self::findDifferences($left, $right, $settings);
         }
 
-        $leftAncestorScript  = [];
+        $leftAncestorScript  = null;
         $rightAncestorScript = self::findDifferences($ancestor, $right, $settings);
 
         if (!empty($rightAncestorScript)) {
             $leftAncestorScript = self::findDifferences($ancestor, $left, $settings);
         }
 
-        if (empty($leftAncestorScript) || empty($rightAncestorScript)) {
+        if (null === $leftAncestorScript || null === $rightAncestorScript) {
             return [];
         }
 

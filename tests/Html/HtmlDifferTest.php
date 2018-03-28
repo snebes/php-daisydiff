@@ -120,16 +120,17 @@ class HtmlDifferTest extends TestCase
     }
 
     // TODO: check this vs. java version.
-//    public function testTwiceChangeTextWithAncestor(): void
-//    {
-//        $ancestor = '<p> This is a blue book</p>';
-//        $oldText  = '<p> This is a blue book</p>';
-//        $newText  = '<p> This is a red table</p>';
-//
-//        $result = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
-//        $this->assertContains('<del class="diff-html-removed"', $result);
-//        $this->assertContains('<ins class="diff-html-added"', $result);
-//    }
+    /** @group test */
+    public function testTwiceChangeTextWithAncestor(): void
+    {
+        $ancestor = '<p> This is a blue book</p>';
+        $oldText  = '<p> This is a blue book</p>';
+        $newText  = '<p> This is a red table</p>';
+
+        $result = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
+        $this->assertContains('<del class="diff-html-removed"', $result);
+        $this->assertContains('<ins class="diff-html-added"', $result);
+    }
 
     public function testScore(): void
     {
