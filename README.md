@@ -1,6 +1,6 @@
 [![GitHub issues](https://img.shields.io/github/issues/snebes/php-daisydiff.svg?style=for-the-badge)](https://github.com/snebes/php-daisydiff/issues)
-![GitHub tag](https://img.shields.io/github/tag/expressjs/express.svg?style=for-the-badge)
-[![Build Status](https://travis-ci.org/snebes/php-daisydiff.svg?branch=master&style=for-the-badge)](https://travis-ci.org/snebes/php-daisydiff)
+![GitHub tag](https://img.shields.io/github/tag/snebes/php-daisydiff.svg?style=for-the-badge)
+![Travis](https://img.shields.io/travis/snebes/php-daisydiff.svg?style=for-the-badge)
 [![GitHub license](https://img.shields.io/github/license/snebes/php-daisydiff.svg?style=for-the-badge)](https://github.com/snebes/php-daisydiff)
 
 # xmldiff
