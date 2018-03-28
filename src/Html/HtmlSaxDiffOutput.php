@@ -34,7 +34,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
     /** {@inheritdoc} */
     public function generateOutput(TagNode $node): void
     {
-        if (0 != strcasecmp($node->getQName(), 'img') && 0 != strcasecmp($node->getQName(), 'body')) {
+        if (0 !== strcasecmp($node->getQName(), 'img') && 0 !== strcasecmp($node->getQName(), 'body')) {
             $this->handler->startElement($node->getQName(), $node->getAttributes());
         }
 
@@ -161,7 +161,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
             $this->handler->endElement('span');
         }
 
-        if (0 != strcasecmp($node->getQName(), 'img') && 0 != strcasecmp($node->getQName(), 'body')) {
+        if (0 !== strcasecmp($node->getQName(), 'img') && 0 !== strcasecmp($node->getQName(), 'body')) {
             $this->handler->endElement($node->getQName());
         }
     }

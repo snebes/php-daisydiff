@@ -77,7 +77,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
      */
     public function getTextNode(int $i): ?TextNode
     {
-        return array_key_exists($i, $this->textNodes)? $this->textNodes[$i] : null;
+        return $this->textNodes[$i] ?? null;
     }
 
     /**
@@ -255,10 +255,10 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
      * @return void
      */
     public function markAsDeleted(
-        int $start = 0,
-        int $end = 0,
+        int $start,
+        int $end,
         TextNodeComparator $oldComp,
-        int $before = 0,
+        int $before,
         int $after = 0,
         string $outputFormat = ModificationType::REMOVED
     ): void {
@@ -300,14 +300,14 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
         /** @var TagNode[] $deletedNodes */
         $deletedNodes = $oldComp->getBodyNode()->getMinimalDeletedSet($this->deletedId);
 
-        // Set prevLeaf to the leaf after which the old HTML needs to be inserted.
+        // Set $prevLeaf to the leaf after which the old HTML needs to be inserted.
         $prevLeaf = null;
 
         if ($before > 0) {
             $prevLeaf = $this->getTextNode($before - 1);
         }
 
-        // Set nextLeaf to the leaf before which the old HTML needs to be inserted.
+        // Set $nextLeaf to the leaf before which the old HTML needs to be inserted.
         $nextLeaf = null;
         $useAfter = false;
 
@@ -400,7 +400,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                 }
 
                 // array_shift removes first array element, and returns it.
-                $prevLeaf = array_shift($deletedNodes)->copyTree();
+                $prevLeaf = (array_shift($deletedNodes))->copyTree();
                 $prevLeaf->setParent($prevResult->getLastCommonParent());
                 $prevResult->getLastCommonParent()->addChild($prevLeaf, $prevResult->getIndexInLastCommonParent() + 1);
             }
@@ -417,7 +417,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                 }
 
                 // array_pop removes last array element, and returns it.
-                $nextLeaf = array_pop($deletedNodes)->copyTree();
+                $nextLeaf = (array_pop($deletedNodes))->copyTree();
                 $nextLeaf->setParent($nextResult->getLastCommonParent());
                 $nextResult->getLastCommonParent()->addChild($nextLeaf, $nextResult->getIndexInLastCommonParent());
             }
