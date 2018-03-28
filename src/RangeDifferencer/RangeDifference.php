@@ -70,7 +70,7 @@ class RangeDifference
      * @param int $ancestorLength
      */
     public function __construct(
-        int $kind,
+        int $kind = 0,
         int $rightStart = 0,
         int $rightLength = 0,
         int $leftStart = 0,
@@ -204,12 +204,12 @@ class RangeDifference
     public function equals(RangeDifference $other): bool
     {
         return
-            $this->kind == $other->kind() &&
-            $this->leftStart == $other->leftStart() &&
-            $this->leftLength == $other->leftLength() &&
-            $this->rightStart == $other->rightStart() &&
-            $this->rightLength == $other->rightLength() &&
-            $this->ancestorStart == $other->ancestorStart() &&
+            $this->kind           == $other->kind() &&
+            $this->leftStart      == $other->leftStart() &&
+            $this->leftLength     == $other->leftLength() &&
+            $this->rightStart     == $other->rightStart() &&
+            $this->rightLength    == $other->rightLength() &&
+            $this->ancestorStart  == $other->ancestorStart() &&
             $this->ancestorLength == $other->ancestorLength()
         ;
     }
