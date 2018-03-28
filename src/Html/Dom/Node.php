@@ -32,7 +32,7 @@ abstract class Node
     {
         $this->parent = $parent;
 
-        if (null != $parent) {
+        if (null !== $parent) {
             $parent->addChild($this);
             $this->root = $parent->getRoot();
         } elseif ($this instanceof TagNode) {
@@ -60,7 +60,7 @@ abstract class Node
     {
         $ancestors = [];
 
-        for ($ancestor = $this->getParent(); null != $ancestor; $ancestor = $ancestor->getParent()) {
+        for ($ancestor = $this->getParent(); null !== $ancestor; $ancestor = $ancestor->getParent()) {
             $ancestors[] = $ancestor;
         }
 
@@ -107,7 +107,7 @@ abstract class Node
      */
     public function getLastCommonParent(?Node $other): LastCommonParentResult
     {
-        if (null == $other) {
+        if (null === $other) {
             throw new InvalidArgumentException('The given TextNode is null.');
         }
 

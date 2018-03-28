@@ -94,7 +94,7 @@ class AncestorComparator implements RangeComparatorInterface
         /** @var RangeDifference[] */
         $differences = RangeDifferencer::findDifferences($other, $this);
 
-        if (0 == count($differences)) {
+        if (empty($differences)) {
             return $result;
         }
 

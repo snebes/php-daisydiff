@@ -85,7 +85,7 @@ class TextNode extends Node
      */
     public function isSameText(?Node $other): bool
     {
-        if (null == $other || !$other instanceof TextNode) {
+        if (null === $other || !$other instanceof TextNode) {
             return false;
         }
 

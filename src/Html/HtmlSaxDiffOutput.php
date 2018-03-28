@@ -201,7 +201,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
 //        }
 //
 //        // Add previous changes.
-//        if (null == $mod->getPrevious()) {
+//        if (null === $mod->getPrevious()) {
 //            $attrs['previous'] = sprintf('first-%s', $this->prefix);
 //        } else {
 //            $attrs['previous'] = sprintf('%s-%s-%s',
@@ -214,7 +214,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
 //        $attrs['changeId'] = sprintf('%s-%s-%s', $mod->getOutputType(), $this->prefix, $mod->getId());
 //
 //        // Add next changes.
-//        if (null == $mod->getNext()) {
+//        if (null === $mod->getNext()) {
 //            $attrs['next'] = sprintf('last-%s', $this->prefix);
 //        } else {
 //            $attrs['next'] = sprintf('%s-%s-%s',

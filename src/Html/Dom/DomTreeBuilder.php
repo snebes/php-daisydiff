@@ -219,7 +219,7 @@ final class DomTreeBuilder implements DomTreeInterface
                 $this->endWord();
 
                 if (WhiteSpaceNode::isWhiteSpace($c) && $this->numberOfActivePreTags == 0) {
-                    if (null != $this->lastSibling) {
+                    if (null !== $this->lastSibling) {
                         $this->lastSibling->setWhiteAfter(true);
                     }
 

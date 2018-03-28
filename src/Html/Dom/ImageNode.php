@@ -28,7 +28,7 @@ class ImageNode extends TextNode
      */
     public function isSameText(?Node $other): bool
     {
-        if (null == $other || !$other instanceof ImageNode) {
+        if (null === $other || !$other instanceof ImageNode) {
             return false;
         }
 

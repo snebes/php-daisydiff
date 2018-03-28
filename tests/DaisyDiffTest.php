@@ -30,7 +30,7 @@ class DaisyDiffTest extends TestCase
         $html2 = "<html>  \n  <body>  \n  Hello world  \n  </body>  \n  </html>";
 
         $daisy = new DaisyDiff();
-        $daisy->diff($html1, $html2);
+        $daisy->diffTag($html1, $html2);
 
         $this->assertTrue(true);
     }
@@ -44,7 +44,7 @@ class DaisyDiffTest extends TestCase
         $html2 = "<html>  \n  <body>  \n  Hello world  \n  </body>  \n  </html>";
 
         $daisy = new DaisyDiff();
-        $daisy->diff($html1, $html2);
+        $daisy->diffTag($html1, $html2);
 
         $this->assertTrue(true);
     }
@@ -72,7 +72,7 @@ class DaisyDiffTest extends TestCase
         $html2 = '<html><body>var v2</body></html>';
 
         $daisy = new DaisyDiff();
-        $daisy->diff($html1, $html2);
+        $daisy->diffTag($html1, $html2);
 
         $this->assertTrue(true);
     }
@@ -86,7 +86,7 @@ class DaisyDiffTest extends TestCase
         $html2 = '<html><body>var v2</body></html>';
 
         $daisy = new DaisyDiff();
-        $daisy->diff($html1, $html2);
+        $daisy->diffTag($html1, $html2);
 
         $this->assertTrue(true);
     }
@@ -114,7 +114,7 @@ class DaisyDiffTest extends TestCase
         $html2 = '<html><head></head><body></body></html>';
 
         $daisy = new DaisyDiff();
-        $daisy->diff($html1, $html2);
+        $daisy->diffTag($html1, $html2);
 
         $this->assertTrue(true);
     }
@@ -128,7 +128,7 @@ class DaisyDiffTest extends TestCase
         $html2 = '<html><head></head><body></body></html>';
 
         $daisy = new DaisyDiff();
-        $daisy->diff($html1, $html2);
+        $daisy->diffTag($html1, $html2);
 
         $this->assertTrue(true);
     }
@@ -156,7 +156,7 @@ class DaisyDiffTest extends TestCase
         $html2 = '<html><head></head><body><p>test</p></body></html>';
 
         $daisy = new DaisyDiff();
-        $daisy->diff($html1, $html2);
+        $daisy->diffTag($html1, $html2);
 
         $this->assertTrue(true);
     }
@@ -170,7 +170,7 @@ class DaisyDiffTest extends TestCase
         $html2 = '<html><head></head><body><p>test</p></body></html>';
 
         $daisy = new DaisyDiff();
-        $daisy->diff($html1, $html2);
+        $daisy->diffTag($html1, $html2);
 
         $this->assertTrue(true);
     }
@@ -198,7 +198,7 @@ class DaisyDiffTest extends TestCase
         $html2 = '<html><head></head><body></body></html>';
 
         $daisy = new DaisyDiff();
-        $daisy->diff($html1, $html2);
+        $daisy->diffTag($html1, $html2);
 
         $this->assertTrue(true);
     }
@@ -212,7 +212,7 @@ class DaisyDiffTest extends TestCase
         $html2 = '<html><head></head><body></body></html>';
 
         $daisy = new DaisyDiff();
-        $daisy->diff($html1, $html2);
+        $daisy->diffTag($html1, $html2);
 
         $this->assertTrue(true);
     }
@@ -240,7 +240,7 @@ class DaisyDiffTest extends TestCase
         $html2 = '<html><head></head><body><p>test</p><p>test</p></body></html>';
 
         $daisy = new DaisyDiff();
-        $daisy->diff($html1, $html2);
+        $daisy->diffTag($html1, $html2);
 
         $this->assertTrue(true);
     }
@@ -254,7 +254,7 @@ class DaisyDiffTest extends TestCase
         $html2 = '<html><head></head><body><p>test</p><p>test</p></body></html>';
 
         $daisy = new DaisyDiff();
-        $daisy->diff($html1, $html2);
+        $daisy->diffTag($html1, $html2);
 
         $this->assertTrue(true);
     }

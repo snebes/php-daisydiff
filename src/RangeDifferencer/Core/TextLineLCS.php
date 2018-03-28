@@ -110,7 +110,7 @@
 //
 //        $j = 0;
 //
-//        while (is_null($lcsSide[$j])) {
+//        while (null === $lcsSide[$j]) {
 //            $j++;
 //        }
 //
@@ -118,7 +118,7 @@
 //        $j++;
 //
 //        for ($i = 1; $i < $len; $i++) {
-//            while (is_null($lcsSide[$j])) {
+//            while (null === $lcsSide[$j]) {
 //                $j++;
 //            }
 //

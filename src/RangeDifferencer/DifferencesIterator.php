@@ -74,7 +74,7 @@ class DifferencesIterator
     {
         $this->fRange[] = $this->fDifference;
 
-        if (null != $this->fDifference) {
+        if (null !== $this->fDifference) {
             if ($this->fIndex < count($this->fArray)) {
                 $this->fDifference = $this->fArray[$this->fIndex++];
             } else {

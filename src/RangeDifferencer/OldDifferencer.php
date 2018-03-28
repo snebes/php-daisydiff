@@ -181,7 +181,7 @@ final class OldDifferencer
             $refLeftLength->setAccessible(true);
         } catch (ReflectionException $e) {} // @codeCoverageIgnore
 
-        while (null != $ep) {
+        while (null !== $ep) {
             $es = new RangeDifference(RangeDifference::CHANGE);
 
             if ($ep->isInsert()) {
@@ -192,7 +192,7 @@ final class OldDifferencer
                 do {
                     $ep = $ep->getNext();
                     $refLeftLength->setValue($es, $es->leftLength() + 1);
-                } while (null != $ep && $ep->isInsert() && $ep->rightStart() == $b->rightStart());
+                } while (null !== $ep && $ep->isInsert() && $ep->rightStart() == $b->rightStart());
             } else {
                 $refRightStart->setValue($es, $ep->rightStart());
                 $refLeftStart->setValue($es, $ep->leftStart());
@@ -202,9 +202,9 @@ final class OldDifferencer
                     $a  = $ep;
                     $ep = $ep->getNext();
                     $refRightLength->setValue($es, $es->rightLength() + 1);
-                } while (null != $ep && $ep->isDelete() && $ep->rightStart() == $a->rightStart() + 1);
+                } while (null !== $ep && $ep->isDelete() && $ep->rightStart() == $a->rightStart() + 1);
 
-                $change = (null != $ep && $ep->isInsert() && $ep->rightStart() == $a->rightStart());
+                $change = (null !== $ep && $ep->isInsert() && $ep->rightStart() == $a->rightStart());
 
                 if ($change) {
                     $b = $ep;
@@ -213,7 +213,7 @@ final class OldDifferencer
                     do {
                         $ep = $ep->getNext();
                         $refLeftLength->setValue($es, $es->leftLength() + 1);
-                    } while (null != $ep && $ep->isInsert() && $ep->rightStart() == $b->rightStart());
+                    } while (null !== $ep && $ep->isInsert() && $ep->rightStart() == $b->rightStart());
                 } else {
                     $refLeftLength->setValue($es, 0);
                 }
@@ -243,7 +243,7 @@ final class OldDifferencer
         $ahead = $start;
         $ep = null;
 
-        while (null != $ahead) {
+        while (null !== $ahead) {
             $behind = $ep;
             $ep = $ahead;
             $ahead = $ahead->getNext();

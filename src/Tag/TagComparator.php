@@ -84,7 +84,7 @@ class TagComparator implements AtomSplitterInterface
      */
     public function substring(int $startAtom, ?int $endAtom = null): string
     {
-        if (is_null($endAtom)) {
+        if (null === $endAtom) {
             $endAtom = count($this->atoms);
         }
 

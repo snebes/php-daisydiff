@@ -41,7 +41,7 @@ final class RangeDifferencer
         RangeComparatorInterface $right,
         ?LCSSettings $settings = null
     ): array {
-        if (null == $settings) {
+        if (null === $settings) {
             $settings = new LCSSettings();
         }
 
@@ -69,7 +69,7 @@ final class RangeDifferencer
         RangeComparatorInterface $right,
         ?LCSSettings $settings = null
     ): array {
-        if (null == $ancestor) {
+        if (null === $ancestor) {
             return self::findDifferences($left, $right, $settings);
         }
 
@@ -92,15 +92,15 @@ final class RangeDifferencer
         $diff3[] = new RangeDifference(RangeDifference::ERROR);
 
         // Combine the two-way edit scripts into one.
-        while (null != $myIter->getDifference() || null != $yourIter->getDifference()) {
+        while (null !== $myIter->getDifference() || null !== $yourIter->getDifference()) {
             $myIter->removeAll();
             $yourIter->removeAll();
 
             // Take the next diff that is closer to the start.
-            if (null == $myIter->getDifference()) {
+            if (null === $myIter->getDifference()) {
                 $startThread = $yourIter;
             }
-            elseif (null == $yourIter->getDifference()) {
+            elseif (null === $yourIter->getDifference()) {
                 $startThread = $myIter;
             }
             else {
@@ -119,7 +119,7 @@ final class RangeDifferencer
             // Check for overlapping changes with other thread merge overlapping changes with this range.
             $other = $startThread->other($myIter, $yourIter);
 
-            while (null != $other->getDifference() && $other->getDifference()->leftStart() <= $changeRangeEnd) {
+            while (null !== $other->getDifference() && $other->getDifference()->leftStart() <= $changeRangeEnd) {
                 $newMax = $other->getDifference()->leftEnd();
                 $other->next();
 
@@ -198,7 +198,7 @@ final class RangeDifferencer
         RangeComparatorInterface $right,
         ?LCSSettings $settings = null
     ): array {
-        if (null == $ancestor) {
+        if (null === $ancestor) {
             return self::findRanges($left, $right, $settings);
         }
 
