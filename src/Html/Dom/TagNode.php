@@ -238,7 +238,7 @@ class TagNode extends Node implements IteratorAggregate
      *
      * @return string
      */
-    public function getClosingTag(): string
+    public function getEndTag(): string
     {
         return Xml::closeElement($this->getQName());
     }

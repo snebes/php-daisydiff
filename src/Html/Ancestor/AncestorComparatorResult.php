@@ -13,7 +13,7 @@ final class AncestorComparatorResult
     private $changed = false;
 
     /** @var string */
-    private $changes;
+    private $changes = '';
 
     /** @var HtmlLayoutChange[] */
     private $htmlLayoutChanges = [];
@@ -40,7 +40,7 @@ final class AncestorComparatorResult
     /**
      * @return string
      */
-    public function getChanges(): ?string
+    public function getChanges(): string
     {
         return $this->changes;
     }
@@ -51,7 +51,7 @@ final class AncestorComparatorResult
      */
     public function setChanges(?string $value): self
     {
-        $this->changes = $value;
+        $this->changes = $value ?? '';
 
         return $this;
     }
@@ -59,7 +59,7 @@ final class AncestorComparatorResult
     /**
      * @return HtmlLayoutChange[]
      */
-    public function getHtmlLayoutChanges(): iterable
+    public function getHtmlLayoutChanges(): array
     {
         return $this->htmlLayoutChanges;
     }

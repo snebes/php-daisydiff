@@ -505,7 +505,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
     /**
      * @return Modification[]
      */
-    public function getLastModified(): iterable
+    public function getLastModified(): array
     {
         return $this->lastModified;
     }

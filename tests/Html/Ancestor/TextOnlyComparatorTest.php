@@ -4,8 +4,6 @@ namespace DaisyDiff\Html\Ancestor;
 
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Dom\TextNode;
-use DaisyDiff\RangeDifferencer\RangeDifference;
-use DaisyDiff\RangeDifferencer\RangeDifferencer;
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 

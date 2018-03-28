@@ -3,19 +3,12 @@
 namespace DaisyDiff\Html\Ancestor\TagToString;
 
 use DaisyDiff\Html\Ancestor\ChangeText;
-use DaisyDiff\Html\Dom\TagNode;
 
+/**
+ * Image <img> tag to string.
+ */
 class NoContentTagToString extends TagToString
 {
-    /**
-     * @param  TagNode $node
-     * @param  string  $sem
-     */
-    public function __construct(TagNode $node, string $sem)
-    {
-        parent::__construct($node, $sem);
-    }
-
     /**
      * @param  ChangeText $text
      * @return void

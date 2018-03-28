@@ -2,6 +2,7 @@
 
 namespace DaisyDiff\RangeDifferencer;
 
+use DaisyDiff\RangeDifferencer\Core\LCSSettings;
 use RuntimeException;
 
 /**
@@ -14,6 +15,9 @@ use RuntimeException;
  *
  * Alternatively, the findRanges methods not only return objects for the differing ranges but for non-differing ranges
  * too.
+ *
+ * The algorithm used is an objectified version of one described in: A File Comparison Program, by Webb Miller and
+ * Eugene W. Myers, Software Practice and Experience, Vol. 15, Nov. 1985.
  */
 final class RangeDifferencer
 {
@@ -30,11 +34,23 @@ final class RangeDifferencer
      *
      * @param  RangeComparatorInterface $left
      * @param  RangeComparatorInterface $right
+     * @param  LCSSettings              $settings
      * @return RangeDifference[]
      */
-    public static function findDifferences(RangeComparatorInterface $left, RangeComparatorInterface $right): array
-    {
-        return RangeComparatorLCS::findDifferences($left, $right);
+    public static function findDifferences(
+        RangeComparatorInterface $left,
+        RangeComparatorInterface $right,
+        ?LCSSettings $settings = null
+    ): array {
+        if (null == $settings) {
+            $settings = new LCSSettings();
+        }
+
+        if (!$settings->isUseGreedyMethod()) {
+            return OldDifferencer::findDifferences($left, $right);
+        }
+
+        return RangeComparatorLCS::findDifferences($left, $right, $settings);
     }
 
     /**

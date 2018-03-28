@@ -11,7 +11,7 @@ use DaisyDiff\Html\Dom\TagNode;
 class TagToStringFactory
 {
     /** @var string[] */
-    private $containerTags = [
+    private static $containerTags = [
         'html',
         'body',
         'p',
@@ -40,13 +40,13 @@ class TagToStringFactory
         'input',
         'form',
         'img',
-// in-line tags that can be considered containers not styles
+        // in-line tags that can be considered containers not styles
         'span',
         'a',
     ];
 
     /** @var string[] */
-    private $styleTags = [
+    private static $styleTags = [
         'i',
         'b',
         'strong',
@@ -85,10 +85,10 @@ class TagToStringFactory
      */
     protected function getChangeSemantic(string $str): string
     {
-        if (in_array(mb_strtolower($str), $this->containerTags)) {
+        if (in_array(mb_strtolower($str), self::$containerTags)) {
             return TagChangeSemantic::MOVED;
         }
-        if (in_array(mb_strtolower($str), $this->styleTags)) {
+        if (in_array(mb_strtolower($str), self::$styleTags)) {
             return TagChangeSemantic::STYLE;
         }
 

@@ -60,12 +60,11 @@ class TextNodeTest extends TestCase
         $this->assertFalse($textRoot->isSameText($root));
     }
 
-    // TODO: validate test
     public function testGetMinimalDeletedSet(): void
     {
         $root = new TagNode(null, 'root');
         $textRoot = new TextNode($root, 'contents of root node');
-//        $intermediate = new TagNode($root, 'intermediate');
+        $intermediate = new TagNode($root, 'intermediate');
         $textIntermediate = new TextNode($root, 'contents of intermediate node');
 
         $this->assertEquals([], $textRoot->getMinimalDeletedSet(0));

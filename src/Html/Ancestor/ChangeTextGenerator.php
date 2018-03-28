@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 namespace DaisyDiff\Html\Ancestor;
+
 use DaisyDiff\Html\Ancestor\TagToString\TagToStringFactory;
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Modification\HtmlLayoutChange;
@@ -23,7 +24,7 @@ class ChangeTextGenerator
     /** @var TagToStringFactory */
     private $factory;
 
-    /** @var const */
+    /** @const int */
     private const MAX_OUTPUT_LINE_LENGTH = 55;
 
     /**
@@ -86,7 +87,7 @@ class ChangeTextGenerator
                 }
 
                 // Add a bullet for an old tag.
-                $this->addTagNew($text, $this->ancestorComparator->getAncestor($i));
+                $this->addTagNew($text, $this->getAncestor($i));
 
                 if ($lvl1ListOpened) {
                     $text->addHtml('</li>');
@@ -110,8 +111,8 @@ class ChangeTextGenerator
     }
 
     /**
-     * @param  ChangeText $text
-     * @param  TagNode $ancestor
+     * @param ChangeText $text
+     * @param TagNode $ancestor
      */
     private function addTagOld(ChangeText $text, TagNode $ancestor): void
     {
@@ -121,8 +122,8 @@ class ChangeTextGenerator
     }
 
     /**
-     * @param  ChangeText $text
-     * @param  TagNode $ancestor
+     * @param ChangeText $text
+     * @param TagNode $ancestor
      */
     private function addTagNew(ChangeText $text, TagNode $ancestor): void
     {
@@ -132,9 +133,18 @@ class ChangeTextGenerator
     }
 
     /**
+     * @param  int $i
+     * @return TagNode
+     */
+    private function getAncestor(int $i): TagNode
+    {
+        return $this->ancestorComparator->getAncestor($i);
+    }
+
+    /**
      * @return HtmlLayoutChange[]
      */
-    public function getHtmlLayoutChanges(): iterable
+    public function getHtmlLayoutChanges(): array
     {
         return $this->htmlLayoutChanges;
     }

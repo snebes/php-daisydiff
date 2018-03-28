@@ -11,7 +11,7 @@ namespace DaisyDiff\Html\Modification;
  */
 final class HtmlLayoutChangeType
 {
-    /** @var const */
+    /** @const string */
     const TAG_ADDED   = 'added';
     const TAG_REMOVED = 'removed';
 }

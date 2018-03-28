@@ -7,7 +7,6 @@ use DaisyDiff\Html\Ancestor\TagChangeSemantic;
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Modification\HtmlLayoutChange;
 use DaisyDiff\Html\Modification\HtmlLayoutChangeType;
-use DaisyDiff\Xml\Xml;
 
 /**
  * TagToString
@@ -48,8 +47,8 @@ class TagToString
     public function getRemovedDescription(ChangeText $text): void
     {
         $this->htmlLayoutChange = new HtmlLayoutChange();
-        $this->htmlLayoutChange->setEndingTag(Xml::closeElement($this->node->getQName()));
-        $this->htmlLayoutChange->setOpeningTag(Xml::openElement($this->node->getQName(), $this->node->getAttributes()));
+        $this->htmlLayoutChange->setEndingTag($this->node->getEndTag());
+        $this->htmlLayoutChange->setOpeningTag($this->node->getOpeningTag());
         $this->htmlLayoutChange->setType(HtmlLayoutChangeType::TAG_REMOVED);
 
         if ($this->sem == TagChangeSemantic::MOVED) {
@@ -60,13 +59,13 @@ class TagToString
         }
         elseif ($this->sem == TagChangeSemantic::STYLE) {
             $text->addHtml('<b>');
-            $text->addText(mb_strtolower($this->getDescription()));
+            $text->addText($this->getDescription());
             $text->addHtml('</b>');
             $text->addText(sprintf(' %s', mb_strtolower($this->getStyleRemoved())));
         }
         else {
             $text->addHtml('<b>');
-            $text->addText(mb_strtolower($this->getDescription()));
+            $text->addText($this->getDescription());
             $text->addHtml('</b>');
             $text->addText(sprintf(' %s', mb_strtolower($this->getRemoved())));
         }
@@ -82,8 +81,8 @@ class TagToString
     public function getAddedDescription(ChangeText $text): void
     {
         $this->htmlLayoutChange = new HtmlLayoutChange();
-        $this->htmlLayoutChange->setEndingTag(Xml::closeElement($this->node->getQName()));
-        $this->htmlLayoutChange->setOpeningTag(Xml::openElement($this->node->getQName(), $this->node->getAttributes()));
+        $this->htmlLayoutChange->setEndingTag($this->node->getEndTag());
+        $this->htmlLayoutChange->setOpeningTag($this->node->getOpeningTag());
         $this->htmlLayoutChange->setType(HtmlLayoutChangeType::TAG_ADDED);
 
         if ($this->sem == TagChangeSemantic::MOVED) {
@@ -94,13 +93,13 @@ class TagToString
         }
         elseif ($this->sem == TagChangeSemantic::STYLE) {
             $text->addHtml('<b>');
-            $text->addText(mb_strtolower($this->getDescription()));
+            $text->addText($this->getDescription());
             $text->addHtml('</b>');
             $text->addText(sprintf(' %s', mb_strtolower($this->getStyleAdded())));
         }
         else {
             $text->addHtml('<b>');
-            $text->addText(mb_strtolower($this->getDescription()));
+            $text->addText($this->getDescription());
             $text->addHtml('</b>');
             $text->addText(sprintf(' %s', mb_strtolower($this->getAdded())));
         }
@@ -159,20 +158,22 @@ class TagToString
 
     /**
      * @param  ChangeText $text
-     * @param  iterable   $attributes
+     * @param  array      $attributes
      * @return void
      */
-    public function addAttributes(ChangeText $text, iterable $attributes = []): void
+    public function addAttributes(ChangeText $text, array $attributes = []): void
     {
         if (count($attributes) < 1) {
             return;
         }
-        $atext = [];
+
+        $arr = [];
+
         foreach ($attributes as $qName => $value) {
-            $atext[] = sprintf('%s %s', $this->translateArgument($qName), $value);
+            $arr[] = sprintf('%s %s', $this->translateArgument($qName), $value);
         }
 
-        $text->addText(sprintf('%s %s', mb_strtolower($this->getWith()), implode(', ', $atext)));
+        $text->addText(sprintf('%s %s', mb_strtolower($this->getWith()), implode(', ', $arr)));
     }
 
     /**
@@ -215,14 +216,6 @@ class TagToString
     /**
      * @return string
      */
-    public function getSource(): string
-    {
-        return $this->getString('diff-source');
-    }
-
-    /**
-     * @return string
-     */
     public function getWidth(): string
     {
         return $this->getString('diff-width');
@@ -234,6 +227,14 @@ class TagToString
     public function getHeight(): string
     {
         return $this->getString('diff-height');
+    }
+
+    /**
+     * @return string
+     */
+    public function getSource(): string
+    {
+        return $this->getString('diff-source');
     }
 
     /**
@@ -338,7 +339,7 @@ class TagToString
             'diff-strike'           => 'Strikethrough',
         ];
 
-        return array_key_exists($key, $trans)?  $trans[$key] : sprintf('!%s!', $key);
+        return array_key_exists($key, $trans)? $trans[$key] : sprintf('!%s!', $key);
     }
 
     /**

@@ -244,14 +244,14 @@ class TagNodeTest extends TestCase
         $this->assertEquals($html, strval($root));
     }
 
-    public function testGetClosingTag(): void
+    public function testGetEndTag(): void
     {
         $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
 
-        $this->assertEquals('</middle>', $intermediate->getClosingTag());
-        $this->assertEquals('</root>', $root->getClosingTag());
+        $this->assertEquals('</middle>', $intermediate->getEndTag());
+        $this->assertEquals('</root>', $root->getEndTag());
     }
 
     public function testIsBlockLevel(): void
@@ -288,14 +288,15 @@ class TagNodeTest extends TestCase
         $this->assertEquals($root, $root->copyTree());
     }
 
-    // TODO: verify this test
     public function testGetMatchRatio(): void
     {
         $root = new TagNode(null, 'root');
-//        $textNode = new TextNode($root, 'Content of the root node');
+        $textNode = new TextNode($root, 'Content of the root node');
         $intermediate = new TagNode($root, 'root');
-//        $text = new TextNode($intermediate, 'Content of the intermdeiate node');
+        $text = new TextNode($intermediate, 'Content of the intermdeiate node');
 
+        $this->assertEquals('Content of the root node', strval($textNode));
+        $this->assertEquals('Content of the intermdeiate node', strval($text));
         $this->assertEquals(0.25, $root->getMatchRatio($intermediate), '', 0.1);
     }
 
