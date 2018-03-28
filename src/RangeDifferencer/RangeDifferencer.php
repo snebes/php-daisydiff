@@ -3,7 +3,6 @@
 namespace DaisyDiff\RangeDifferencer;
 
 use DaisyDiff\RangeDifferencer\Core\LCSSettings;
-use RuntimeException;
 
 /**
  * A RangeDifferencer finds the differences between two or three RangeComparatorInterfaces.
@@ -73,17 +72,74 @@ final class RangeDifferencer
         if (null == $ancestor) {
             return self::findDifferences($left, $right);
         }
-//
-//        $leftAncestorScript  = [];
-//        $rightAncestorScript = self::findDifferences($ancestor, $right, $settings);
-//
-//        if (!empty($rightAncestorScript)) {
-//            $leftAncestorScript = self::findDifferences($ancestor, $left, $settings);
-//        }
-//
-//        if (empty($leftAncestorScript) || empty($rightAncestorScript)) {
-//            return [];
-//        }
+
+        $leftAncestorScript  = [];
+        $rightAncestorScript = self::findDifferences($ancestor, $right, $settings);
+
+        if (!empty($rightAncestorScript)) {
+            $leftAncestorScript = self::findDifferences($ancestor, $left, $settings);
+        }
+
+        if (empty($leftAncestorScript) || empty($rightAncestorScript)) {
+            return [];
+        }
+
+        $myIter   = new DifferencesIterator($rightAncestorScript);
+        $yourIter = new DifferencesIterator($leftAncestorScript);
+
+        // Prime array with a sentinal.
+        $diff3 = [];
+        $diff3[] = new RangeDifference(RangeDifference::ERROR);
+
+        // Combine the two-way edit scripts into one.
+        while (null != $myIter->getDifference() || null != $yourIter->getDifference()) {
+            $myIter->removeAll();
+            $yourIter->removeAll();
+
+            // Take the next diff that is closer to the start.
+            if (null == $myIter->getDifference()) {
+                $startThread = $yourIter;
+            }
+            elseif (null == $yourIter->getDifference()) {
+                $startThread = $myIter;
+            }
+            else {
+                // Not at end of both scripts take the lowest range.
+                if ($myIter->getDifference()->leftStart() <= $yourIter->getDifference()->leftStart()) {
+                    $startThread = $myIter;
+                } else {
+                    $startThread = $yourIter;
+                }
+            }
+
+            $changeRangeStart = $startThread->getDifference()->leftStart();
+            $changeRangeEnd   = $startThread->getDifference()->leftEnd();
+
+            $startThread->next();
+
+            // Check for overlapping changes with other thread merge overlapping changes with this range.
+            $other = $startThread->other($myIter, $yourIter);
+
+            while (null != $other->getDifference() && $other->getDifference()->leftStart() <= $changeRangeEnd) {
+                $newMax = $other->getDifference()->leftEnd();
+                $other->next();
+
+                if ($newMax >= $changeRangeEnd) {
+                    $changeRangeEnd = $newMax;
+                    $other = $other->other($myIter, $yourIter);
+                }
+            }
+
+            $diff3[] = self::createRangeDifference3(
+                $myIter, $yourIter, $diff3,
+                $right, $left,
+                $changeRangeStart, $changeRangeEnd);
+        }
+
+        // Remove sentinal, the first item in the array.
+        array_shift($diff3);
+
+        return $diff3;
     }
 
     /**
@@ -173,13 +229,135 @@ final class RangeDifferencer
         }
 
         $rd = new RangeDifference(RangeDifference::NOCHANGE,
-            $mstart, $es->getRangeCount() - $mstart,
-            $ystart, $es->getRangeCount() - $ystart);
+            $mstart, $right->getRangeCount() - $mstart,
+            $ystart, $left->getRangeCount() - $ystart,
+            $astart, $ancestor->getRangeCount() - $astart);
 
         if ($rd->maxLength() > 0) {
             $out[] = $rd;
         }
 
         return $out;
+    }
+
+    /**
+     * @param  DifferencesIterator      $myIter
+     * @param  DifferencesIterator      $yourIter
+     * @param  array                    $diff3
+     * @param  RangeComparatorInterface $right
+     * @param  RangeComparatorInterface $left
+     * @param  int                      $changeRangeStart
+     * @param  int                      $changeRangeEnd
+     * @return RangeDifference
+     */
+    private static function createRangeDifference3(
+        DifferencesIterator $myIter,
+        DifferencesIterator $yourIter,
+        array &$diff3,
+        RangeComparatorInterface $right,
+        RangeComparatorInterface $left,
+        int $changeRangeStart = 0,
+        int $changeRangeEnd = 0
+    ): RangeDifference {
+        $kind = RangeDifference::ERROR;
+
+        /** @var RangeDifference $last */
+        $last = $diff3[count($diff3) - 1];
+
+        // At least one range array must be non-empty.
+        assert(0 != $myIter->getCount() || 0 != $yourIter->getCount());
+
+        // Find corresponding lines to fChangeRangeStart/End in right and left.
+        if (0 == $myIter->getCount()) {
+            // Only left changed.
+            $rightStart = $changeRangeStart - $last->ancestorEnd() + $last->rightEnd();
+            $rightEnd   = $changeRangeEnd - $last->ancestorEnd() + $last->rightEnd();
+            $kind = RangeDifference::LEFT;
+        } else {
+            /** @var RangeDifference[] $range */
+            $range = $myIter->getRange();
+            $f = $range[0];
+            $l = $range[count($range) - 1];
+            $rightStart = $changeRangeStart - $f->leftStart() + $f->rightStart();
+            $rightEnd   = $changeRangeEnd - $l->leftEnd() + $l->rightEnd();
+        }
+
+        if (0 == $yourIter->getCount()) {
+            // Only right changed.
+            $leftStart = $changeRangeStart - $last->ancestorEnd() + $last->leftEnd();
+            $leftEnd   = $changeRangeEnd - $last->ancestorEnd() + $last->leftEnd();
+            $kind = RangeDifference::RIGHT;
+        } else {
+            /** @var RangeDifference[] $range */
+            $range = $yourIter->getRange();
+            $f = $range[0];
+            $l = $range[count($range) - 1];
+            $leftStart = $changeRangeStart - $f->leftStart() + $f->rightStart();
+            $leftEnd   = $changeRangeEnd - $l->leftEnd() + $l->rightEnd();
+        }
+
+        if (RangeDifference::ERROR == $kind) {
+            // Overlapping change (conflict).
+            if (self::rangeSpansEqual(
+                $right, $rightStart, $rightEnd - $rightStart, $left, $leftStart, $leftEnd - $leftStart)) {
+                $kind = RangeDifference::ANCESTOR;
+            } else {
+                $kind = RangeDifference::CONFLICT;
+            }
+        }
+
+        return new RangeDifference(
+            $kind,
+            $rightStart, $rightEnd - $rightStart,
+            $leftStart, $leftEnd - $leftStart,
+            $changeRangeStart, $changeRangeEnd - $changeRangeStart);
+    }
+
+    /**
+     * @param  RangeComparatorInterface $right
+     * @param  int                      $rightStart
+     * @param  int                      $rightLen
+     * @param  RangeComparatorInterface $left
+     * @param  int                      $leftStart
+     * @param  int                      $leftLen
+     * @return bool
+     */
+    private static function rangeSpansEqual(
+        RangeComparatorInterface $right,
+        int $rightStart,
+        int $rightLen,
+        RangeComparatorInterface $left,
+        int $leftStart,
+        int $leftLen
+    ): bool {
+        if ($rightLen == $leftLen) {
+            for ($i = 0; $i < $rightLen; $i++) {
+                if (!self::rangesEqual($right, $rightStart + $i, $left, $leftStart + $i)) {
+                    break;
+                }
+            }
+
+            if ($i == $rightLen) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param  RangeComparatorInterface $a
+     * @param  int                      $ai
+     * @param  RangeComparatorInterface $b
+     * @param  int                      $bi
+     * @return bool
+     */
+    private static function rangesEqual(
+        RangeComparatorInterface $a,
+        int $ai,
+        RangeComparatorInterface $b,
+        int $bi
+    ): bool {
+        return $a->rangesEqual($ai, $b, $bi);
     }
 }

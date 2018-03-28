@@ -20,8 +20,8 @@ class RangeComparatorLCS extends LCS
     private $lcs;
 
     /**
-     * @param  RangeComparatorInterface $comparator1
-     * @param  RangeComparatorInterface $comparator2
+     * @param RangeComparatorInterface $comparator1
+     * @param RangeComparatorInterface $comparator2
      */
     public function __construct(RangeComparatorInterface $comparator1, RangeComparatorInterface $comparator2)
     {

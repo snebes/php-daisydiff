@@ -2,6 +2,7 @@
 
 namespace DaisyDiff\RangeDifferencer;
 
+use ReflectionException;
 use ReflectionProperty;
 use RuntimeException;
 
@@ -92,15 +93,17 @@ final class OldDifferencer
 
                 $col = $row + $k - $origin;
 
-                // $edit->rightStart = $row;
-                $refProp = new ReflectionProperty($edit, 'rightStart');
-                $refProp->setAccessible(true);
-                $refProp->setValue($edit, $row);
+                try {
+                    // $edit->rightStart = $row;
+                    $refProp = new ReflectionProperty($edit, 'rightStart');
+                    $refProp->setAccessible(true);
+                    $refProp->setValue($edit, $row);
 
-                // $edit->leftStart = $col;
-                $refProp = new ReflectionProperty($edit, 'leftStart');
-                $refProp->setAccessible(true);
-                $refProp->setValue($edit, $col);
+                    // $edit->leftStart = $col;
+                    $refProp = new ReflectionProperty($edit, 'leftStart');
+                    $refProp->setAccessible(true);
+                    $refProp->setValue($edit, $col);
+                } catch (ReflectionException $e) {} // @codeCoverageIgnore
 
                 assert($k >= 0 && $k <= $maxDiagonal);
                 $script[$k] = $edit;
@@ -167,14 +170,16 @@ final class OldDifferencer
         $ep = self::reverseDifferences($start);
         $result = [];
 
-        $refRightStart  = new ReflectionProperty(RangeDifference::class, 'rightStart');
-        $refRightLength = new ReflectionProperty(RangeDifference::class, 'rightLength');
-        $refLeftStart   = new ReflectionProperty(RangeDifference::class, 'leftStart');
-        $refLeftLength  = new ReflectionProperty(RangeDifference::class, 'leftLength');
-        $refRightStart->setAccessible(true);
-        $refRightLength->setAccessible(true);
-        $refLeftStart->setAccessible(true);
-        $refLeftLength->setAccessible(true);
+        try {
+            $refRightStart = new ReflectionProperty(RangeDifference::class, 'rightStart');
+            $refRightLength = new ReflectionProperty(RangeDifference::class, 'rightLength');
+            $refLeftStart = new ReflectionProperty(RangeDifference::class, 'leftStart');
+            $refLeftLength = new ReflectionProperty(RangeDifference::class, 'leftLength');
+            $refRightStart->setAccessible(true);
+            $refRightLength->setAccessible(true);
+            $refLeftStart->setAccessible(true);
+            $refLeftLength->setAccessible(true);
+        } catch (ReflectionException $e) {} // @codeCoverageIgnore
 
         while (null != $ep) {
             $es = new RangeDifference(RangeDifference::CHANGE);
