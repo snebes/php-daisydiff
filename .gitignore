@@ -1,5 +1,4 @@
+/composer.lock
 /build/
 /vendor/
-
 /.idea/
-test.php
