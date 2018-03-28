@@ -1,6 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DaisyDiff\Tag;
+
+require 'TagTestFixture.php';
 
 use PHPUnit\Framework\TestCase;
 

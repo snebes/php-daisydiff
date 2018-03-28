@@ -1,9 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DaisyDiff\Tag;
 
 use DaisyDiff\Output\TextDiffOutputInterface;
-use DaisyDiff\Xml\AttributeBag;
 use DaisyDiff\Xml\ContentHandlerInterface;
 
 /**
@@ -54,9 +53,7 @@ class TagSaxDiffOutput implements TextDiffOutputInterface
 
                 case '<':
                     if (false === $this->insideTag) {
-                        $attrs = new AttributeBag([
-                            'class' => 'diff-tag-html',
-                        ]);
+                        $attrs = ['class' => 'diff-tag-html'];
                         $this->consumer->startElement('span', $attrs);
                         $this->insideTag = true;
                     } else {
@@ -88,11 +85,11 @@ class TagSaxDiffOutput implements TextDiffOutputInterface
      */
     public function addRemovedPart(string $text): void
     {
-        $attrs = new AttributeBag([
+        $attrs = [
             'class' => 'diff-tag-removed',
             'id'    => 'removed' . $this->removedId,
             'title' => '#removed' . $this->removedId,
-        ]);
+        ];
         $this->removedId++;
 
         $this->consumer->startElement('span', $attrs);
@@ -105,11 +102,11 @@ class TagSaxDiffOutput implements TextDiffOutputInterface
      */
     public function addAddedPart(string $text): void
     {
-        $attrs = new AttributeBag([
+        $attrs = [
             'class' => 'diff-tag-added',
             'id'    => 'removed' . $this->addedId,
             'title' => '#removed' . $this->addedId,
-        ]);
+        ];
         $this->addedId++;
 
         $this->consumer->startElement('span', $attrs);
