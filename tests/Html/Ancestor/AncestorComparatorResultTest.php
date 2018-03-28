@@ -27,7 +27,7 @@ class AncestorComparatorResultTest extends TestCase
     public function testGetChanges(): void
     {
         $result = new AncestorComparatorResult();
-        $this->assertNull($result->getChanges());
+        $this->assertEmpty($result->getChanges());
     }
 
     public function testSetChanges(): void

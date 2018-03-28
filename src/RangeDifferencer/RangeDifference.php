@@ -40,25 +40,25 @@ class RangeDifference
     const ERROR = 5;
 
     /** @var int */
-    private $kind = 0;
+    protected $kind = 0;
 
     /** @var int */
-    private $leftStart = 0;
+    protected $leftStart = 0;
 
     /** @var int */
-    private $leftLength = 0;
+    protected $leftLength = 0;
 
     /** @var int */
-    private $rightStart = 0;
+    protected $rightStart = 0;
 
     /** @var int */
-    private $rightLength = 0;
+    protected $rightLength = 0;
 
     /** @var int */
-    private $ancestorStart = 0;
+    protected $ancestorStart = 0;
 
     /** @var int */
-    private $ancestorLength = 0;
+    protected $ancestorLength = 0;
 
     /**
      * @param int $kind

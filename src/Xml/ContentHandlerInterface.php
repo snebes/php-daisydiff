@@ -8,11 +8,11 @@ namespace DaisyDiff\Xml;
 interface ContentHandlerInterface
 {
     /**
-     * @param  string       $qName
-     * @param  AttributeBag $attributeBag
+     * @param  string $qName
+     * @param  array  $attributes
      * @return void
      */
-    public function startElement(string $qName, AttributeBag $attributeBag = null): void;
+    public function startElement(string $qName, array $attributes = []): void;
 
     /**
      * @param  string $qName

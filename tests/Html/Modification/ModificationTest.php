@@ -2,10 +2,7 @@
 
 namespace DaisyDiff\Html\Modification;
 
-use DaisyDiff\Html\Dom\TagNode;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
 
 /**
  * Modification Tests.
@@ -24,8 +21,6 @@ class ModificationTest extends TestCase
     {
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);
         $id   = 123;
-
-        $this->assertEquals(-1, $newM->getId());
 
         $newM->setId($id);
         $this->assertEquals($id, $newM->getId());

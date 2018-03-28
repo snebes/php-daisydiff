@@ -9,10 +9,9 @@ use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Dom\TextNode;
 use DaisyDiff\Html\Modification\Modification;
 use DaisyDiff\Html\Modification\ModificationType;
-use OutOfBoundsException;
+use Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use StdClass;
 
 /**
  * HtmlSaxDiffOutput Tests.
@@ -64,6 +63,7 @@ class HtmlSaxDiffOutputTest extends TestCase
      * @param  string            $newText
      * @param  HtmlSaxDiffOutput $output
      * @return string
+     * @throws Exception
      */
     private function diff(string $oldText, string $newText, HtmlSaxDiffOutput $output): string
     {

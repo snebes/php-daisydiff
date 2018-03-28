@@ -7,7 +7,7 @@ use RuntimeException;
 /**
  * DOM Tree Builder.
  */
-final class DomTreeBuilder
+final class DomTreeBuilder implements DomTreeInterface
 {
     /** @var TextNode[] */
     private $textNodes = [];
@@ -43,13 +43,12 @@ final class DomTreeBuilder
     private $lastSibling;
 
     /**
-     * Constructor.
+     * Default values.
      */
     public function __construct()
     {
-        $this->bodyNode = new BodyNode();
+        $this->bodyNode      = new BodyNode();
         $this->currentParent = $this->bodyNode;
-        $this->lastSibling = null;
     }
 
     /**
@@ -63,9 +62,9 @@ final class DomTreeBuilder
     /**
      * @return TextNode[]
      */
-    public function getTextNodes(): iterable
+    public function getTextNodes(): array
     {
-        return $this->textNodes ?? [];
+        return $this->textNodes;
     }
 
     /**
@@ -107,18 +106,20 @@ final class DomTreeBuilder
 
         $this->endWord();
 
-        $this->documentEnded = true;
+        $this->documentEnded   = true;
         $this->documentStarted = false;
     }
 
     /**
-     * @param  resource $xmlParser
-     * @param  string   $qName
-     * @param  iterable $attributes
+     * @param  mixed  $xmlParser
+     * @param  string $qName
+     * @param  array  $attributes
      * @return void
      */
-    public function startElement($xmlParser, string $qName, ?iterable $attributes): void
+    public function startElement($xmlParser, string $qName, array $attributes = []): void
     {
+        assert($xmlParser);
+
         if (!$this->documentStarted || $this->documentEnded) {
             throw new RuntimeException('No document is opened.', 8002);
         }
@@ -153,12 +154,14 @@ final class DomTreeBuilder
     }
 
     /**
-     * @param  resource $xmlParser
-     * @param  string   $qName
+     * @param  mixed  $xmlParser
+     * @param  string $qName
      * @return void
      */
     public function endElement($xmlParser, string $qName): void
     {
+        assert($xmlParser);
+
         if (!$this->documentStarted || $this->documentEnded) {
             throw new RuntimeException('No document is opened.', 8003);
         }
@@ -197,24 +200,26 @@ final class DomTreeBuilder
     }
 
     /**
-     * @param  resource $xmlParser
-     * @param  string   $chars
+     * @param  mixed  $xmlParser
+     * @param  string $chars
      * @return void
      */
     public function characters($xmlParser, string $chars): void
     {
+        assert($xmlParser);
+
         if (!$this->documentStarted || $this->documentEnded) {
             throw new RuntimeException('No document is opened.', 8004);
         }
 
         for ($i = 0, $max = mb_strlen($chars); $i < $max; $i++) {
-            $c = $chars[$i];
+            $c = mb_substr($chars, $i, 1);
 
             if ($this->isDelimiter($c)) {
                 $this->endWord();
 
                 if (WhiteSpaceNode::isWhiteSpace($c) && $this->numberOfActivePreTags == 0) {
-                    if (!is_null($this->lastSibling)) {
+                    if (null != $this->lastSibling) {
                         $this->lastSibling->setWhiteAfter(true);
                     }
 
@@ -273,9 +278,7 @@ final class DomTreeBuilder
         }
 
         // Don't add multiple separators.
-        $count = count($this->textNodes);
-
-        if ($this->textNodes[$count - 1] instanceof SeparatingNode) {
+        if ($this->textNodes[count($this->textNodes) - 1] instanceof SeparatingNode) {
             return;
         }
 
@@ -283,6 +286,7 @@ final class DomTreeBuilder
     }
 
     /**
+     * @param  string $c
      * @return bool
      */
     public static function isDelimiter(string $c): bool
@@ -301,6 +305,7 @@ final class DomTreeBuilder
             case '=':
             case "'":
             case '"':
+            // Extra Delimiters
             case '[':
             case ']':
             case '{':

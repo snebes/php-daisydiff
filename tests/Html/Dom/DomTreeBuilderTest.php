@@ -104,7 +104,7 @@ class DomTreeBuilderTest extends TestCase
         $tree = new DomTreeBuilder();
         $tree->startDocument();
         $this->setBodyStarted($tree, true);
-        $tree->startElement(null, 'p', ['class' => 'test']);
+        $tree->startElement(true, 'p', ['class' => 'test']);
         $this->setBodyEnded($tree, true);
         $tree->endDocument();
 
@@ -131,7 +131,7 @@ class DomTreeBuilderTest extends TestCase
 
         $tree->startDocument();
         $this->setBodyStarted($tree, true);
-        $tree->startElement(null, 'span', []);
+        $tree->startElement(true, 'span', []);
         $this->setBodyEnded($tree, true);
         $tree->endDocument();
 
@@ -153,7 +153,7 @@ class DomTreeBuilderTest extends TestCase
         $tree = new DomTreeBuilder();
         $tree->startDocument();
         $this->setBodyStarted($tree, true);
-        $tree->startElement(null, 'pre', []);
+        $tree->startElement(true, 'pre', []);
         $this->setBodyEnded($tree, true);
         $tree->endDocument();
 
@@ -171,7 +171,7 @@ class DomTreeBuilderTest extends TestCase
     {
         $tree = new DomTreeBuilder();
         $tree->startDocument();
-        $tree->startElement(null, 'body', []);
+        $tree->startElement(true, 'body', []);
 
         $refProp = new ReflectionProperty($tree, 'bodyStarted');
         $refProp->setAccessible(true);
@@ -187,7 +187,7 @@ class DomTreeBuilderTest extends TestCase
         $tree = new DomTreeBuilder();
         $tree->startDocument();
         $this->setBodyStarted($tree, true);
-        $tree->startElement(null, 'p', $attrs);
+        $tree->startElement(true, 'p', $attrs);
 
         $this->assertEquals('<p class="diff">', strval($tree->getBodyNode()->getChild(0)));
     }
@@ -200,7 +200,7 @@ class DomTreeBuilderTest extends TestCase
         $tree->startDocument();
         $this->setBodyStarted($tree, true);
         $this->setBodyEnded($tree, true);
-        $tree->startElement(null, 'p', $attrs);
+        $tree->startElement(true, 'p', $attrs);
 
         $this->assertEquals(0, strval($tree->getBodyNode()->getNumChildren()));
     }
@@ -213,7 +213,7 @@ class DomTreeBuilderTest extends TestCase
         $tree->startDocument();
         $this->setBodyStarted($tree, false);
         $this->setBodyEnded($tree, true);
-        $tree->startElement(null, 'p', $attrs);
+        $tree->startElement(true, 'p', $attrs);
 
         $this->assertEquals(0, strval($tree->getBodyNode()->getNumChildren()));
     }
@@ -226,7 +226,7 @@ class DomTreeBuilderTest extends TestCase
         $tree->startDocument();
         $this->setBodyStarted($tree, false);
         $this->setBodyEnded($tree, false);
-        $tree->startElement(null, 'p', $attrs);
+        $tree->startElement(true, 'p', $attrs);
 
         $this->assertEquals(0, strval($tree->getBodyNode()->getNumChildren()));
     }
@@ -244,7 +244,7 @@ class DomTreeBuilderTest extends TestCase
         $this->setBodyEnded($tree, false);
 
         try {
-            $tree->startElement(null, 'p', $attrs);
+            $tree->startElement(true, 'p', $attrs);
         } catch (RuntimeException $e) {
             $this->assertEquals(8002, $e->getCode());
             throw $e;
@@ -267,7 +267,7 @@ class DomTreeBuilderTest extends TestCase
         $this->setBodyEnded($tree, false);
 
         try {
-            $tree->startElement(null, 'p', $attrs);
+            $tree->startElement(true, 'p', $attrs);
         } catch (RuntimeException $e) {
             $this->assertEquals(8002, $e->getCode());
             throw $e;
@@ -281,7 +281,7 @@ class DomTreeBuilderTest extends TestCase
         $tree = new DomTreeBuilder();
         $tree->startDocument();
 
-        $tree->startElement(null, 'body', $attrs);
+        $tree->startElement(true, 'body', $attrs);
         $this->assertEquals('<body>', strval($tree->getBodyNode()));
     }
 
@@ -293,7 +293,7 @@ class DomTreeBuilderTest extends TestCase
         $tree->startDocument();
         $this->setBodyStarted($tree, true);
 
-        $tree->startElement(null, 'pre', $attrs);
+        $tree->startElement(true, 'pre', $attrs);
         $this->assertEquals('<pre class="diff">', strval($tree->getBodyNode()->getChild(0)));
     }
 
@@ -305,7 +305,7 @@ class DomTreeBuilderTest extends TestCase
         $tree = new DomTreeBuilder();
         $tree->startDocument();
         $this->setBodyStarted($tree, true);
-        $tree->endElement(null, 'body');
+        $tree->endElement(true, 'body');
 
         $refProp = new ReflectionProperty($tree, 'bodyEnded');
         $refProp->setAccessible(true);
@@ -327,7 +327,7 @@ class DomTreeBuilderTest extends TestCase
 
         $tree->startDocument();
         $this->setBodyStarted($tree, true);
-        $tree->endElement(null, 'pre');
+        $tree->endElement(true, 'pre');
 
         $this->assertEquals(0, $refProp->getValue($tree));
     }
@@ -340,8 +340,8 @@ class DomTreeBuilderTest extends TestCase
         $tree = new DomTreeBuilder();
         $tree->startDocument();
         $this->setBodyStarted($tree, true);
-        $tree->startElement(null, 'span', []);
-        $tree->endElement(null, 'img');
+        $tree->startElement(true, 'span', []);
+        $tree->endElement(true, 'img');
 
         $refProp = new ReflectionProperty($tree, 'lastSibling');
         $refProp->setAccessible(true);
@@ -359,8 +359,8 @@ class DomTreeBuilderTest extends TestCase
         $this->setBodyStarted($tree, true);
         $this->setBodyEnded($tree, true);
 
-        $tree->startElement(null, 'p', $attrs);
-        $tree->endElement(null, 'p');
+        $tree->startElement(true, 'p', $attrs);
+        $tree->endElement(true, 'p');
 
         $this->assertEquals(0, $tree->getBodyNode()->getNumChildren());
     }
@@ -374,8 +374,8 @@ class DomTreeBuilderTest extends TestCase
         $this->setBodyStarted($tree, false);
         $this->setBodyEnded($tree, true);
 
-        $tree->startElement(null, 'p', $attrs);
-        $tree->endElement(null, 'p');
+        $tree->startElement(true, 'p', $attrs);
+        $tree->endElement(true, 'p');
 
         $this->assertEquals(0, $tree->getBodyNode()->getNumChildren());
     }
@@ -389,8 +389,8 @@ class DomTreeBuilderTest extends TestCase
         $this->setBodyStarted($tree, false);
         $this->setBodyEnded($tree, false);
 
-        $tree->startElement(null, 'p', $attrs);
-        $tree->endElement(null, 'p');
+        $tree->startElement(true, 'p', $attrs);
+        $tree->endElement(true, 'p');
 
         $this->assertEquals(0, $tree->getBodyNode()->getNumChildren());
     }
@@ -408,7 +408,7 @@ class DomTreeBuilderTest extends TestCase
         $this->setBodyEnded($tree, false);
 
         try {
-            $tree->endElement(null, 'p');
+            $tree->endElement(true, 'p');
         } catch (RuntimeException $e) {
             $this->assertEquals(8003, $e->getCode());
             throw $e;
@@ -431,7 +431,7 @@ class DomTreeBuilderTest extends TestCase
         $this->setBodyEnded($tree, false);
 
         try {
-            $tree->endElement(null, 'p');
+            $tree->endElement(true, 'p');
         } catch (RuntimeException $e) {
             $this->assertEquals(8003, $e->getCode());
             throw $e;
@@ -445,8 +445,8 @@ class DomTreeBuilderTest extends TestCase
         $tree = new DomTreeBuilder();
         $tree->startDocument();
 
-        $tree->startElement(null, 'body', $attrs);
-        $tree->endElement(null, 'body');
+        $tree->startElement(true, 'body', $attrs);
+        $tree->endElement(true, 'body');
 
         $this->assertEquals('<body>', strval($tree->getBodyNode()));
     }
@@ -459,8 +459,8 @@ class DomTreeBuilderTest extends TestCase
         $tree->startDocument();
         $this->setBodyStarted($tree, true);
 
-        $tree->startElement(null, 'img', $attrs);
-        $tree->endElement(null, 'img');
+        $tree->startElement(true, 'img', $attrs);
+        $tree->endElement(true, 'img');
 
         $this->assertEquals('<img src="Image path">', strval($tree->getBodyNode()->getChild(0)));
     }
@@ -473,8 +473,8 @@ class DomTreeBuilderTest extends TestCase
         $tree->startDocument();
         $this->setBodyStarted($tree, true);
 
-        $tree->startElement(null, 'pre', $attrs);
-        $tree->endElement(null, 'pre');
+        $tree->startElement(true, 'pre', $attrs);
+        $tree->endElement(true, 'pre');
 
         $this->assertEquals('<pre class="diff">', strval($tree->getBodyNode()->getChild(0)));
     }
@@ -487,11 +487,11 @@ class DomTreeBuilderTest extends TestCase
         $tree->startDocument();
         $this->setBodyStarted($tree, true);
 
-        $tree->startElement(null, 'p', $attrs);
-        $tree->endElement(null, 'p');
+        $tree->startElement(true, 'p', $attrs);
+        $tree->endElement(true, 'p');
 
         $c = "/es\t h+ract\nr";
-        $tree->characters(null, $c);
+        $tree->characters(true, $c);
 
         $this->assertEquals('<p class="diff">', strval($tree->getBodyNode()->getChild(0)));
     }
@@ -505,7 +505,7 @@ class DomTreeBuilderTest extends TestCase
 
         $tree = new DomTreeBuilder();
         $tree->startDocument();
-        $tree->characters(null, $chars);
+        $tree->characters(true, $chars);
         $tree->endDocument();
 
         $refProp = new ReflectionProperty($tree, 'textNodes');
@@ -538,7 +538,7 @@ class DomTreeBuilderTest extends TestCase
         $refProp->setValue($tree, 1);
 
         $tree->startDocument();
-        $tree->characters(null, $chars);
+        $tree->characters(true, $chars);
         $tree->endDocument();
 
         $refProp = new ReflectionProperty($tree, 'textNodes');
@@ -567,7 +567,7 @@ class DomTreeBuilderTest extends TestCase
 
         $tree = new DomTreeBuilder();
         $tree->startDocument();
-        $tree->characters(null, $chars);
+        $tree->characters(true, $chars);
         $tree->endDocument();
 
         $refProp = new ReflectionProperty($tree, 'textNodes');
@@ -596,7 +596,7 @@ class DomTreeBuilderTest extends TestCase
 
         $tree = new DomTreeBuilder();
         $tree->startDocument();
-        $tree->characters(null, $chars);
+        $tree->characters(true, $chars);
         $tree->endDocument();
 
         $refProp = new ReflectionProperty($tree, 'textNodes');
@@ -646,7 +646,7 @@ class DomTreeBuilderTest extends TestCase
 
         try {
             $c = "/es\t h+ract\nr";
-            $tree->characters(null, $c);
+            $tree->characters(true, $c);
         } catch (RuntimeException $e) {
             $this->assertEquals(8004, $e->getCode());
             throw $e;
@@ -661,11 +661,11 @@ class DomTreeBuilderTest extends TestCase
         $tree = new DomTreeBuilder();
         $tree->startDocument();
         $this->setBodyStarted($tree, true);
-        $tree->startElement(null, 'div', []);
-        $tree->startElement(null, 'p', []);
-        $tree->characters(null, 'test');
-        $tree->endElement(null, 'p');
-        $tree->endElement(null, 'div');
+        $tree->startElement(true, 'div', []);
+        $tree->startElement(true, 'p', []);
+        $tree->characters(true, 'test');
+        $tree->endElement(true, 'p');
+        $tree->endElement(true, 'div');
 
         $refProp = new ReflectionProperty($tree, 'textNodes');
         $refProp->setAccessible(true);

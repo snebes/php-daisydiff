@@ -7,10 +7,10 @@ namespace DaisyDiff\Html\Modification;
  */
 class Modification
 {
-    /** @var ModificationType */
+    /** @var string */
     private $type;
 
-    /** @var ModificationType */
+    /** @var string */
     private $outputType;
 
     /** @var int */
@@ -26,14 +26,14 @@ class Modification
     private $firstOfId = false;
 
     /** @var string */
-    private $changes;
+    private $changes = '';
 
     /** @var string[] */
     private $htmlLayoutChanges;
 
     /**
-     * @param  ModificationType $type
-     * @param  ModificationType $outputType
+     * @param string $type
+     * @param string $outputType
      */
     public function __construct(string $type, string $outputType)
     {
@@ -42,7 +42,7 @@ class Modification
     }
 
     /**
-     * @return ModificationType
+     * @return string
      */
     public function getType(): string
     {
@@ -56,7 +56,7 @@ class Modification
      * In three-way diffs we format "ADDED" modifications as REMOVED, and the other way round, because the comparison is
      * reversed, compared to a two-way diff.
      *
-     * @return ModificationType
+     * @return string
      */
     public function getOutputType(): string
     {
@@ -125,7 +125,7 @@ class Modification
      */
     public function getChanges(): string
     {
-        return $this->changes ?? '';
+        return $this->changes;
     }
 
     /**
@@ -134,7 +134,7 @@ class Modification
      */
     public function setChanges(?string $changes): self
     {
-        $this->changes = $changes;
+        $this->changes = $changes ?? '';
 
         return $this;
     }
@@ -159,18 +159,18 @@ class Modification
     }
 
     /**
-     * @return string[]
+     * @return string[]|null
      */
-    public function getHtmlLayoutChanges(): ?iterable
+    public function getHtmlLayoutChanges(): ?array
     {
         return $this->htmlLayoutChanges;
     }
 
     /**
-     * @param  string[] $htmlLayoutChanges
+     * @param  string[]|null $htmlLayoutChanges
      * @return self
      */
-    public function setHtmlLayoutChanges(array $htmlLayoutChanges): self
+    public function setHtmlLayoutChanges(?array $htmlLayoutChanges): self
     {
         $this->htmlLayoutChanges = $htmlLayoutChanges;
 

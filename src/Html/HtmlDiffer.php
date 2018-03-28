@@ -3,6 +3,7 @@
 namespace DaisyDiff\Html;
 
 use DaisyDiff\Output\DiffOutputInterface;
+use DaisyDiff\RangeDifferencer\Core\LCSSettings;
 use DaisyDiff\RangeDifferencer\RangeDifference;
 use DaisyDiff\RangeDifferencer\RangeDifferencer;
 use OutOfBoundsException;
@@ -33,7 +34,12 @@ class HtmlDiffer
      */
     public function diff(TextNodeComparator $leftComparator, TextNodeComparator $rightComparator): void
     {
-        $differences = RangeDifferencer::findDifferences($leftComparator, $rightComparator);
+        // Configure LCS.
+        $settings = new LCSSettings();
+        $settings->setUseGreedyMethod(true);
+
+        /** @var RangeDifference[] $differences */
+        $differences = RangeDifferencer::findDifferences($leftComparator, $rightComparator, $settings);
 
         /** @var RangeDifference[] */
         $pDifferences = $this->preProcess($differences);
@@ -69,7 +75,6 @@ class HtmlDiffer
         }
 
         $rightComparator->expandWhiteSpace();
-
         $this->output->generateOutput($rightComparator->getBodyNode());
     }
 
@@ -77,7 +82,7 @@ class HtmlDiffer
      * @param  RangeDifference[] $differences
      * @return RangeDifference[]
      */
-    private function preProcess(array $differences): iterable
+    private function preProcess(array $differences): array
     {
         /** @var RangeDifference[] */
         $newRanges = [];
@@ -99,12 +104,14 @@ class HtmlDiffer
                     $differences[$i + 1]->kind() == $kind &&
                     $this->score($leftLength, $differences[$i + 1]->leftLength(),
                                 $rightLength, $differences[$i + 1]->rightLength()) > ($differences[$i + 1]->leftStart() - $leftEnd)) {
+                $ancestorEnd    = $differences[$i + 1]->ancestorEnd();
                 $leftEnd        = $differences[$i + 1]->leftEnd();
                 $rightEnd       = $differences[$i + 1]->rightEnd();
-                $ancestorEnd    = $differences[$i + 1]->ancestorEnd();
+
+                $ancestorLength = $ancestorEnd - $ancestorStart;
                 $leftLength     = $leftEnd - $leftStart;
                 $rightLength    = $rightEnd - $rightStart;
-                $ancestorLength = $ancestorEnd - $ancestorStart;
+
                 $i++;
             }
 
