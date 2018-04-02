@@ -32,6 +32,9 @@ class TagNode extends Node implements IteratorAggregate
     {
         parent::__construct($parent);
 
+        unset($attributes['style']);
+        ksort($attributes);
+
         $this->qName = $qName;
         $this->attributes = $attributes;
     }

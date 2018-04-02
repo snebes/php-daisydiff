@@ -37,14 +37,14 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
     /** @var int */
     private $changedId = 0;
 
+    /** @var int */
+    private $deletedId = 0;
+
     /** @var bool */
     private $changedIdUsed = false;
 
     /** @var bool */
     private $whiteAfterLastChangedPart = false;
-
-    /** @var int */
-    private $deletedId = 0;
 
     /**
      * @param DomTreeInterface $tree
@@ -198,7 +198,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                         $nextLastModified = [];
                     }
                 }
-                elseif (null !== $result->getChanges() && $result->getChanges() != $changes) {
+                elseif (null !== $result->getChanges() && $changes !== $result->getChanges()) {
                     $this->changedId++;
                     $mod->setFirstOfId(true);
 
@@ -387,7 +387,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                         // Insert after the previous node.
                         $prevResult->setLastCommonParentDepth($prevResult->getLastCommonParentDepth() + 1);
                     } else {
-                        // Isert before the next node.
+                        // Insert before the next node.
                         $nextResult->setLastCommonParentDepth($nextResult->getLastCommonParentDepth() + 1);
                     }
                 }
@@ -465,7 +465,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
      * @param  int $value
      * @return void
      */
-    public function setStartChangedID(int $value): void
+    public function setStartChangedId(int $value): void
     {
         $this->changedId = $value;
     }
@@ -477,7 +477,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
      * @param  int $value
      * @return void
      */
-    public function setStartNewID(int $value): void
+    public function setStartNewId(int $value): void
     {
         $this->newId = $value;
     }

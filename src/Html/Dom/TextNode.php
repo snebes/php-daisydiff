@@ -89,10 +89,7 @@ class TextNode extends Node
             return false;
         }
 
-        $a = str_replace("\n", ' ', $this->getText());
-        $b = str_replace("\n", ' ', $other->getText());
-
-        return 0 == strcmp($a, $b);
+        return 0 == strcmp($this->getText(), $other->getText());
     }
 
     /**

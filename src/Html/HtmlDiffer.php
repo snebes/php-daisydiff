@@ -216,7 +216,7 @@ class HtmlDiffer
     }
 
     /**
-     * @param  int[] ...$numbers
+     * @param  int[] $numbers
      * @return float
      */
     public static function score(int ...$numbers): float
