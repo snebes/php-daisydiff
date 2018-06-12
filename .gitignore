@@ -2,4 +2,6 @@
 /build/
 /example/
 /vendor/
-/.idea/
+
+.idea
+.DS_Store
