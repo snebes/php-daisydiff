@@ -3,5 +3,5 @@
 ![Travis](https://img.shields.io/travis/snebes/php-daisydiff.svg?style=for-the-badge)
 [![GitHub license](https://img.shields.io/github/license/snebes/php-daisydiff.svg?style=for-the-badge)](https://github.com/snebes/php-daisydiff)
 
-# xmldiff
+# PHP DaisyDiff Post
 PHP XML Diff Engine - DaisyDiff Port
