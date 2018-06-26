@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html;
 
@@ -22,19 +24,26 @@ class DelegatingContentHandler implements ContentHandlerInterface
         $this->changeText = $changeText;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * @param string $qName
+     * @param array  $attributes
+     */
     public function startElement(string $qName, array $attributes = []): void
     {
         $this->changeText->addHtml(Xml::openElement($qName, $attributes));
     }
 
-    /** {@inheritdoc} */
+    /**
+     * @param string $qName
+     */
     public function endElement(string $qName): void
     {
         $this->changeText->addHtml(Xml::closeElement($qName));
     }
 
-    /** {@inheritdoc} */
+    /**
+     * @param string $chars
+     */
     public function characters(string $chars): void
     {
         $this->changeText->addHtml($chars);

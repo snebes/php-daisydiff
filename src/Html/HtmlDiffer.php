@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html;
 
@@ -30,7 +32,7 @@ class HtmlDiffer
      * @param  TextNodeComparator $ancestorComparator
      * @param  TextNodeComparator $leftComparator
      * @param  TextNodeComparator $rightComparator
-     * @return void
+     *
      * @throws
      */
     public function diff3(
@@ -120,7 +122,7 @@ class HtmlDiffer
      *
      * @param  TextNodeComparator $leftComparator
      * @param  TextNodeComparator $rightComparator
-     * @return void
+     *
      * @throws
      */
     public function diff(TextNodeComparator $leftComparator, TextNodeComparator $rightComparator): void
@@ -216,7 +218,7 @@ class HtmlDiffer
     }
 
     /**
-     * @param  int[] $numbers
+     * @param int[] $numbers
      * @return float
      */
     public static function score(int ...$numbers): float

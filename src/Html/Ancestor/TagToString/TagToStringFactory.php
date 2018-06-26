@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Ancestor\TagToString;
 
@@ -68,11 +70,11 @@ class TagToStringFactory
     {
         $sem = $this->getChangeSemantic($node->getQName());
 
-        if (0 == strcasecmp($node->getQName(), 'a')) {
+        if (0 === strcasecmp($node->getQName(), 'a')) {
             return new AnchorToString($node, $sem);
         }
 
-        if (0 == strcasecmp($node->getQName(), 'img')) {
+        if (0 === strcasecmp($node->getQName(), 'img')) {
             return new NoContentTagToString($node, $sem);
         }
 
@@ -83,7 +85,7 @@ class TagToStringFactory
      * @param  string $str
      * @return string<TagChangeSemantic>
      */
-    protected function getChangeSemantic(string $str): string
+    private function getChangeSemantic(string $str): string
     {
         if (in_array(mb_strtolower($str), self::$containerTags)) {
             return TagChangeSemantic::MOVED;

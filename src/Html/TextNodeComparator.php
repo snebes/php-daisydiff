@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html;
 
@@ -72,7 +74,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
     }
 
     /**
-     * @param  int $i
+     * @param int $i
      * @return TextNode|null
      */
     public function getTextNode(int $i): ?TextNode
@@ -84,9 +86,9 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
      * Marks the given range as new. In the output, the range will be formatted as specified by the anOutputFormat
      * parameter.
      *
-     * @param  int    $start
-     * @param  int    $end
-     * @param  string $outputFormat
+     * @param int    $start
+     * @param int    $end
+     * @param string $outputFormat
      * @return void
      */
     public function markAsNew(int $start, int $end, string $outputFormat = ModificationType::ADDED): void
@@ -126,9 +128,9 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
     }
 
     /**
-     * @param  int                      $thisIndex
-     * @param  RangeComparatorInterface $other
-     * @param  int                      $otherIndex
+     * @param int                      $thisIndex
+     * @param RangeComparatorInterface $other
+     * @param int                      $otherIndex
      * @return bool
      */
     public function rangesEqual(int $thisIndex, RangeComparatorInterface $other, int $otherIndex): bool
@@ -141,9 +143,9 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
     }
 
     /**
-     * @param  int                      $length
-     * @param  int                      $maxLength
-     * @param  RangeComparatorInterface $other
+     * @param int                      $length
+     * @param int                      $maxLength
+     * @param RangeComparatorInterface $other
      * @return bool
      */
     public function skipRangeComparison(int $length, int $maxLength, RangeComparatorInterface $other): bool
@@ -152,12 +154,11 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
     }
 
     /**
-     * @param  int                $leftStart
-     * @param  int                $leftEnd
-     * @param  int                $rightStart
-     * @param  int                $rightEnd
-     * @param  TextNodeComparator $leftComparator
-     * @return void
+     * @param int                $leftStart
+     * @param int                $leftEnd
+     * @param int                $rightStart
+     * @param int                $rightEnd
+     * @param TextNodeComparator $leftComparator
      */
     public function handlePossibleChangedPart(
         int $leftStart = 0,
@@ -252,7 +253,6 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
      * @param  int                $before
      * @param  int                $after
      * @param  string             $outputFormat
-     * @return void
      */
     public function markAsDeleted(
         int $start,
@@ -450,8 +450,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
      * Used for combining multiple comparators in order to create a single output document. The IDs must be successive
      * along the different comparators.
      *
-     * @param  int $value
-     * @return void
+     * @param int $value
      */
     public function setStartDeletedId(int $value): void
     {
@@ -462,8 +461,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
      * Used for combining multiple comparators in order to create a single output document. The IDs must be successive
      * along the different comparators.
      *
-     * @param  int $value
-     * @return void
+     * @param int $value
      */
     public function setStartChangedId(int $value): void
     {
@@ -474,8 +472,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
      * Used for combining multiple comparators in order to create a single output document. The IDs must be successive
      * along the different comparators.
      *
-     * @param  int $value
-     * @return void
+     * @param int $value
      */
     public function setStartNewId(int $value): void
     {
@@ -515,8 +512,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
     }
 
     /**
-     * @param  Modification[] $lastModified
-     * @return void
+     * @param Modification[] $lastModified
      */
     public function setLastModified(?array $lastModified): void
     {

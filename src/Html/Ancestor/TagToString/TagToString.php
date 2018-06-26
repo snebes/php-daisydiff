@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Ancestor\TagToString;
 
@@ -16,7 +18,7 @@ class TagToString
     /** @var TagNode */
     protected $node;
 
-    /** @var string<TagChangeSemantic> */
+    /** @var string */
     protected $sem;
 
     /** @var HtmlLayoutChange */

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html;
 
@@ -22,8 +24,8 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
     private $prefix;
 
     /**
-     * @param  ContentHandlerInterface $handler
-     * @param  string                  $prefix
+     * @param ContentHandlerInterface $handler
+     * @param string                  $prefix
      */
     public function __construct(ContentHandlerInterface $handler, string $prefix)
     {
@@ -31,7 +33,9 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
         $this->prefix  = $prefix;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * @param TagNode $node
+     */
     public function generateOutput(TagNode $node): void
     {
         if (0 !== strcasecmp($node->getQName(), 'img') && 0 !== strcasecmp($node->getQName(), 'body')) {
@@ -167,8 +171,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
     }
 
     /**
-     * @param  ImageNode $imageNode
-     * @return void
+     * @param ImageNode $imageNode
      */
     private function writeImage(ImageNode $imageNode): void
     {
@@ -189,9 +192,8 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
     }
 
     /**
-     * @param  Modification $mod
-     * @param  array        $attrs
-     * @return void
+     * @param Modification $mod
+     * @param array        $attrs
      */
     private function addAttributes(Modification $mod, array &$attrs): void
     {
