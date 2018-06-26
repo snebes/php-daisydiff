@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Tag;
 
@@ -46,18 +48,16 @@ class ArgumentComparator implements AtomSplitterInterface
                 }
 
                 $this->atoms[] = new TextAtom('' . $c);
-                $currentWord = '';
-            }
-            elseif (DelimiterAtom::isValidDelimiter('' . $c)) {
+                $currentWord   = '';
+            } else if (DelimiterAtom::isValidDelimiter('' . $c)) {
                 // A delimiter.
                 if (mb_strlen($currentWord) > 0) {
                     $this->atoms[] = new TextAtom($currentWord);
-                    $currentWord = '';
+                    $currentWord   = '';
                 }
 
                 $this->atoms[] = new DelimiterAtom($c);
-            }
-            else {
+            } else {
                 $currentWord .= $c;
             }
         }

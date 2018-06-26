@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Tag;
 
@@ -92,8 +94,8 @@ class TagDiffer implements TextDifferInterface
         // We can assume that the LCS is correct and that there are exactly as many atoms left and right.
         while ($beginLeft < $endLeft) {
             while ($beginLeft < $endLeft &&
-            !$rightComparator->getAtom($beginRight)->hasInternalIdentifiers() &&
-            !$leftComparator->getAtom($beginLeft)->hasInternalIdentifiers()) {
+                !$rightComparator->getAtom($beginRight)->hasInternalIdentifiers() &&
+                !$leftComparator->getAtom($beginLeft)->hasInternalIdentifiers()) {
                 $s .= $rightComparator->getAtom($beginRight)->getFullText();
                 $beginRight++;
                 $beginLeft++;
@@ -181,7 +183,7 @@ class TagDiffer implements TextDifferInterface
                     $temp++;
                 }
 
-                if ($temp == $differences[$i + 1]->leftStart())  {
+                if ($temp == $differences[$i + 1]->leftStart()) {
                     $leftEnd  = $differences[$i + 1]->leftEnd();
                     $rightEnd = $differences[$i + 1]->rightEnd();
                     $temp     = $leftEnd;

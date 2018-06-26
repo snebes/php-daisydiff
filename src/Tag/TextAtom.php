@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Tag;
 
 use RuntimeException;
 
 /**
-* An Atom that represents a piece of ordinary text.
-*/
+ * An Atom that represents a piece of ordinary text.
+ */
 class TextAtom implements AtomInterface
 {
     /** @var string */

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Tag;
 
@@ -50,23 +52,21 @@ class TagComparator implements AtomSplitterInterface
                 // A tag.
                 if (mb_strlen($currentWord) > 0) {
                     $this->atoms[] = new TextAtom($currentWord);
-                    $currentWord = '';
+                    $currentWord   = '';
                 }
 
-                $end = mb_strpos($s, '>', $i);
+                $end           = mb_strpos($s, '>', $i);
                 $this->atoms[] = new TagAtom(mb_substr($s, $i, $end + 1 - $i));
-                $i = $end;
-            }
-            elseif (DelimiterAtom::isValidDelimiter('' . $c)) {
+                $i             = $end;
+            } else if (DelimiterAtom::isValidDelimiter('' . $c)) {
                 // A delimiter.
                 if (mb_strlen($currentWord) > 0) {
                     $this->atoms[] = new TextAtom($currentWord);
-                    $currentWord = '';
+                    $currentWord   = '';
                 }
 
                 $this->atoms[] = new DelimiterAtom($c);
-            }
-            else {
+            } else {
                 // Something else.
                 $currentWord .= $c;
             }
