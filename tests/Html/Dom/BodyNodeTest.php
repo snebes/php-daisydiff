@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Dom;
 
@@ -17,7 +19,7 @@ class BodyNodeTest extends TestCase
 
     public function testCopyTreeWithChildren(): void
     {
-        $body = new BodyNode();
+        $body         = new BodyNode();
         $intermediate = new TagNode($body, 'middle');
         $body->addChild($intermediate);
 
@@ -29,7 +31,7 @@ class BodyNodeTest extends TestCase
 
     public function testGetMinimalDeletedSet(): void
     {
-        $body = new BodyNode();
+        $body         = new BodyNode();
         $intermediate = new TagNode($body, 'middle');
         $body->addChild($intermediate);
 

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Dom;
 
@@ -24,12 +26,12 @@ class TextNode extends Node
     {
         parent::__construct($parent);
 
-        $this->s = $s;
+        $this->s            = $s;
         $this->modification = new Modification(ModificationType::NONE, ModificationType::NONE);
     }
 
     /**
-     * {@inheritdoc}
+     * @return Node
      */
     public function copyTree(): Node
     {
@@ -40,7 +42,7 @@ class TextNode extends Node
     }
 
     /**
-     * {@inheritdoc}
+     * @return Node
      */
     public function getLeftMostChild(): Node
     {
@@ -48,15 +50,16 @@ class TextNode extends Node
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $id
+     * @return array
      */
     public function getMinimalDeletedSet(int $id): array
     {
-        $nodes = [];
+        $nodes        = [];
         $modification = $this->getModification();
 
-        if (null !== $modification && $modification->getType() == ModificationType::REMOVED &&
-            $modification->getId() == $id) {
+        if (null !== $modification && $modification->getType() === ModificationType::REMOVED &&
+            $modification->getId() === $id) {
             $nodes = [$this];
         }
 
@@ -64,7 +67,7 @@ class TextNode extends Node
     }
 
     /**
-     * {@inheritdoc}
+     * @return Node
      */
     public function getRightMostChild(): Node
     {
@@ -80,7 +83,7 @@ class TextNode extends Node
     }
 
     /**
-     * @param  Node $other
+     * @param Node $other
      * @return bool
      */
     public function isSameText(?Node $other): bool
@@ -89,26 +92,23 @@ class TextNode extends Node
             return false;
         }
 
-        return 0 == strcmp($this->getText(), $other->getText());
+        return 0 === strcmp($this->getText(), $other->getText());
     }
 
     /**
      * @return Modification
      */
-    public function getModification(): ?Modification
+    public function getModification(): Modification
     {
         return $this->modification;
     }
 
     /**
-     * @param  Modification $m
-     * @return self
+     * @param Modification $m
      */
-    public function setModification(?Modification $m): self
+    public function setModification(Modification $m): void
     {
         $this->modification = $m;
-
-        return $this;
     }
 
     /**
@@ -117,5 +117,14 @@ class TextNode extends Node
     public function __toString(): string
     {
         return $this->getText();
+    }
+
+    /**
+     * @param TextNode $node
+     * @return string
+     */
+    public static function toDiffLine(TextNode $node): string
+    {
+        return str_replace("\n", ' ', $node->getText());
     }
 }

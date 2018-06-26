@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Dom;
 
@@ -31,14 +33,14 @@ class TextNodeTest extends TestCase
         $this->assertEquals($textRoot, $textRoot->getRightMostChild());
     }
 
-    public function testGetModificationText(): void
-    {
-        $root = new TagNode(null, 'root');
-        $textRoot = new TextNode($root, 'root');
-        $textRoot->setModification(null);
-
-        $this->assertNull($textRoot->getModification());
-    }
+//    public function testGetModificationText(): void
+//    {
+//        $root = new TagNode(null, 'root');
+//        $textRoot = new TextNode($root, 'root');
+//        $textRoot->setModification(null);
+//
+//        $this->assertNull($textRoot->getModification());
+//    }
 
     public function testGetText(): void
     {

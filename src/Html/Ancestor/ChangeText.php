@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Ancestor;
 
@@ -7,19 +9,8 @@ namespace DaisyDiff\Html\Ancestor;
  */
 class ChangeText
 {
-    /** @var int */
-    private $maxNumCharsPerLine = 0;
-
     /** @var string */
     private $text = '';
-
-    /**
-     * @param  int $maxNumCharsPerLine
-     */
-    public function __construct(int $maxNumCharsPerLine)
-    {
-        $this->maxNumCharsPerLine = $maxNumCharsPerLine;
-    }
 
     /**
      * @param  string $s

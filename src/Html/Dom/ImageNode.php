@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Dom;
 
@@ -32,7 +34,7 @@ class ImageNode extends TextNode
             return false;
         }
 
-        return 0 == strcasecmp($this->getText(), $other->getText());
+        return 0 === strcasecmp($this->getText(), $other->getText());
     }
 
     /**

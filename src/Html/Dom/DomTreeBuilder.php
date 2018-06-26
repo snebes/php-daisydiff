@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Dom;
 
@@ -7,7 +9,7 @@ use RuntimeException;
 /**
  * DOM Tree Builder.
  */
-final class DomTreeBuilder implements DomTreeInterface
+final class DomTreeBuilder
 {
     /** @var TextNode[] */
     private $textNodes = [];
@@ -101,7 +103,7 @@ final class DomTreeBuilder implements DomTreeInterface
     public function endDocument(): void
     {
         if (!$this->documentStarted || $this->documentEnded) {
-            throw new RuntimeException('No document opened.', 8001);
+            throw new RuntimeException('No document is open.', 8001);
         }
 
         $this->endWord();
@@ -121,13 +123,13 @@ final class DomTreeBuilder implements DomTreeInterface
         assert($xmlParser);
 
         if (!$this->documentStarted || $this->documentEnded) {
-            throw new RuntimeException('No document is opened.', 8002);
+            throw new RuntimeException('No document is open.', 8002);
         }
 
         if ($this->bodyStarted && !$this->bodyEnded) {
             $this->endWord();
 
-            $newTagNode = new TagNode($this->currentParent, $qName, $attributes);
+            $newTagNode          = new TagNode($this->currentParent, $qName, $attributes);
             $this->currentParent = $newTagNode;
             $this->lastSibling   = null;
 
@@ -144,18 +146,16 @@ final class DomTreeBuilder implements DomTreeInterface
             if ($this->isSeparatingTag($newTagNode)) {
                 $this->addSeparatorNode();
             }
-        }
-        elseif ($this->bodyStarted) {
+        } else if ($this->bodyStarted) {
             // Ignoring element after body tag closed.
-        }
-        elseif (0 == strcasecmp($qName, 'body')) {
+        } else if (0 === strcasecmp($qName, 'body')) {
             $this->bodyStarted = true;
         }
     }
 
     /**
-     * @param  mixed  $xmlParser
-     * @param  string $qName
+     * @param mixed  $xmlParser
+     * @param string $qName
      * @return void
      */
     public function endElement($xmlParser, string $qName): void
@@ -163,14 +163,13 @@ final class DomTreeBuilder implements DomTreeInterface
         assert($xmlParser);
 
         if (!$this->documentStarted || $this->documentEnded) {
-            throw new RuntimeException('No document is opened.', 8003);
+            throw new RuntimeException('No document is open.', 8003);
         }
 
-        if (0 == strcasecmp($qName, 'body')) {
+        if (0 === strcasecmp($qName, 'body')) {
             $this->bodyEnded = true;
-        }
-        elseif ($this->bodyStarted && !$this->bodyEnded) {
-            if (0 == strcasecmp($qName, 'img')) {
+        } else if ($this->bodyStarted && !$this->bodyEnded) {
+            if (0 === strcasecmp($qName, 'img')) {
                 // Insert a dummy leaf for the image.
                 $img = new ImageNode($this->currentParent, $this->currentParent->getAttributes());
                 $img->setWhiteBefore($this->whiteSpaceBeforeThis);
@@ -186,7 +185,7 @@ final class DomTreeBuilder implements DomTreeInterface
                 $this->lastSibling = null;
             }
 
-            if (0 == strcasecmp($qName, 'pre')) {
+            if (0 === strcasecmp($qName, 'pre')) {
                 $this->numberOfActivePreTags--;
             }
 
@@ -194,14 +193,14 @@ final class DomTreeBuilder implements DomTreeInterface
                 $this->addSeparatorNode();
             }
 
-            $this->currentParent = $this->currentParent->getParent();
+            $this->currentParent        = $this->currentParent->getParent();
             $this->whiteSpaceBeforeThis = false;
         }
     }
 
     /**
-     * @param  mixed  $xmlParser
-     * @param  string $chars
+     * @param mixed  $xmlParser
+     * @param string $chars
      * @return void
      */
     public function characters($xmlParser, string $chars): void
@@ -209,16 +208,16 @@ final class DomTreeBuilder implements DomTreeInterface
         assert($xmlParser);
 
         if (!$this->documentStarted || $this->documentEnded) {
-            throw new RuntimeException('No document is opened.', 8004);
+            throw new RuntimeException('No document is open.', 8004);
         }
 
-        for ($i = 0, $max = mb_strlen($chars); $i < $max; $i++) {
+        for ($i = 0, $iMax = mb_strlen($chars); $i < $iMax; $i++) {
             $c = mb_substr($chars, $i, 1);
 
             if ($this->isDelimiter($c)) {
                 $this->endWord();
 
-                if (WhiteSpaceNode::isWhiteSpace($c) && $this->numberOfActivePreTags == 0) {
+                if (WhiteSpaceNode::isWhiteSpace($c) && $this->numberOfActivePreTags === 0) {
                     if (null !== $this->lastSibling) {
                         $this->lastSibling->setWhiteAfter(true);
                     }
@@ -229,8 +228,8 @@ final class DomTreeBuilder implements DomTreeInterface
                     $textNode->setWhiteBefore($this->whiteSpaceBeforeThis);
 
                     $this->whiteSpaceBeforeThis = false;
-                    $this->lastSibling = $textNode;
-                    $this->textNodes[] = $textNode;
+                    $this->lastSibling          = $textNode;
+                    $this->textNodes[]          = $textNode;
                 }
             } else {
                 $this->newWord .= $c;
@@ -248,9 +247,9 @@ final class DomTreeBuilder implements DomTreeInterface
             $node->setWhiteBefore($this->whiteSpaceBeforeThis);
 
             $this->whiteSpaceBeforeThis = false;
-            $this->lastSibling = $node;
-            $this->textNodes[] = $node;
-            $this->newWord = '';
+            $this->lastSibling          = $node;
+            $this->textNodes[]          = $node;
+            $this->newWord              = '';
         }
     }
 
@@ -258,7 +257,7 @@ final class DomTreeBuilder implements DomTreeInterface
      * Returns true if the given tag separates text nodes from being successive. I.e. every block starts a new distinct
      * text flow.
      *
-     * @param  TagNode $tagNode
+     * @param TagNode $tagNode
      * @return bool
      */
     private function isSeparatingTag(TagNode $tagNode): bool
@@ -268,8 +267,6 @@ final class DomTreeBuilder implements DomTreeInterface
 
     /**
      * Ensures that a separator is added after the last text node.
-     *
-     * @return void
      */
     private function addSeparatorNode(): void
     {
@@ -286,7 +283,7 @@ final class DomTreeBuilder implements DomTreeInterface
     }
 
     /**
-     * @param  string $c
+     * @param string $c
      * @return bool
      */
     public static function isDelimiter(string $c): bool
@@ -296,6 +293,7 @@ final class DomTreeBuilder implements DomTreeInterface
         }
 
         switch ($c) {
+            // Basic Delimiters
             case '/':
             case '.':
             case '!':
@@ -305,7 +303,7 @@ final class DomTreeBuilder implements DomTreeInterface
             case '=':
             case "'":
             case '"':
-            // Extra Delimiters
+                // Extra Delimiters
             case '[':
             case ']':
             case '{':

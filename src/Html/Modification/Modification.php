@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Modification;
 
@@ -29,7 +31,7 @@ class Modification
     private $changes = '';
 
     /** @var string[] */
-    private $htmlLayoutChanges;
+    private $htmlLayoutChanges = [];
 
     /**
      * @param string $type
@@ -72,14 +74,11 @@ class Modification
     }
 
     /**
-     * @param  int $id
-     * @return self
+     * @param int $id
      */
-    public function setId(int $id): self
+    public function setId(int $id): void
     {
         $this->id = $id;
-
-        return $this;
     }
 
     /**
@@ -91,14 +90,11 @@ class Modification
     }
 
     /**
-     * @param  Modification $mod
-     * @return self
+     * @param Modification $mod
      */
-    public function setPrevious(?Modification $mod): self
+    public function setPrevious(?Modification $mod): void
     {
         $this->prevMod = $mod;
-
-        return $this;
     }
 
     /**
@@ -111,13 +107,10 @@ class Modification
 
     /**
      * @param  Modification $mod
-     * @return self
      */
-    public function setNext(?Modification $mod): self
+    public function setNext(?Modification $mod): void
     {
         $this->nextMod = $mod;
-
-        return $this;
     }
 
     /**
@@ -129,14 +122,11 @@ class Modification
     }
 
     /**
-     * @param  string $changes
-     * @return self
+     * @param string $changes
      */
-    public function setChanges(?string $changes): self
+    public function setChanges(string $changes): void
     {
-        $this->changes = $changes ?? '';
-
-        return $this;
+        $this->changes = $changes;
     }
 
     /**
@@ -148,32 +138,26 @@ class Modification
     }
 
     /**
-     * @param  bool $value
-     * @return self
+     * @param bool $value
      */
-    public function setFirstOfId(bool $value): self
+    public function setFirstOfId(bool $value): void
     {
         $this->firstOfId = $value;
-
-        return $this;
     }
 
     /**
-     * @return string[]|null
+     * @return string[]
      */
-    public function getHtmlLayoutChanges(): ?array
+    public function getHtmlLayoutChanges(): array
     {
         return $this->htmlLayoutChanges;
     }
 
     /**
-     * @param  string[]|null $htmlLayoutChanges
-     * @return self
+     * @param  string[] $htmlLayoutChanges
      */
-    public function setHtmlLayoutChanges(?array $htmlLayoutChanges): self
+    public function setHtmlLayoutChanges(array $htmlLayoutChanges): void
     {
         $this->htmlLayoutChanges = $htmlLayoutChanges;
-
-        return $this;
     }
 }

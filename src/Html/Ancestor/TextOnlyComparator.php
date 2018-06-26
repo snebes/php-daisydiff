@@ -88,7 +88,7 @@ class TextOnlyComparator implements RangeComparatorInterface
     }
 
     /**
-     * @param  TextOnlyComparator $other
+     * @param TextOnlyComparator $other
      * @return float
      */
     public function getMatchRatio(TextOnlyComparator $other): float

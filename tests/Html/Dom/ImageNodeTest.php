@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Dom;
 
@@ -17,8 +19,8 @@ class ImageNodeTest extends TestCase
         $root = new TagNode(null, 'root', $nodeAttrs);
         $img  = new TagNode($root, 'img', $nodeAttrs);
 
-        $imgNode = new ImageNode($img, $nodeAttrs);
-        $rootNode = new ImageNode($root, $nodeAttrs);
+        $imgNode     = new ImageNode($img, $nodeAttrs);
+        $rootNode    = new ImageNode($root, $nodeAttrs);
         $compareNode = new ImageNode($root, $attrs);
 
         $this->assertTrue($imgNode->isSameText($rootNode));

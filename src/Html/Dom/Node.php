@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Dom;
 
@@ -6,7 +8,7 @@ use DaisyDiff\Html\Dom\Helper\LastCommonParentResult;
 use InvalidArgumentException;
 
 /**
- * Represents any element in the DOM tree of an HTML file.
+ * Represents any element in the DOM tree of a HTML file.
  */
 abstract class Node
 {
@@ -35,7 +37,7 @@ abstract class Node
         if (null !== $parent) {
             $parent->addChild($this);
             $this->root = $parent->getRoot();
-        } elseif ($this instanceof TagNode) {
+        } else if ($this instanceof TagNode) {
             $this->root = $this;
         }
     }
@@ -85,7 +87,7 @@ abstract class Node
     }
 
     /**
-     * @param  int $id
+     * @param int $id
      * @return Node[]
      */
     abstract public function getMinimalDeletedSet(int $id): array;
@@ -113,11 +115,11 @@ abstract class Node
 
         $result = new LastCommonParentResult();
 
-        // These lists can be empty.
+        // Note: these lists are never null, but sometimes are empty.
         $myParents    = $this->getParentTree();
         $otherParents = $other->getParentTree();
 
-        $i = 1;
+        $i      = 1;
         $isSame = true;
 
         while ($isSame && $i < count($myParents) && $i < count($otherParents)) {
@@ -136,17 +138,14 @@ abstract class Node
             // Found different parent.
             $result->setIndexInLastCommonParent($myParents[$i - 1]->getIndexOf($myParents[$i]));
             $result->setSplittingNeeded();
-        }
-        elseif (count($myParents) < count($otherParents)) {
+        } else if (count($myParents) < count($otherParents)) {
             // Current node is not so deeply nested.
             $result->setIndexInLastCommonParent($myParents[$i - 1]->getIndexOf($this));
-        }
-        elseif (count($myParents) > count($otherParents)) {
-            // All tags matched but there are tags left in this tree - $other node is not so deeply nested.
+        } else if (count($myParents) > count($otherParents)) {
+            // All tags matched but there are tags left in this tree - other node is not so deeply nested.
             $result->setIndexInLastCommonParent($myParents[$i - 1]->getIndexOf($myParents[$i]));
             $result->setSplittingNeeded();
-        }
-        else {
+        } else {
             // All tags matched until the very last one in both trees or there were not tags besides the BODY.
             $result->setIndexInLastCommonParent($myParents[$i - 1]->getIndexOf($this));
         }
@@ -158,29 +157,23 @@ abstract class Node
      * Changes the $parent field of this node. Does NOT append/remvoe iteself from the previous or the new parent
      * children collection.
      *
-     * @param  TagNode|null $parent
-     * @return self
+     * @param TagNode|null $parent
      */
-    public function setParent(?TagNode $parent): self
+    public function setParent(?TagNode $parent): void
     {
         $this->parent = $parent;
 
         if (null !== $parent) {
             $this->setRoot($parent->getRoot());
         }
-
-        return $this;
     }
 
     /**
-     * @param  TagNode $root
-     * @return self
+     * @param TagNode $root
      */
-    protected function setRoot(TagNode $root): self
+    protected function setRoot(TagNode $root): void
     {
         $this->root = $root;
-
-        return $this;
     }
 
     /**
@@ -216,7 +209,7 @@ abstract class Node
     }
 
     /**
-     * @param  bool $value
+     * @param bool $value
      * @return self
      */
     public function setWhiteBefore(bool $value): self
@@ -235,7 +228,7 @@ abstract class Node
     }
 
     /**
-     * @param  bool $value
+     * @param bool $value
      * @return self
      */
     public function setWhiteAfter(bool $value): self

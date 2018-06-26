@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Dom;
 
@@ -323,7 +325,8 @@ class DomTreeBuilderTest extends TestCase
             $value = $refProp->getValue($tree);
 
             $this->assertTrue($value);
-        } catch (\ReflectionException $e) {}
+        } catch (\ReflectionException $e) {
+        }
     }
 
     /**
@@ -343,7 +346,8 @@ class DomTreeBuilderTest extends TestCase
             $tree->endElement(true, 'pre');
 
             $this->assertEquals(0, $refProp->getValue($tree));
-        } catch (\ReflectionException $e) {}
+        } catch (\ReflectionException $e) {
+        }
     }
 
     /**
@@ -363,7 +367,8 @@ class DomTreeBuilderTest extends TestCase
             $element = $refProp->getValue($tree);
 
             $this->assertEquals('<span>', strval($element));
-        } catch (\ReflectionException $e) {}
+        } catch (\ReflectionException $e) {
+        }
     }
 
     public function testEndElementExample1(): void
@@ -537,7 +542,8 @@ class DomTreeBuilderTest extends TestCase
                 $this->assertFalse($textNodes[$i + 1]->isWhiteBefore());
                 $this->assertFalse($textNodes[$i + 1]->isWhiteAfter());
             }
-        } catch (\ReflectionException $e) {}
+        } catch (\ReflectionException $e) {
+        }
     }
 
     /**
@@ -546,13 +552,14 @@ class DomTreeBuilderTest extends TestCase
     public function testUnitCharacters2(): void
     {
         $chars = 'a a.a,a"a\'a(a)a?a:a;a!a{a}a-a+a*a=a_a[a]a|';
-        $tree = new DomTreeBuilder();
+        $tree  = new DomTreeBuilder();
 
         try {
             $refProp = new ReflectionProperty($tree, 'numberOfActivePreTags');
             $refProp->setAccessible(true);
             $refProp->setValue($tree, 1);
-        } catch (\ReflectionException $e) {}
+        } catch (\ReflectionException $e) {
+        }
 
         $tree->startDocument();
         $tree->characters(true, $chars);
@@ -575,7 +582,8 @@ class DomTreeBuilderTest extends TestCase
                 $this->assertFalse($textNodes[$i + 1]->isWhiteBefore());
                 $this->assertFalse($textNodes[$i + 1]->isWhiteAfter());
             }
-        } catch (\ReflectionException $e) {}
+        } catch (\ReflectionException $e) {
+        }
     }
 
     /**
@@ -607,7 +615,8 @@ class DomTreeBuilderTest extends TestCase
                 $this->assertFalse($textNodes[$i + 1]->isWhiteBefore());
                 $this->assertFalse($textNodes[$i + 1]->isWhiteAfter());
             }
-        } catch (\ReflectionException $e) {}
+        } catch (\ReflectionException $e) {
+        }
     }
 
     /**
@@ -643,7 +652,8 @@ class DomTreeBuilderTest extends TestCase
                     $this->assertTrue($textNodes[$i]->isWhiteAfter());
                 }
             }
-        } catch (\ReflectionException $e) {}
+        } catch (\ReflectionException $e) {
+        }
     }
 
     /**
@@ -652,7 +662,7 @@ class DomTreeBuilderTest extends TestCase
      */
     public function testCharactersException(): void
     {
-        $tree = new DomTreeBuilder();
+        $tree  = new DomTreeBuilder();
         $flags = [
             'documentStarted' => false,
             'documentEnded'   => true,
@@ -665,7 +675,8 @@ class DomTreeBuilderTest extends TestCase
                 $refProp = new ReflectionProperty($tree, $prop);
                 $refProp->setAccessible(true);
                 $refProp->setValue($tree, $value);
-            } catch (\ReflectionException $e) {}
+            } catch (\ReflectionException $e) {
+            }
         }
 
         try {
@@ -695,7 +706,8 @@ class DomTreeBuilderTest extends TestCase
             $refProp = new ReflectionProperty($tree, 'textNodes');
             $refProp->setAccessible(true);
             $value = $refProp->getValue($tree);
-        } catch (\ReflectionException $e) {}
+        } catch (\ReflectionException $e) {
+        }
 
         $this->assertTrue(end($value) instanceof SeparatingNode);
     }

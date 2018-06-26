@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Modification;
 
@@ -82,7 +84,7 @@ class ModificationTest extends TestCase
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);
         $htmlLayoutChanges = [];
 
-        $this->assertNull($newM->getHtmlLayoutChanges());
+        $this->assertEmpty($newM->getHtmlLayoutChanges());
 
         $htmlLayoutChanges[] = new HtmlLayoutChange();
         $newM->setHtmlLayoutChanges($htmlLayoutChanges);

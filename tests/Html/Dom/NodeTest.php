@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Dom;
 
@@ -13,7 +15,7 @@ class NodeTest extends TestCase
 {
     public function testGetParentTree(): void
     {
-        $root = new TagNode(null, 'root');
+        $root         = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
 
@@ -25,7 +27,7 @@ class NodeTest extends TestCase
 
     public function testGetRoot(): void
     {
-        $root = new TagNode(null, 'root');
+        $root         = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
 
@@ -37,7 +39,7 @@ class NodeTest extends TestCase
      */
     public function testGetLastCommonParentNullException(): void
     {
-        $root = new TagNode(null, 'root');
+        $root         = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
 
@@ -51,7 +53,7 @@ class NodeTest extends TestCase
 
     public function testGetLastCommonParent(): void
     {
-        $root = new TagNode(null, 'root');
+        $root         = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'intermediate');
         $root->addChild($intermediate);
 
@@ -82,7 +84,7 @@ class NodeTest extends TestCase
         $refMethod = new ReflectionMethod(Node::class, 'setRoot');
         $refMethod->setAccessible(true);
 
-        $root = new TagNode(null, 'root');
+        $root   = new TagNode(null, 'root');
         $middle = new TagNode($root, 'middle');
         $refMethod->invoke($middle, $root);
 
@@ -96,7 +98,7 @@ class NodeTest extends TestCase
 
     public function testInPre(): void
     {
-        $preRoot = new TagNode(null, 'pre');
+        $preRoot      = new TagNode(null, 'pre');
         $intermediate = new TagNode($preRoot, 'intermediate');
         $preRoot->addChild($intermediate);
 
@@ -105,7 +107,7 @@ class NodeTest extends TestCase
 
         $this->assertTrue($leaf->inPre());
 
-        $root = new TagNode(null, 'root');
+        $root   = new TagNode(null, 'root');
         $middle = new TagNode($root, 'middle');
         $root->addChild($middle);
 
@@ -117,7 +119,7 @@ class NodeTest extends TestCase
 
     public function testIsWhiteBeforeAfter(): void
     {
-        $root = new TagNode(null, 'root');
+        $root         = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
 

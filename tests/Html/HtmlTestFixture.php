@@ -4,8 +4,7 @@ namespace DaisyDiff\Html;
 
 use DaisyDiff\Html\Ancestor\ChangeText;
 use DaisyDiff\Html\Dom\DomTreeBuilder;
-use DaisyDiff\SAXReader;
-use Exception;
+use DaisyDiff\Xml\XMLReader;
 
 /**
  * TestCase for HTML diffing. Can be used in unit tests. See HtmlDifferText for example.
@@ -30,19 +29,19 @@ class HtmlTestFixture
     {
         // Parse $oldText.
         $oldHandler = new DomTreeBuilder();
-        $oldSax     = new SAXReader($oldHandler);
+        $oldSax     = new XMLReader($oldHandler);
         $oldSax->parse($oldText);
 
         // Parse $newText.
         $newHandler = new DomTreeBuilder();
-        $newSax     = new SAXReader($newHandler);
+        $newSax     = new XMLReader($newHandler);
         $newSax->parse($newText);
 
         // Diff.
         $leftComparator  = new TextNodeComparator($oldHandler);
         $rightComparator = new TextNodeComparator($newHandler);
 
-        $content = new ChangeText(55);
+        $content = new ChangeText();
         $handler = new DelegatingContentHandler($content);
         $output  = new HtmlSaxDiffOutput($handler, 'test');
         $differ  = new HtmlDiffer($output);
@@ -62,17 +61,17 @@ class HtmlTestFixture
     {
         // Parse $ancestor.
         $ancestorHandler = new DomTreeBuilder();
-        $ancestorSax     = new SAXReader($ancestorHandler);
+        $ancestorSax     = new XMLReader($ancestorHandler);
         $ancestorSax->parse($ancestor);
 
         // Parse $oldText.
         $oldHandler = new DomTreeBuilder();
-        $oldSax     = new SAXReader($oldHandler);
+        $oldSax     = new XMLReader($oldHandler);
         $oldSax->parse($oldText);
 
         // Parse $newText.
         $newHandler = new DomTreeBuilder();
-        $newSax     = new SAXReader($newHandler);
+        $newSax     = new XMLReader($newHandler);
         $newSax->parse($newText);
 
         // Diff.
@@ -80,7 +79,7 @@ class HtmlTestFixture
         $leftComparator     = new TextNodeComparator($oldHandler);
         $rightComparator    = new TextNodeComparator($newHandler);
 
-        $content = new ChangeText(55);
+        $content = new ChangeText();
         $handler = new DelegatingContentHandler($content);
         $output  = new HtmlSaxDiffOutput($handler, 'test');
         $differ  = new HtmlDiffer($output);

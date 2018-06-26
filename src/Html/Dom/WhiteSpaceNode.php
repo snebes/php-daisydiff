@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Dom;
 
@@ -25,7 +27,7 @@ class WhiteSpaceNode extends TextNode
     }
 
     /**
-     * @param  string $c
+     * @param string $c
      * @return bool
      */
     public static function isWhiteSpace(string $c): bool

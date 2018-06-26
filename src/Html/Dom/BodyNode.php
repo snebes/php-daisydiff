@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Dom;
 
@@ -16,7 +18,7 @@ class BodyNode extends TagNode
     }
 
     /**
-     * {@inheritdoc}
+     * @return Node
      */
     public function copyTree(): Node
     {
@@ -32,7 +34,8 @@ class BodyNode extends TagNode
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $id
+     * @return Node[]
      */
     public function getMinimalDeletedSet(int $id): array
     {

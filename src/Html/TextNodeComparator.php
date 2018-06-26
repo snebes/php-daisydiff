@@ -6,7 +6,7 @@ use ArrayIterator;
 use DaisyDiff\Html\Ancestor\AncestorComparator;
 use DaisyDiff\Html\Ancestor\AncestorComparatorResult;
 use DaisyDiff\Html\Dom\BodyNode;
-use DaisyDiff\Html\Dom\DomTreeInterface;
+use DaisyDiff\Html\Dom\DomTreeBuilder;
 use DaisyDiff\Html\Dom\Helper\LastCommonParentResult;
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Dom\TextNode;
@@ -47,12 +47,12 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
     private $whiteAfterLastChangedPart = false;
 
     /**
-     * @param DomTreeInterface $tree
+     * @param DomTreeBuilder $domTreeBuilder
      */
-    public function __construct(DomTreeInterface $tree)
+    public function __construct(DomTreeBuilder $domTreeBuilder)
     {
-        $this->textNodes = $tree->getTextNodes();
-        $this->bodyNode  = $tree->getBodyNode();
+        $this->textNodes = $domTreeBuilder->getTextNodes();
+        $this->bodyNode  = $domTreeBuilder->getBodyNode();
     }
 
     /**
