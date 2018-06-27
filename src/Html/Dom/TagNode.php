@@ -20,10 +20,10 @@ class TagNode extends Node implements IteratorAggregate
     protected $children = [];
 
     /** @var string */
-    private $qName;
+    protected $qName;
 
     /** @var array */
-    private $attributes = [];
+    protected $attributes = [];
 
     /**
      * @param TagNode|null $parent
@@ -34,7 +34,7 @@ class TagNode extends Node implements IteratorAggregate
     {
         parent::__construct($parent);
 
-        $this->qName      = $qName;
+        $this->qName = $qName;
 
         unset($attributes['style']);
         ksort($attributes);
@@ -87,10 +87,10 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function getIndexOf(Node $node): int
     {
-        foreach ($this->children as $key => $child) {
-            if ($child === $node) {
-                return $key;
-            }
+        $key = array_search($node, $this->children, true);
+
+        if (false !== $key) {
+            return $key;
         }
 
         return -1;
@@ -126,11 +126,7 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function getNumChildren(): int
     {
-        if (empty($this->children)) {
-            return 0;
-        } else {
-            return count($this->children);
-        }
+        return count($this->children);
     }
 
     /**
@@ -146,7 +142,7 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function getAttributes(): array
     {
-        return $this->attributes ?? [];
+        return $this->attributes;
     }
 
     /**
@@ -274,10 +270,10 @@ class TagNode extends Node implements IteratorAggregate
 
         foreach ($this->children as $child) {
             $childrenChildren = $child->getMinimalDeletedSet($id);
-            $nodes = array_merge($nodes, $childrenChildren);
+            $nodes            = array_merge($nodes, $childrenChildren);
 
             if (!$hasNotDeletedDescendant &&
-                !(1 == count($childrenChildren) && in_array($child, $childrenChildren, true))) {
+                !(1 === count($childrenChildren) && in_array($child, $childrenChildren, true))) {
                 // This child is not entirely deleted.
                 $hasNotDeletedDescendant = true;
             }
@@ -448,8 +444,8 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function expandWhiteSpace(): void
     {
-        $shift = 0;
-        $spaceAdded = false;
+        $shift               = 0;
+        $spaceAdded          = false;
         $numOriginalChildren = $this->getNumChildren();
 
         for ($i = 0; $i < $numOriginalChildren; $i++) {

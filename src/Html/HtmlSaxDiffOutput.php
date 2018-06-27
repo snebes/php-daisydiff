@@ -53,48 +53,42 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
                 if ($newStarted) {
                     $this->handler->endElement('ins');
                     $newStarted = false;
-                }
-                elseif ($changeStarted) {
+                } else if ($changeStarted) {
                     $this->handler->endElement('span');
                     $changeStarted = false;
-                }
-                elseif ($remStarted) {
+                } else if ($remStarted) {
                     $this->handler->endElement('del');
                     $remStarted = false;
-                }
-                elseif ($conflictStarted) {
+                } else if ($conflictStarted) {
                     $this->handler->endElement('span');
                     $conflictStarted = false;
                 }
 
                 $this->generateOutput($child);
-            }
-            elseif ($child instanceof TextNode) {
+            } else if ($child instanceof TextNode) {
                 $mod = $child->getModification();
 
-                if ($newStarted && ($mod->getOutputType() != ModificationType::ADDED || $mod->isFirstOfId())) {
+                if ($newStarted && ($mod->getOutputType() !== ModificationType::ADDED || $mod->isFirstOfId())) {
                     $this->handler->endElement('ins');
                     $newStarted = false;
-                }
-                elseif ($changeStarted && (
-                    $mod->getOutputType() != ModificationType::CHANGED ||
-                    $mod->getChanges() != $changeText ||
-                    $mod->isFirstOfId())) {
+                } else if ($changeStarted
+                    && (
+                        $mod->getOutputType() !== ModificationType::CHANGED
+                        || $mod->getChanges() !== $changeText
+                        || $mod->isFirstOfId())) {
                     $this->handler->endElement('span');
                     $changeStarted = false;
-                }
-                elseif ($remStarted && ($mod->getOutputType() != ModificationType::REMOVED || $mod->isFirstOfId())) {
+                } else if ($remStarted && ($mod->getOutputType() !== ModificationType::REMOVED || $mod->isFirstOfId())) {
                     $this->handler->endElement('del');
                     $remStarted = false;
-                }
-                elseif ($conflictStarted &&
-                        ($mod->getOutputType() != ModificationType::CONFLICT || $mod->isFirstOfId())) {
+                } else if ($conflictStarted &&
+                    ($mod->getOutputType() !== ModificationType::CONFLICT || $mod->isFirstOfId())) {
                     $this->handler->endElement('span');
                     $conflictStarted = false;
                 }
 
                 // No else because a removed part can just be closed and a new part can start.
-                if (!$newStarted && $mod->getOutputType() == ModificationType::ADDED) {
+                if (!$newStarted && $mod->getOutputType() === ModificationType::ADDED) {
                     $attrs = ['class' => 'diff-html-added'];
 
                     if ($mod->isFirstOfId()) {
@@ -105,8 +99,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
                     $this->handler->startElement('ins', $attrs);
 
                     $newStarted = true;
-                }
-                elseif (!$changeStarted && $mod->getOutputType() == ModificationType::CHANGED) {
+                } else if (!$changeStarted && $mod->getOutputType() == ModificationType::CHANGED) {
                     $attrs = ['class' => 'diff-html-changed'];
 
                     if ($mod->isFirstOfId()) {
@@ -117,9 +110,8 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
                     $this->handler->startElement('span', $attrs);
 
                     $changeStarted = true;
-                    $changeText = $mod->getChanges();
-                }
-                elseif (!$remStarted && $mod->getOutputType() == ModificationType::REMOVED) {
+                    $changeText    = $mod->getChanges();
+                } else if (!$remStarted && $mod->getOutputType() == ModificationType::REMOVED) {
                     $attrs = ['class' => 'diff-html-removed'];
 
                     if ($mod->isFirstOfId()) {
@@ -130,8 +122,7 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
                     $this->handler->startElement('del', $attrs);
 
                     $remStarted = true;
-                }
-                elseif (!$conflictStarted && $mod->getOutputType() == ModificationType::CONFLICT) {
+                } else if (!$conflictStarted && $mod->getOutputType() == ModificationType::CONFLICT) {
                     $attrs = ['class' => 'diff-html-conflict'];
 
                     if ($mod->isFirstOfId()) {
@@ -154,14 +145,11 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
 
         if ($newStarted) {
             $this->handler->endElement('ins');
-        }
-        elseif ($changeStarted) {
+        } else if ($changeStarted) {
             $this->handler->endElement('span');
-        }
-        elseif ($remStarted) {
+        } else if ($remStarted) {
             $this->handler->endElement('del');
-        }
-        elseif ($conflictStarted) {
+        } else if ($conflictStarted) {
             $this->handler->endElement('span');
         }
 
@@ -179,11 +167,9 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
 
         if ($imageNode->getModification()->getOutputType() == ModificationType::REMOVED) {
             $attrs['changeType'] = 'diff-removed-image';
-        }
-        elseif ($imageNode->getModification()->getOutputType() == ModificationType::ADDED) {
+        } else if ($imageNode->getModification()->getOutputType() == ModificationType::ADDED) {
             $attrs['changeType'] = 'diff-added-image';
-        }
-        elseif ($imageNode->getModification()->getOutputType() == ModificationType::CONFLICT) {
+        } else if ($imageNode->getModification()->getOutputType() == ModificationType::CONFLICT) {
             $attrs['changeType'] = 'diff-conflict-image';
         }
 

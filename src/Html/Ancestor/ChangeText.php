@@ -42,7 +42,7 @@ class ChangeText
     }
 
     /**
-     * @param  string $s
+     * @param string $s
      * @return string
      */
     private function clean(string $s): string

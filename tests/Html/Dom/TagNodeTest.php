@@ -213,6 +213,15 @@ class TagNodeTest extends TestCase
         $this->assertTrue($intermediate->isSameTag($compareIntermediate));
     }
 
+    public function testEqualsSameRoot()
+    {
+        $root = new TagNode(null, 'root');
+        $left = new TagNode($root, 'leaf');
+        $right = new TagNode($root, 'leaf');
+
+        $this->assertFalse($left->equals($right));
+    }
+
     public function testIsSimilarTag(): void
     {
         $refMethod = new ReflectionMethod(TagNode::class, 'isSimilarTag');
@@ -324,5 +333,25 @@ class TagNodeTest extends TestCase
 
         $this->assertTrue($root->isPre());
         $this->assertFalse($intermediate->isPre());
+    }
+
+    public function testSplitUntil1()
+    {
+        $root = new TagNode(null, 'ol');
+        $tag1 = new TagNode($root, 'li');
+        $tag2 = new TagNode($tag1, 'p');
+        $tag3 = new TagNode($tag1, 'p');
+        $tag4 = new TagNode($tag1, 'p');
+
+        $split = $root->splitUntil($root, $tag1, true);
+        $this->assertFalse($split);
+
+        $split = $tag1->splitUntil($root, $tag3, true);
+        $this->assertTrue($split);
+
+        $split = $tag1->splitUntil($root, $tag3, false);
+        $this->assertTrue($split);
+
+        $this->assertEquals(4, $root->getNumChildren());
     }
 }

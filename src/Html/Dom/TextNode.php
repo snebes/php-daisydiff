@@ -13,10 +13,10 @@ use DaisyDiff\Html\Modification\ModificationType;
 class TextNode extends Node
 {
     /** @var string */
-    private $s = '';
+    protected $s = '';
 
     /** @var Modification */
-    private $modification;
+    protected $modification;
 
     /**
      * @param TagNode $parent
@@ -117,14 +117,5 @@ class TextNode extends Node
     public function __toString(): string
     {
         return $this->getText();
-    }
-
-    /**
-     * @param TextNode $node
-     * @return string
-     */
-    public static function toDiffLine(TextNode $node): string
-    {
-        return str_replace("\n", ' ', $node->getText());
     }
 }

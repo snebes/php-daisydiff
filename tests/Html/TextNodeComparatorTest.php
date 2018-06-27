@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html;
 
@@ -7,6 +9,7 @@ use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Dom\TextNode;
 use DaisyDiff\Html\Modification\Modification;
 use DaisyDiff\Html\Modification\ModificationType;
+use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 
@@ -56,6 +59,19 @@ class TextNodeComparatorTest extends TestCase
         $this->assertEquals('<body>', strval($comp->getBodyNode()));
         $this->assertEquals('contents of p node', strval($comp->getTextNode(0)));
         $this->assertEquals(1, $comp->getRangeCount());
+    }
+
+    /**
+     * @expectedException OutOfBoundsException
+     */
+    public function testGetTextNode(): void
+    {
+        $tree = new DomTreeBuilder();
+        $comp = new TextNodeComparator($tree);
+        $this->getTextNodes($comp);
+
+        $this->assertTrue($comp->getTextNode(0) instanceof TextNode);
+        $comp->getTextNode(10);
     }
 
     public function testMarkAsNewExample1(): void

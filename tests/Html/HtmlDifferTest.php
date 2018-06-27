@@ -120,7 +120,6 @@ class HtmlDifferTest extends TestCase
     }
 
     // TODO: check this vs. java version.
-    /** @group test */
     public function testTwiceChangeTextWithAncestor(): void
     {
         $ancestor = '<p> This is a blue book</p>';

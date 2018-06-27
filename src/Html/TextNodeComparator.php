@@ -17,6 +17,7 @@ use DaisyDiff\Html\Modification\ModificationType;
 use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
 use IteratorAggregate;
 use RuntimeException;
+use OutOfBoundsException;
 
 /**
  * A comparator that generates a DOM tree of sorts from handling SAX events. Then it can be used to compute the
@@ -74,12 +75,18 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
     }
 
     /**
-     * @param int $i
-     * @return TextNode|null
+     * @param int $index
+     * @return TextNode
+     *
+     * @throws OutOfBoundsException
      */
-    public function getTextNode(int $i): ?TextNode
+    public function getTextNode(int $index): TextNode
     {
-        return $this->textNodes[$i] ?? null;
+        if ($index < 0 || $index > count($this->textNodes)) {
+            throw new OutOfBoundsException();
+        }
+
+        return $this->textNodes[$index];
     }
 
     /**
@@ -179,7 +186,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
 
         /** @var Modification[] */
         $nextLastModified = [];
-        $changes = null;
+        $changes          = null;
 
         while ($i < $rightEnd) {
             $acThis  = new AncestorComparator($this->getTextNode($i)->getParentTree());
@@ -196,16 +203,15 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
 
                     if (count($nextLastModified) > 0) {
                         $this->lastModified = $nextLastModified;
-                        $nextLastModified = [];
+                        $nextLastModified   = [];
                     }
-                }
-                elseif (null !== $result->getChanges() && $changes !== $result->getChanges()) {
+                } else if (null !== $result->getChanges() && $changes !== $result->getChanges()) {
                     $this->changedId++;
                     $mod->setFirstOfId(true);
 
                     if (count($nextLastModified) > 0) {
                         $this->lastModified = $nextLastModified;
-                        $nextLastModified = [];
+                        $nextLastModified   = [];
                     }
                 }
 
@@ -226,10 +232,9 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                 $mod->setId($this->changedId);
 
                 $this->getTextNode($i)->setModification($mod);
-                $changes = $result->getChanges();
+                $changes             = $result->getChanges();
                 $this->changedIdUsed = true;
-            }
-            elseif ($this->changedIdUsed) {
+            } else if ($this->changedIdUsed) {
                 $this->changedId++;
                 $this->changedIdUsed = false;
             }
@@ -313,14 +318,13 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
 
         if ($after < $this->getRangeCount()) {
             $orderResult = $this->getTextNode($before)->getLastCommonParent($this->getTextNode($after));
-            $check = $this->getTextNode($before)->getParentTree();
-            $check = array_reverse($check);
+            $check       = $this->getTextNode($before)->getParentTree();
+            $check       = array_reverse($check);
 
             foreach ($check as $curr) {
                 if ($curr === $orderResult->getLastCommonParent()) {
                     break;
-                }
-                elseif ($curr->isBlockLevel()) {
+                } else if ($curr->isBlockLevel()) {
                     $useAfter = true;
                     break;
                 }
@@ -333,8 +337,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                 foreach ($check as $curr) {
                     if ($curr === $orderResult->getLastCommonParent()) {
                         break;
-                    }
-                    elseif ($curr->isBlockLevel()) {
+                    } else if ($curr->isBlockLevel()) {
                         $useAfter = true;
                         break;
                     }
@@ -346,8 +349,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
 
         if ($useAfter) {
             $nextLeaf = $this->getTextNode($after);
-        }
-        elseif ($before < $this->getRangeCount()) {
+        } else if ($before < $this->getRangeCount()) {
             $nextLeaf = $this->getTextNode($before);
         }
 
@@ -381,7 +383,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                     // The difference is in the parent, so compare them. now THIS is tricky.
                     $distancePrev = $deletedNodes[0]->getParent()->getMatchRatio($prevResult->getLastCommonParent());
                     $distanceNext = $deletedNodes[count($deletedNodes) - 1]->getParent()
-                        ->getMatchRatio($nextResult->getLastCommonParent());
+                                                                           ->getMatchRatio($nextResult->getLastCommonParent());
 
                     if ($distancePrev <= $distanceNext) {
                         // Insert after the previous node.
@@ -403,12 +405,11 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                 $prevLeaf = (array_shift($deletedNodes))->copyTree();
                 $prevLeaf->setParent($prevResult->getLastCommonParent());
                 $prevResult->getLastCommonParent()->addChild($prevLeaf, $prevResult->getIndexInLastCommonParent() + 1);
-            }
-            elseif ($prevResult->getLastCommonParentDepth() < $nextResult->getLastCommonParentDepth()) {
+            } else if ($prevResult->getLastCommonParentDepth() < $nextResult->getLastCommonParentDepth()) {
                 // Inserting at the back.
                 if ($nextResult->isSplittingNeeded()) {
                     $splitOccurred = $nextLeaf->getParent()
-                        ->splitUntil($nextResult->getLastCommonParent(), $nextLeaf, false);
+                                              ->splitUntil($nextResult->getLastCommonParent(), $nextLeaf, false);
 
                     if ($splitOccurred) {
                         // The place where to insert is shifted one place to the right.
@@ -420,8 +421,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                 $nextLeaf = (array_pop($deletedNodes))->copyTree();
                 $nextLeaf->setParent($nextResult->getLastCommonParent());
                 $nextResult->getLastCommonParent()->addChild($nextLeaf, $nextResult->getIndexInLastCommonParent());
-            }
-            else {
+            } else {
                 throw new RuntimeException();
             }
         }
@@ -514,8 +514,8 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
     /**
      * @param Modification[] $lastModified
      */
-    public function setLastModified(?array $lastModified): void
+    public function setLastModified(array $lastModified): void
     {
-        $this->lastModified = $lastModified ?? [];
+        $this->lastModified = $lastModified;
     }
 }

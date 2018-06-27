@@ -122,8 +122,7 @@ abstract class LCS
             $lcs2 = $this->lcsRec($startx + $len, $topL1, $starty + $len, $topL2, $V, $snake);
 
             return $len + $lcs1 + $lcs2;
-        }
-        elseif ($d == 1) {
+        } else if ($d == 1) {
             // In this case the sequences differ by exactly 1 line. We have already saved all the lines after the
             // difference in the for loop above, now we need to save all the lines before the difference.
             $max = min($startx - $bottomL1, $starty - $bottomL2);
@@ -214,9 +213,8 @@ abstract class LCS
                 // Check to see if we can cut down the diagonal range.
                 if ($x >= $N && $endForward > $k - 1) {
                     $endForward = $k - 1;
-                }
-                elseif ($y >= $M) {
-                    $startForward = $k + 1;
+                } else if ($y >= $M) {
+                    $startForward      = $k + 1;
                     $valueToAddForward = 0;
                 }
             }

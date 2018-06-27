@@ -11,7 +11,7 @@ namespace DaisyDiff\Html\Dom;
 class ImageNode extends TextNode
 {
     /** @var array */
-    private $attributes = [];
+    protected $attributes = [];
 
     /**
      * @param TagNode $parent

@@ -13,9 +13,6 @@ use RuntimeException;
  */
 class DomTreeBuilderTest extends TestCase
 {
-    /**
-     * @group unit
-     */
     public function testStartDocument(): void
     {
         $tree = new DomTreeBuilder();
@@ -31,7 +28,6 @@ class DomTreeBuilderTest extends TestCase
 
     /**
      * @expectedException RuntimeException
-     * @group unit
      */
     public function testStartDocumentException(): void
     {
@@ -47,9 +43,6 @@ class DomTreeBuilderTest extends TestCase
         }
     }
 
-    /**
-     * @group unit
-     */
     public function testEndDocument(): void
     {
         $tree = new DomTreeBuilder();
@@ -66,7 +59,6 @@ class DomTreeBuilderTest extends TestCase
 
     /**
      * @expectedException RuntimeException
-     * @group unit
      */
     public function testEndDocumentException1(): void
     {
@@ -82,7 +74,6 @@ class DomTreeBuilderTest extends TestCase
 
     /**
      * @expectedException RuntimeException
-     * @group unit
      */
     public function testEndDocumentException2(): void
     {
@@ -98,9 +89,6 @@ class DomTreeBuilderTest extends TestCase
         }
     }
 
-    /**
-     * @group unit
-     */
     public function testUnitStartElement1(): void
     {
         $tree = new DomTreeBuilder();
@@ -122,9 +110,6 @@ class DomTreeBuilderTest extends TestCase
         } catch (\ReflectionException $e) {}
     }
 
-    /**
-     * @group unit
-     */
     public function testUnitStartElement2(): void
     {
         $tree = new DomTreeBuilder();
@@ -153,9 +138,6 @@ class DomTreeBuilderTest extends TestCase
         } catch (\ReflectionException $e) {}
     }
 
-    /**
-     * @group unit
-     */
     public function testUnitStartElement3(): void
     {
         $tree = new DomTreeBuilder();
@@ -174,9 +156,6 @@ class DomTreeBuilderTest extends TestCase
         } catch (\ReflectionException $e) {}
     }
 
-    /**
-     * @group unit
-     */
     public function testUnitStartElement4(): void
     {
         $tree = new DomTreeBuilder();
@@ -245,7 +224,6 @@ class DomTreeBuilderTest extends TestCase
 
     /**
      * @expectedException RuntimeException
-     * @group unit
      */
     public function testStartElementExample5(): void
     {
@@ -265,7 +243,6 @@ class DomTreeBuilderTest extends TestCase
 
     /**
      * @expectedException RuntimeException
-     * @group unit
      */
     public function testStartElementExample6(): void
     {
@@ -309,9 +286,6 @@ class DomTreeBuilderTest extends TestCase
         $this->assertEquals('<pre class="diff">', strval($tree->getBodyNode()->getChild(0)));
     }
 
-    /**
-     * @group unit
-     */
     public function testUnitEndElement1(): void
     {
         $tree = new DomTreeBuilder();
@@ -329,9 +303,6 @@ class DomTreeBuilderTest extends TestCase
         }
     }
 
-    /**
-     * @group unit
-     */
     public function testUnitEndElement2(): void
     {
         $tree = new DomTreeBuilder();
@@ -350,9 +321,6 @@ class DomTreeBuilderTest extends TestCase
         }
     }
 
-    /**
-     * @group unit
-     */
     public function testUnitEndElement3(): void
     {
         $tree = new DomTreeBuilder();
@@ -418,7 +386,6 @@ class DomTreeBuilderTest extends TestCase
 
     /**
      * @expectedException RuntimeException
-     * @group unit
      */
     public function testEndElementExample4(): void
     {
@@ -436,7 +403,6 @@ class DomTreeBuilderTest extends TestCase
 
     /**
      * @expectedException RuntimeException
-     * @group unit
      */
     public function testEndElementExample5(): void
     {
@@ -513,9 +479,6 @@ class DomTreeBuilderTest extends TestCase
         $this->assertEquals('<p class="diff">', strval($tree->getBodyNode()->getChild(0)));
     }
 
-    /**
-     * @group unit
-     */
     public function testUnitCharacters1(): void
     {
         $chars = 'a.a,a"a\'a(a)a?a:a;a!a{a}a-a+a*a=a_a[a]a|';
@@ -546,9 +509,6 @@ class DomTreeBuilderTest extends TestCase
         }
     }
 
-    /**
-     * @group unit
-     */
     public function testUnitCharacters2(): void
     {
         $chars = 'a a.a,a"a\'a(a)a?a:a;a!a{a}a-a+a*a=a_a[a]a|';
@@ -586,9 +546,6 @@ class DomTreeBuilderTest extends TestCase
         }
     }
 
-    /**
-     * @group unit
-     */
     public function testUnitCharacters3(): void
     {
         $chars = 'a/a.a!a,a;a?a=a\'a"a[a]a{a}a(a)a&a|a\\a-a_a+a*a:';
@@ -619,9 +576,6 @@ class DomTreeBuilderTest extends TestCase
         }
     }
 
-    /**
-     * @group unit
-     */
     public function testUnitCharacters4(): void
     {
         $chars = "a a\na\ra\ta";
@@ -658,7 +612,6 @@ class DomTreeBuilderTest extends TestCase
 
     /**
      * @expectedException RuntimeException
-     * @group unit
      */
     public function testCharactersException(): void
     {
@@ -688,9 +641,6 @@ class DomTreeBuilderTest extends TestCase
         }
     }
 
-    /**
-     * @group unit
-     */
     public function testAddSeparatingNode(): void
     {
         $tree = new DomTreeBuilder();
