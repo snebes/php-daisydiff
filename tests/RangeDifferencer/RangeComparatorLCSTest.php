@@ -1,11 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\RangeDifferencer;
 
-use DaisyDiff\RangeDifferencer\Core\LCSSettings;
 use DaisyDiff\Tag\TagComparator;
 use PHPUnit\Framework\TestCase;
-use ReflectionException;
 use ReflectionMethod;
 use ReflectionProperty;
 
@@ -19,11 +19,10 @@ class RangeComparatorLCSTest extends TestCase
         $oldText = '<p> This is a blue book</p>';
         $newText = '<p> This is a <b>big</b> blue book</p>';
 
-        $left     = new TagComparator($oldText);
-        $right    = new TagComparator($newText);
-        $settings = new LCSSettings();
+        $left  = new TagComparator($oldText);
+        $right = new TagComparator($newText);
 
-        $rangeDifference = RangeComparatorLCS::findDifferences($left, $right, $settings);
+        $rangeDifference = RangeComparatorLCS::findDifferences($left, $right);
         $this->assertContains('Left: (8, 0) Right: (8, 4)', strval($rangeDifference[0]));
     }
 
@@ -92,18 +91,16 @@ class RangeComparatorLCSTest extends TestCase
         $right = new TagComparator($newText);
         $comp  = new RangeComparatorLCS($left, $right);
 
-        try {
-            $refMethod = new ReflectionMethod($comp, 'initializeLcs');
-            $refMethod->setAccessible(true);
-            $refMethod->invoke($comp, 20);
+        $refMethod = new ReflectionMethod($comp, 'initializeLcs');
+        $refMethod->setAccessible(true);
+        $refMethod->invoke($comp, 20);
 
-            $refProp = new ReflectionProperty($comp, 'lcs');
-            $refProp->setAccessible(true);
-            $lcs = $refProp->getValue($comp);
+        $refProp = new ReflectionProperty($comp, 'lcs');
+        $refProp->setAccessible(true);
+        $lcs = $refProp->getValue($comp);
 
-            $this->assertEquals(2, count($lcs));
-            $this->assertEquals(20, count($lcs[0]));
-        } catch (ReflectionException $e) {}
+        $this->assertEquals(2, count($lcs));
+        $this->assertEquals(20, count($lcs[0]));
     }
 
     public function testInitializeLCSZero(): void
@@ -115,18 +112,16 @@ class RangeComparatorLCSTest extends TestCase
         $right = new TagComparator($newText);
         $comp  = new RangeComparatorLCS($left, $right);
 
-        try {
-            $refMethod = new ReflectionMethod($comp, 'initializeLcs');
-            $refMethod->setAccessible(true);
-            $refMethod->invoke($comp, 0);
+        $refMethod = new ReflectionMethod($comp, 'initializeLcs');
+        $refMethod->setAccessible(true);
+        $refMethod->invoke($comp, 0);
 
-            $refProp = new ReflectionProperty($comp, 'lcs');
-            $refProp->setAccessible(true);
-            $lcs = $refProp->getValue($comp);
+        $refProp = new ReflectionProperty($comp, 'lcs');
+        $refProp->setAccessible(true);
+        $lcs = $refProp->getValue($comp);
 
-            $this->assertEquals(2, count($lcs));
-            $this->assertEquals(0, count($lcs[0]));
-        } catch (ReflectionException $e) {}
+        $this->assertEquals(2, count($lcs));
+        $this->assertEquals(0, count($lcs[0]));
     }
 
     public function testIsRangeEqual(): void
@@ -138,13 +133,11 @@ class RangeComparatorLCSTest extends TestCase
         $right = new TagComparator($newText);
         $comp  = new RangeComparatorLCS($left, $right);
 
-        try {
-            $refMethod = new ReflectionMethod($comp, 'isRangeEqual');
-            $refMethod->setAccessible(true);
+        $refMethod = new ReflectionMethod($comp, 'isRangeEqual');
+        $refMethod->setAccessible(true);
 
-            $this->assertTrue($refMethod->invoke($comp, 0, 0));
-            $this->assertFalse($refMethod->invoke($comp, 0, 3));
-        } catch (ReflectionException $e) {}
+        $this->assertTrue($refMethod->invoke($comp, 0, 0));
+        $this->assertFalse($refMethod->invoke($comp, 0, 3));
     }
 
     public function testGetDifferencesExample1(): void

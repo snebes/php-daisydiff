@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace RangeDifferencer;
 
@@ -67,7 +69,7 @@ class DifferencesIteratorTest extends TestCase
         $newComp = new TagComparator($newText);
 
         $iterator->next();
-        $diffs = RangeDifferencer::findDifferences($oldComp, $newComp);
+        $diffs    = RangeDifferencer::findDifferences($oldComp, $newComp);
         $iterator = new DifferencesIterator($diffs);
         $iterator->next();
 

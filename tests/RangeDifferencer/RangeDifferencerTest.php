@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DaisyDiff\RangeDifferencer;
 
-use DaisyDiff\RangeDifferencer\Core\LCSSettings;
 use DaisyDiff\Tag\TagComparator;
 use PHPUnit\Framework\TestCase;
 
@@ -34,8 +35,7 @@ class RangeDifferencerTest extends TestCase
         $left  = new TagComparator($oldText);
         $right = new TagComparator($newText);
 
-        $settings = new LCSSettings();
-        $diff = RangeDifferencer::findDifferences($left, $right, $settings);
+        $diff = RangeDifferencer::findDifferences($left, $right);
 
         $this->assertEquals(3, count($diff));
         $this->assertContains('Left: (8, 1) Right: (8, 3)', strval($diff[0]));
@@ -50,9 +50,7 @@ class RangeDifferencerTest extends TestCase
         $left  = new TagComparator($oldText);
         $right = new TagComparator($newText);
 
-        $settings = new LCSSettings();
-        $settings->setUseGreedyMethod(true);
-        $diff = RangeDifferencer::findDifferences($left, $right, $settings);
+        $diff = RangeDifferencer::findDifferences($left, $right);
 
         $this->assertEquals(2, count($diff));
         $this->assertContains('Left: (8, 1) Right: (8, 5)', strval($diff[0]));
@@ -69,10 +67,7 @@ class RangeDifferencerTest extends TestCase
         $right = new TagComparator($newText);
         $ancestorTag = new TagComparator($ancestor);
 
-        $settings = new LCSSettings();
-        $settings->setUseGreedyMethod(true);
-
-        $diff = RangeDifferencer::findDifferences3($ancestorTag, $left, $right, $settings);
+        $diff = RangeDifferencer::findDifferences3($ancestorTag, $left, $right);
 
         $this->assertEquals(2, count($diff));
         $this->assertContains('Left: (8, 2) Right: (8, 6) Ancestor: (8, 0)', strval($diff[0]));
@@ -87,9 +82,7 @@ class RangeDifferencerTest extends TestCase
         $left  = new TagComparator($oldText);
         $right = new TagComparator($newText);
 
-        $settings = new LCSSettings();
-        $settings->setUseGreedyMethod(true);
-        $diff = RangeDifferencer::findDifferences3(null, $left, $right, $settings);
+        $diff = RangeDifferencer::findDifferences3(null, $left, $right);
 
         $this->assertEquals(0, count($diff));
     }
@@ -102,10 +95,7 @@ class RangeDifferencerTest extends TestCase
         $left  = new TagComparator($oldText);
         $right = new TagComparator($newText);
 
-        $settings = new LCSSettings();
-        $settings->setUseGreedyMethod(true);
-
-        $diff = RangeDifferencer::findRanges($left, $right, $settings);
+        $diff = RangeDifferencer::findRanges($left, $right);
         $this->assertEquals(5, count($diff));
         $this->assertContains('Left: (0, 8) Right: (0, 8)', strval($diff[0]));
         $this->assertContains('Left: (8, 1) Right: (8, 5)', strval($diff[1]));
@@ -119,10 +109,7 @@ class RangeDifferencerTest extends TestCase
         $left  = new TagComparator($oldText);
         $right = new TagComparator($newText);
 
-        $settings = new LCSSettings();
-        $settings->setUseGreedyMethod(true);
-
-        $diff = RangeDifferencer::findRanges($left, $right, $settings);
+        $diff = RangeDifferencer::findRanges($left, $right);
         $this->assertEquals(5, count($diff));
         $this->assertContains('Left: (0, 8) Right: (0, 8)', strval($diff[0]));
         $this->assertContains('Left: (8, 1) Right: (8, 5)', strval($diff[1]));
@@ -138,10 +125,7 @@ class RangeDifferencerTest extends TestCase
         $right = new TagComparator($newText);
         $ancestorTag = new TagComparator($ancestor);
 
-        $settings = new LCSSettings();
-        $settings->setUseGreedyMethod(true);
-
-        $diff = RangeDifferencer::findRanges3($ancestorTag, $left, $right, $settings);
+        $diff = RangeDifferencer::findRanges3($ancestorTag, $left, $right);
         $this->assertEquals(5, count($diff));
         $this->assertContains('Left: (0, 8) Right: (0, 8) Ancestor: (0, 8)', strval($diff[0]));
         $this->assertContains('Left: (8, 2) Right: (8, 6) Ancestor: (8, 0)', strval($diff[1]));
@@ -155,10 +139,7 @@ class RangeDifferencerTest extends TestCase
         $left  = new TagComparator($oldText);
         $right = new TagComparator($newText);
 
-        $settings = new LCSSettings();
-        $settings->setUseGreedyMethod(true);
-
-        $diff = RangeDifferencer::findRanges3(null, $left, $right, $settings);
+        $diff = RangeDifferencer::findRanges3(null, $left, $right);
         $this->assertEquals(5, count($diff));
         $this->assertContains('Left: (0, 8) Right: (0, 8)', strval($diff[0]));
         $this->assertContains('Left: (8, 1) Right: (8, 5)', strval($diff[1]));

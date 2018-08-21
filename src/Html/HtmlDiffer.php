@@ -6,7 +6,6 @@ namespace DaisyDiff\Html;
 
 use DaisyDiff\Html\Modification\ModificationType;
 use DaisyDiff\Output\DiffOutputInterface;
-use DaisyDiff\RangeDifferencer\Core\LCSSettings;
 use DaisyDiff\RangeDifferencer\RangeDifference;
 use DaisyDiff\RangeDifferencer\RangeDifferencer;
 use OutOfBoundsException;
@@ -40,12 +39,8 @@ class HtmlDiffer
         TextNodeComparator $leftComparator,
         TextNodeComparator $rightComparator
     ): void {
-        $settings = new LCSSettings();
-        $settings->setUseGreedyMethod(false);
-
         /** @var RangeDifference[] $differences */
-        $differences = RangeDifferencer::findDifferences3(
-            $ancestorComparator, $leftComparator, $rightComparator, $settings);
+        $differences = RangeDifferencer::findDifferences3($ancestorComparator, $leftComparator, $rightComparator);
         $pDifferences = $this->preProcess($differences);
 
         $currentIndexAncestor = 0;
@@ -127,12 +122,8 @@ class HtmlDiffer
      */
     public function diff(TextNodeComparator $leftComparator, TextNodeComparator $rightComparator): void
     {
-        // Configure LCS.
-        $settings = new LCSSettings();
-        $settings->setUseGreedyMethod(true);
-
         /** @var RangeDifference[] $differences */
-        $differences = RangeDifferencer::findDifferences($leftComparator, $rightComparator, $settings);
+        $differences = RangeDifferencer::findDifferences($leftComparator, $rightComparator);
 
         /** @var RangeDifference[] */
         $pDifferences = $this->preProcess($differences);
