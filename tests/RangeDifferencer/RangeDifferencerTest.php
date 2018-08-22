@@ -138,7 +138,7 @@ class RangeDifferencerTest extends TestCase
 
         $left  = new TagComparator($oldText);
         $right = new TagComparator($newText);
-
+r
         $diff = RangeDifferencer::findRanges3(null, $left, $right);
         $this->assertEquals(5, count($diff));
         $this->assertContains('Left: (0, 8) Right: (0, 8)', strval($diff[0]));
