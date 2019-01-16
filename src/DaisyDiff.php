@@ -65,8 +65,8 @@ class DaisyDiff
     }
 
     /**
-     * @param  string $oldText
-     * @param  string $newText
+     * @param string $oldText
+     * @param string $newText
      * @return string
      * @throws Exception
      */

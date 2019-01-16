@@ -36,7 +36,7 @@ abstract class LCS
      * After this method is called, the longest common subsequence is available by calling getResult() where result[0]
      * is composed of entries from l1 and result[1] is composed of entries from l2
      *
-     * @param  LCSSettings $settings
+     * @param LCSSettings $settings
      * @return void
      */
     public function longestCommonSubsequence(LCSSettings $settings): void
@@ -89,12 +89,12 @@ abstract class LCS
      * The recursive helper function for Myers' LCS. Computes the LCS of l1[bottoml1 .. topl1] and l2[bottoml2 .. topl2]
      * fills in the appropriate location in lcs and returns the length.
      *
-     * @param  int     $bottomL1
-     * @param  int     $topL1
-     * @param  int     $bottomL2
-     * @param  int     $topL2
-     * @param  int[][] $V
-     * @param  int[]   $snake
+     * @param int     $bottomL1
+     * @param int     $topL1
+     * @param int     $bottomL2
+     * @param int     $topL2
+     * @param int[][] $V
+     * @param int[]   $snake
      * @return int
      */
     protected function lcsRec(int $bottomL1, int $topL1, int $bottomL2, int $topL2, array &$V, array &$snake): int
@@ -142,12 +142,12 @@ abstract class LCS
      * The x, y coodrdinates of the start of the middle snake are saved in snake[0], snake[1] respectively and the
      * length of the snake is saved in s[2].
      *
-     * @param  int     $bottomL1
-     * @param  int     $topL1
-     * @param  int     $bottomL2
-     * @param  int     $topL2
-     * @param  int[][] $V
-     * @param  int[]   $snake
+     * @param int     $bottomL1
+     * @param int     $topL1
+     * @param int     $bottomL2
+     * @param int     $topL2
+     * @param int[][] $V
+     * @param int[]   $snake
      * @return int
      */
     protected function findMiddleSnake(
@@ -277,10 +277,10 @@ abstract class LCS
     }
 
     /**
-     * @param  int     $M
-     * @param  int     $N
-     * @param  int     $limit
-     * @param  int[][] $V
+     * @param int     $M
+     * @param int     $N
+     * @param int     $limit
+     * @param int[][] $V
      * @return int[]
      */
     protected function findMostProgress(int $M, int $N, int $limit, array &$V): array
@@ -377,21 +377,21 @@ abstract class LCS
     abstract protected function getLength2(): int;
 
     /**
-     * @param  int $i1
-     * @param  int $i2
+     * @param int $i1
+     * @param int $i2
      * @return bool
      */
     abstract protected function isRangeEqual(int $i1, int $i2): bool;
 
     /**
-     * @param  int $sl1
-     * @param  int $sl2
+     * @param int $sl1
+     * @param int $sl2
      * @return void
      */
     abstract protected function setLcs(int $sl1, int $sl2): void;
 
     /**
-     * @param  int $lcsLength
+     * @param int $lcsLength
      * @return void
      */
     abstract protected function initializeLcs(int $lcsLength): void;

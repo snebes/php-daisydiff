@@ -31,7 +31,7 @@ final class HtmlLayoutChange
     }
 
     /**
-     * @param  string|null $value
+     * @param string|null $value
      * @return self
      */
     public function setType(?string $value): self
@@ -50,7 +50,7 @@ final class HtmlLayoutChange
     }
 
     /**
-     * @param  string|null $value
+     * @param string|null $value
      * @return self
      */
     public function setOpeningTag(?string $value): self
@@ -69,7 +69,7 @@ final class HtmlLayoutChange
     }
 
     /**
-     * @param  string|null $value
+     * @param string|null $value
      * @return self
      */
     public function setEndingTag(?string $value): self

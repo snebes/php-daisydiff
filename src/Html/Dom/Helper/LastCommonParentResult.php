@@ -32,7 +32,7 @@ class LastCommonParentResult
     }
 
     /**
-     * @param  TagNode $value
+     * @param TagNode $value
      * @return void
      */
     public function setLastCommonParent(?TagNode $value): void
@@ -65,7 +65,7 @@ class LastCommonParentResult
     }
 
     /**
-     * @param  int $value
+     * @param int $value
      * @return void
      */
     public function setLastCommonParentDepth(int $value): void
@@ -82,7 +82,7 @@ class LastCommonParentResult
     }
 
     /**
-     * @param  int $value
+     * @param int $value
      * @return void
      */
     public function setIndexInLastCommonParent(int $value): void

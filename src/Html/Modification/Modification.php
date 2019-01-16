@@ -106,7 +106,7 @@ class Modification
     }
 
     /**
-     * @param  Modification $mod
+     * @param Modification $mod
      */
     public function setNext(?Modification $mod): void
     {
@@ -154,7 +154,7 @@ class Modification
     }
 
     /**
-     * @param  string[] $htmlLayoutChanges
+     * @param string[] $htmlLayoutChanges
      */
     public function setHtmlLayoutChanges(array $htmlLayoutChanges): void
     {

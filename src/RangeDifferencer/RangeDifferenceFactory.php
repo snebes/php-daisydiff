@@ -10,13 +10,13 @@ declare(strict_types=1);
 //class RangeDifferenceFactory
 //{
 //    /**
-//     * @param  int $kind
-//     * @param  int $rightStart
-//     * @param  int $rightLength
-//     * @param  int $leftStart
-//     * @param  int $leftLength
-//     * @param  int $ancestorStart
-//     * @param  int $ancestorLength
+//     * @param int $kind
+//     * @param int $rightStart
+//     * @param int $rightLength
+//     * @param int $leftStart
+//     * @param int $leftLength
+//     * @param int $ancestorStart
+//     * @param int $ancestorLength
 //     * @return RangeDifference
 //     */
 //    public static function createRangeDifference(

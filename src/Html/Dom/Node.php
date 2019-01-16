@@ -104,7 +104,7 @@ abstract class Node
      * Descent the ancestors list for both nodes stopping either at the first no-match case or when either of the lists
      * is exhausted.
      *
-     * @param  Node|null $other
+     * @param Node|null $other
      * @return LastCommonParentResult
      */
     public function getLastCommonParent(?Node $other): LastCommonParentResult

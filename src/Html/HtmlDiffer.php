@@ -29,9 +29,9 @@ class HtmlDiffer
     }
 
     /**
-     * @param  TextNodeComparator $ancestorComparator
-     * @param  TextNodeComparator $leftComparator
-     * @param  TextNodeComparator $rightComparator
+     * @param TextNodeComparator $ancestorComparator
+     * @param TextNodeComparator $leftComparator
+     * @param TextNodeComparator $rightComparator
      *
      * @throws
      */
@@ -120,8 +120,8 @@ class HtmlDiffer
     /**
      * Compares two Node Trees.
      *
-     * @param  TextNodeComparator $leftComparator
-     * @param  TextNodeComparator $rightComparator
+     * @param TextNodeComparator $leftComparator
+     * @param TextNodeComparator $rightComparator
      *
      * @throws
      */
@@ -172,7 +172,7 @@ class HtmlDiffer
     }
 
     /**
-     * @param  RangeDifference[] $differences
+     * @param RangeDifference[] $differences
      * @return RangeDifference[]
      */
     private function preProcess(array $differences): array

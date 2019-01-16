@@ -31,13 +31,13 @@ interface AtomInterface
     public function getFullText(): string;
 
     /**
-     * @param  string $s
+     * @param string $s
      * @return bool
      */
     public function isValidAtom(string $s): bool;
 
     /**
-     * @param  AtomInterface $other
+     * @param AtomInterface $other
      * @return bool
      */
     public function equalsIdentifier(AtomInterface $other): bool;

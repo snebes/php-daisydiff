@@ -13,7 +13,7 @@ class ChangeText
     private $text = '';
 
     /**
-     * @param  string $s
+     * @param string $s
      * @return void
      */
     public function addText(string $s): void
@@ -25,7 +25,7 @@ class ChangeText
     }
 
     /**
-     * @param  string $s
+     * @param string $s
      * @return void
      */
     public function addHtml(string $s): void

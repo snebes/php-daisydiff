@@ -28,9 +28,9 @@ interface RangeComparatorInterface
      * Returns whether the comparable entity given by the first index matches an entity specified by the other
      * RangeComparatorInterface and index.
      *
-     * @param  int                      $thisIndex
-     * @param  RangeComparatorInterface $other
-     * @param  int                      $otherIndex
+     * @param int                      $thisIndex
+     * @param RangeComparatorInterface $other
+     * @param int                      $otherIndex
      * @return bool
      */
     public function rangesEqual(int $thisIndex, RangeComparatorInterface $other, int $otherIndex): bool;
@@ -38,9 +38,9 @@ interface RangeComparatorInterface
     /**
      * Returns whether a comparison should be skipped because it would be too costly (or lengthy).
      *
-     * @param  int                      $length
-     * @param  int                      $maxLength
-     * @param  RangeComparatorInterface $other
+     * @param int                      $length
+     * @param int                      $maxLength
+     * @param RangeComparatorInterface $other
      * @return bool
      */
     public function skipRangeComparison(int $length, int $maxLength, RangeComparatorInterface $other): bool;

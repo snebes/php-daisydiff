@@ -29,7 +29,7 @@ final class AncestorComparatorResult
     }
 
     /**
-     * @param  bool $value
+     * @param bool $value
      * @return self
      */
     public function setChanged(bool $value): self
@@ -48,7 +48,7 @@ final class AncestorComparatorResult
     }
 
     /**
-     * @param  string|null $value
+     * @param string|null $value
      * @return self
      */
     public function setChanges(?string $value): self
@@ -67,7 +67,7 @@ final class AncestorComparatorResult
     }
 
     /**
-     * @param  HtmlLayoutChange[] $value
+     * @param HtmlLayoutChange[] $value
      * @return self
      */
     public function setHtmlLayoutChanges(?array $value): self

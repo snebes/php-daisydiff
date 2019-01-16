@@ -86,8 +86,8 @@ class DifferencesIterator
     }
 
     /**
-     * @param  DifferencesIterator $right
-     * @param  DifferencesIterator $left
+     * @param DifferencesIterator $right
+     * @param DifferencesIterator $left
      * @return DifferencesIterator
      */
     public function other(DifferencesIterator $right, DifferencesIterator $left): DifferencesIterator

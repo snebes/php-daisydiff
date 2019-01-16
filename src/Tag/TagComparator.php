@@ -18,7 +18,7 @@ class TagComparator implements AtomSplitterInterface
     private $atoms = [];
 
     /**
-     * @param  string $s
+     * @param string $s
      */
     public function __construct(string $s)
     {
@@ -34,7 +34,7 @@ class TagComparator implements AtomSplitterInterface
     }
 
     /**
-     * @param  string $s
+     * @param string $s
      * @return void
      */
     private function generateAtoms(string $s): void
@@ -78,8 +78,8 @@ class TagComparator implements AtomSplitterInterface
     }
 
     /**
-     * @param  int $startAtom
-     * @param  int $endAtom
+     * @param int $startAtom
+     * @param int $endAtom
      * @return string
      */
     public function substring(int $startAtom, ?int $endAtom = null): string
@@ -102,7 +102,7 @@ class TagComparator implements AtomSplitterInterface
     }
 
     /**
-     * @param  int $i
+     * @param int $i
      * @return AtomInterface
      */
     public function getAtom(int $i): AtomInterface
@@ -123,9 +123,9 @@ class TagComparator implements AtomSplitterInterface
     }
 
     /**
-     * @param  int                      $thisIndex
-     * @param  RangeComparatorInterface $other
-     * @param  int                      $otherIndex
+     * @param int                      $thisIndex
+     * @param RangeComparatorInterface $other
+     * @param int                      $otherIndex
      * @return bool
      */
     public function rangesEqual(int $thisIndex, RangeComparatorInterface $other, int $otherIndex): bool
@@ -138,9 +138,9 @@ class TagComparator implements AtomSplitterInterface
     }
 
     /**
-     * @param  int                      $length
-     * @param  int                      $maxLength
-     * @param  RangeComparatorInterface $other
+     * @param int                      $length
+     * @param int                      $maxLength
+     * @param RangeComparatorInterface $other
      * @return bool
      */
     public function skipRangeComparison(int $length, int $maxLength, RangeComparatorInterface $other): bool

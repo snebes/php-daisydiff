@@ -12,8 +12,8 @@ class Xml
     /**
      * Open XML element.
      *
-     * @param  string $qName
-     * @param  array  $attributes
+     * @param string $qName
+     * @param array  $attributes
      * @return string
      */
     public static function openElement(string $qName, array $attributes = []): string
@@ -32,7 +32,7 @@ class Xml
     /**
      * Shortcut to close an XML element.
      *
-     * @param  string $qName
+     * @param string $qName
      * @return string
      */
     public static function closeElement(string $qName): string

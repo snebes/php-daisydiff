@@ -25,7 +25,7 @@ declare(strict_types=1);
 //    /**
 //     * Compares this TextLine to l and returns true if they have the same text.
 //     *
-//     * @param  TextLine $l
+//     * @param TextLine $l
 //     * @return bool
 //     */
 //    public function sameText(TextLine $l): bool
