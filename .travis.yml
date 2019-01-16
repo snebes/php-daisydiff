@@ -10,4 +10,4 @@ install:
 script:
   - phpunit --configuration phpunit.xml.dist --coverage-text --exclude-group incomplete
 notifications:
-  email: snebes+travis@gmail.com
+  email: 'snebes+travis@gmail.com'
