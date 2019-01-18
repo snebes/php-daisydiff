@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace DaisyDiff;
@@ -15,25 +22,15 @@ use DaisyDiff\Tag\TagDiffer;
 use DaisyDiff\Tag\TagSaxDiffOutput;
 use DaisyDiff\Xml\XMLReader;
 use Exception;
-use Psr\Log\LoggerInterface;
 
 /**
- * DaisyDiff
+ * Daisy Diff is a library that diffs (compares) HTML.
  */
 class DaisyDiff
 {
-    /** @var LoggerInterface */
-    private $logger;
-
     /**
-     * @param LoggerInterface|null $logger
-     */
-    public function __construct(?LoggerInterface $logger = null)
-    {
-        $this->logger = $logger;
-    }
-
-    /**
+     * Diffs two HTML strings, returning the result.
+     *
      * @param string $oldSource
      * @param string $newSource
      * @return string
@@ -43,28 +40,30 @@ class DaisyDiff
     {
         // Parse $old XML.
         $oldHandler = new DomTreeBuilder();
-        $reader1    = new XMLReader($oldHandler);
+        $reader1 = new XMLReader($oldHandler);
         $reader1->parse($oldSource);
 
         // Parse $new XML.
         $newHandler = new DomTreeBuilder();
-        $reader2    = new XMLReader($newHandler);
+        $reader2 = new XMLReader($newHandler);
         $reader2->parse($newSource);
 
         // Comparators.
-        $leftComparator  = new TextNodeComparator($oldHandler);
+        $leftComparator = new TextNodeComparator($oldHandler);
         $rightComparator = new TextNodeComparator($newHandler);
 
         $content = new ChangeText();
         $handler = new DelegatingContentHandler($content);
-        $output  = new HtmlSaxDiffOutput($handler, 'diff');
-        $differ  = new HtmlDiffer($output);
+        $output = new HtmlSaxDiffOutput($handler, 'diff');
+        $differ = new HtmlDiffer($output);
         $differ->diff($leftComparator, $rightComparator);
 
         return strval($content);
     }
 
     /**
+     * Diffs two HTML strings for word as source, returning the result.
+     *
      * @param string $oldText
      * @param string $newText
      * @return string
@@ -77,8 +76,8 @@ class DaisyDiff
 
         $content = new ChangeText();
         $handler = new DelegatingContentHandler($content);
-        $output  = new TagSaxDiffOutput($handler);
-        $differ  = new TagDiffer($output);
+        $output = new TagSaxDiffOutput($handler);
+        $differ = new TagDiffer($output);
         $differ->diff($oldComp, $newComp);
 
         return strval($content);
