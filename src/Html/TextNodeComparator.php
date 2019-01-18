@@ -14,10 +14,10 @@ use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Dom\TextNode;
 use DaisyDiff\Html\Modification\Modification;
 use DaisyDiff\Html\Modification\ModificationType;
-use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
 use IteratorAggregate;
 use RuntimeException;
 use OutOfBoundsException;
+use SN\RangeDifferencer\RangeComparatorInterface;
 
 /**
  * A comparator that generates a DOM tree of sorts from handling SAX events. Then it can be used to compute the

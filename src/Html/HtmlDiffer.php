@@ -7,9 +7,9 @@ namespace DaisyDiff\Html;
 use DaisyDiff\Html\Modification\ModificationType;
 use DaisyDiff\Output\DiffOutputInterface;
 use DaisyDiff\RangeDifferencer\Core\LCSSettings;
-use DaisyDiff\RangeDifferencer\RangeDifference;
-use DaisyDiff\RangeDifferencer\RangeDifferencer;
 use OutOfBoundsException;
+use SN\RangeDifferencer\RangeDifference;
+use SN\RangeDifferencer\RangeDifferencer;
 
 /**
  * Takes TextNodeComparator instances, computes the difference between them, marks the changes, and outputs a merged

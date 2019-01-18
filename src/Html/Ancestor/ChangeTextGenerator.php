@@ -7,7 +7,7 @@ namespace DaisyDiff\Html\Ancestor;
 use DaisyDiff\Html\Ancestor\TagToString\TagToStringFactory;
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Modification\HtmlLayoutChange;
-use DaisyDiff\RangeDifferencer\RangeDifference;
+use SN\RangeDifferencer\RangeDifference;
 
 /**
  * ChangeTextGenerator

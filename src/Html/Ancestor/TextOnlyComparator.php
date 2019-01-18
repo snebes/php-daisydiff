@@ -7,9 +7,9 @@ namespace DaisyDiff\Html\Ancestor;
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Dom\TextNode;
 use DaisyDiff\RangeDifferencer\Core\LCSSettings;
-use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
-use DaisyDiff\RangeDifferencer\RangeDifferencer;
 use OutOfBoundsException;
+use SN\RangeDifferencer\RangeComparatorInterface;
+use SN\RangeDifferencer\RangeDifferencer;
 
 /**
  * A comparator that compares only the elements of text inside a given tag.
@@ -100,7 +100,7 @@ class TextOnlyComparator implements RangeComparatorInterface
         $settings->setPowLimit(1.5);
         $settings->setTooLong(150 * 150);
 
-        $differences   = RangeDifferencer::findDifferences($other, $this, $settings);
+        $differences   = RangeDifferencer::findDifferences($other, $this);
         $distanceOther = 0;
         $distanceThis  = 0;
 
