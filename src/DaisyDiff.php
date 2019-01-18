@@ -64,8 +64,8 @@ class DaisyDiff
     /**
      * Diffs two HTML strings for word as source, returning the result.
      *
-     * @param  string $oldText
-     * @param  string $newText
+     * @param string $oldText
+     * @param string $newText
      * @return string
      * @throws Exception
      */

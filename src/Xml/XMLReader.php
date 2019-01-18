@@ -24,7 +24,7 @@ class XMLReader
     }
 
     /**
-     * @param  string $xml
+     * @param string $xml
      * @return void
      *
      * @throws Exception

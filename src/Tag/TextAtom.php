@@ -15,7 +15,7 @@ class TextAtom implements AtomInterface
     private $s;
 
     /**
-     * @param  string|null $s
+     * @param string|null $s
      */
     public function __construct(string $s)
     {

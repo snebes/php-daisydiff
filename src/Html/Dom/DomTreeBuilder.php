@@ -113,9 +113,9 @@ final class DomTreeBuilder
     }
 
     /**
-     * @param  mixed  $xmlParser
-     * @param  string $qName
-     * @param  array  $attributes
+     * @param mixed  $xmlParser
+     * @param string $qName
+     * @param array  $attributes
      * @return void
      */
     public function startElement($xmlParser, string $qName, array $attributes = []): void

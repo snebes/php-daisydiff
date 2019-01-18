@@ -33,9 +33,9 @@ final class RangeDifferencer
      * Finds the differences between two RangeComparatorInterfaces. The differences are returned as an array of
      * RangeDifferences. If no differences are detected an empty array is returned.
      *
-     * @param  RangeComparatorInterface $left
-     * @param  RangeComparatorInterface $right
-     * @param  LCSSettings              $settings
+     * @param RangeComparatorInterface $left
+     * @param RangeComparatorInterface $right
+     * @param LCSSettings              $settings
      * @return RangeDifference[]
      */
     public static function findDifferences(
@@ -59,10 +59,10 @@ final class RangeDifferencer
      * RangeDifferences. If no differences are detected an empty list is returned. If the ancestor range comparator is
      * null, a two-way comparison is performed.
      *
-     * @param  RangeComparatorInterface $ancestor
-     * @param  RangeComparatorInterface $left
-     * @param  RangeComparatorInterface $right
-     * @param  LCSSettings              $settings
+     * @param RangeComparatorInterface $ancestor
+     * @param RangeComparatorInterface $left
+     * @param RangeComparatorInterface $right
+     * @param LCSSettings              $settings
      * @return RangeDifference[]
      */
     public static function findDifferences3(
@@ -144,9 +144,9 @@ final class RangeDifferencer
     }
 
     /**
-     * @param  RangeComparatorInterface $left
-     * @param  RangeComparatorInterface $right
-     * @param  LCSSettings|null         $settings
+     * @param RangeComparatorInterface $left
+     * @param RangeComparatorInterface $right
+     * @param LCSSettings|null         $settings
      * @return RangeDifference[]
      */
     public static function findRanges(
@@ -188,10 +188,10 @@ final class RangeDifferencer
     }
 
     /**
-     * @param  RangeComparatorInterface|null $ancestor
-     * @param  RangeComparatorInterface      $left
-     * @param  RangeComparatorInterface      $right
-     * @param  LCSSettings|null              $settings
+     * @param RangeComparatorInterface|null $ancestor
+     * @param RangeComparatorInterface      $left
+     * @param RangeComparatorInterface      $right
+     * @param LCSSettings|null              $settings
      * @return array
      */
     public static function findRanges3(
@@ -242,13 +242,13 @@ final class RangeDifferencer
     }
 
     /**
-     * @param  DifferencesIterator      $myIter
-     * @param  DifferencesIterator      $yourIter
-     * @param  array                    $diff3
-     * @param  RangeComparatorInterface $right
-     * @param  RangeComparatorInterface $left
-     * @param  int                      $changeRangeStart
-     * @param  int                      $changeRangeEnd
+     * @param DifferencesIterator      $myIter
+     * @param DifferencesIterator      $yourIter
+     * @param array                    $diff3
+     * @param RangeComparatorInterface $right
+     * @param RangeComparatorInterface $left
+     * @param int                      $changeRangeStart
+     * @param int                      $changeRangeEnd
      * @return RangeDifference
      */
     private static function createRangeDifference3(
@@ -315,12 +315,12 @@ final class RangeDifferencer
     }
 
     /**
-     * @param  RangeComparatorInterface $right
-     * @param  int                      $rightStart
-     * @param  int                      $rightLen
-     * @param  RangeComparatorInterface $left
-     * @param  int                      $leftStart
-     * @param  int                      $leftLen
+     * @param RangeComparatorInterface $right
+     * @param int                      $rightStart
+     * @param int                      $rightLen
+     * @param RangeComparatorInterface $left
+     * @param int                      $leftStart
+     * @param int                      $leftLen
      * @return bool
      */
     private static function rangeSpansEqual(
@@ -347,10 +347,10 @@ final class RangeDifferencer
     }
 
     /**
-     * @param  RangeComparatorInterface $a
-     * @param  int                      $ai
-     * @param  RangeComparatorInterface $b
-     * @param  int                      $bi
+     * @param RangeComparatorInterface $a
+     * @param int                      $ai
+     * @param RangeComparatorInterface $b
+     * @param int                      $bi
      * @return bool
      */
     private static function rangesEqual(

@@ -17,8 +17,8 @@ class LinkedRangeDifference extends RangeDifference
     private $next;
 
     /**
-     * @param  LinkedRangeDifference $next
-     * @param  int                   $operation
+     * @param LinkedRangeDifference $next
+     * @param int                   $operation
      */
     public function __construct(?LinkedRangeDifference $next, int $operation = RangeDifference::ERROR)
     {

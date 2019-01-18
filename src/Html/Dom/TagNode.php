@@ -149,7 +149,7 @@ class TagNode extends Node implements IteratorAggregate
      * Checks tags for being semantically equivalent if it's from a different tree and for being the same object if it's
      * from the same tree as $this tag.
      *
-     * @param  TagNode $other
+     * @param TagNode $other
      * @return bool
      */
     public function isSameTag(?TagNode $other): bool
@@ -165,7 +165,7 @@ class TagNode extends Node implements IteratorAggregate
      * Considers tags from different trees equal if they have same name and equivalent attributes. No attention paid to
      * the content (children) of the tag. Considers tags from the same tree equal if it is the same object.
      *
-     * @param  TagNode $tagNode
+     * @param TagNode $tagNode
      * @return bool
      */
     public function equals(TagNode $tagNode): bool
@@ -202,7 +202,7 @@ class TagNode extends Node implements IteratorAggregate
      * Returns true if this tag is similar to the given other tag. The tags may be from different trees. If the tag name
      * and attributes are the same, the result will be true.
      *
-     * @param  Node $other
+     * @param Node $other
      * @return bool
      */
     protected function isSimilarTag(Node $other): bool
@@ -305,9 +305,9 @@ class TagNode extends Node implements IteratorAggregate
      * new doc. (means they either has been deleted or changed arguments). The "parent" parameter in that case is the
      * deepest common parent between the deleted node and its surrounding remaining siblings.
      *
-     * @param  TagNode $parent
-     * @param  Node    $split
-     * @param  bool    $includeLeft
+     * @param TagNode $parent
+     * @param Node    $split
+     * @param bool    $includeLeft
      * @return bool
      */
     public function splitUntil(TagNode $parent, Node $split, bool $includeLeft): bool

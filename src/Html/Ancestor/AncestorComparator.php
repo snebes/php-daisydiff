@@ -23,7 +23,7 @@ class AncestorComparator implements RangeComparatorInterface
     private $compareTxt = '';
 
     /**
-     * @param  TagNode[] $ancestors
+     * @param TagNode[] $ancestors
      */
     public function __construct(?array $ancestors)
     {
@@ -39,9 +39,9 @@ class AncestorComparator implements RangeComparatorInterface
     }
 
     /**
-     * @param  int                      $thisIndex
-     * @param  RangeComparatorInterface $other
-     * @param  int                      $otherIndex
+     * @param int                      $thisIndex
+     * @param RangeComparatorInterface $other
+     * @param int                      $otherIndex
      * @return bool
      */
     public function rangesEqual(int $thisIndex, RangeComparatorInterface $other, int $otherIndex): bool
@@ -54,9 +54,9 @@ class AncestorComparator implements RangeComparatorInterface
     }
 
     /**
-     * @param  int                      $length
-     * @param  int                      $maxLength
-     * @param  RangeComparatorInterface $other
+     * @param int                      $length
+     * @param int                      $maxLength
+     * @param RangeComparatorInterface $other
      * @return bool
      */
     public function skipRangeComparison(int $length, int $maxLength, RangeComparatorInterface $other): bool
@@ -65,7 +65,7 @@ class AncestorComparator implements RangeComparatorInterface
     }
 
     /**
-     * @param  int $i
+     * @param int $i
      * @return TagNode|null
      * @throws OutOfBoundsException
      */
@@ -87,7 +87,7 @@ class AncestorComparator implements RangeComparatorInterface
     }
 
     /**
-     * @param  AncestorComparator $other
+     * @param AncestorComparator $other
      * @return AncestorComparatorResult
      */
     public function getResult(AncestorComparator $other): AncestorComparatorResult

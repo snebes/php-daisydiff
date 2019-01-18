@@ -1,4 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Ancestor\TagToString;
 
@@ -6,7 +14,6 @@ use DaisyDiff\Html\Ancestor\ChangeText;
 use DaisyDiff\Html\Ancestor\TagChangeSemantic;
 use DaisyDiff\Html\Dom\TagNode;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
 
 /**
  * AnchorToString Tests.
@@ -37,14 +44,13 @@ class AnchorToStringTest extends TestCase
 
         $anchor = new AnchorToString($root, TagChangeSemantic::STYLE);
 
-        $changeText = new ChangeText(10);
+        $changeText = new ChangeText();
         $newText = '<a href="">Click here</a>';
         $changeText->addText($newText);
 
         $anchor->addAttributes($changeText, $attrs);
 
-        $this->assertEquals('Added', $anchor->getAdded());
-        $this->assertContains('href', strval($changeText));
-        $this->assertContains('class', strval($changeText));
+        $this->assertContains('href', $changeText->__toString());
+        $this->assertContains('class', $changeText->__toString());
     }
 }

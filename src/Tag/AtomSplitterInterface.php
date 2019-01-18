@@ -12,14 +12,14 @@ use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
 interface AtomSplitterInterface extends RangeComparatorInterface
 {
     /**
-     * @param  int $i
+     * @param int $i
      * @return AtomInterface
      */
     public function getAtom(int $i): AtomInterface;
 
     /**
-     * @param  int      $startAtom
-     * @param  int|null $endAtom
+     * @param int      $startAtom
+     * @param int|null $endAtom
      * @return string
      */
     public function substring(int $startAtom, ?int $endAtom = null): string;

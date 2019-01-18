@@ -200,7 +200,7 @@ class RangeDifference
     }
 
     /**
-     * @param  RangeDifference $other
+     * @param RangeDifference $other
      * @return bool
      */
     public function equals(RangeDifference $other): bool
@@ -262,8 +262,8 @@ class RangeDifference
     }
 
     /**
-     * @param  int $start
-     * @param  int $length
+     * @param int $start
+     * @param int $length
      * @return string
      */
     private function toRangeString(int $start, int $length): string

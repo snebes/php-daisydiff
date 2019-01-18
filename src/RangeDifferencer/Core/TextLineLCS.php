@@ -61,8 +61,8 @@ declare(strict_types=1);
 //    }
 //
 //    /**
-//     * @param  int $i1
-//     * @param  int $i2
+//     * @param int $i1
+//     * @param int $i2
 //     * @return bool
 //     */
 //    protected function isRangeEqual(int $i1, int $i2): bool
@@ -71,8 +71,8 @@ declare(strict_types=1);
 //    }
 //
 //    /**
-//     * @param  int $sl1
-//     * @param  int $sl2
+//     * @param int $sl1
+//     * @param int $sl2
 //     * @return void
 //     */
 //    protected function setLcs(int $sl1, int $sl2): void
@@ -82,7 +82,7 @@ declare(strict_types=1);
 //    }
 //
 //    /**
-//     * @param  int $lcsLength
+//     * @param int $lcsLength
 //     * @return void
 //     */
 //    protected function initializeLcs(int $lcsLength): void
@@ -96,9 +96,9 @@ declare(strict_types=1);
 //     *
 //     * TODO: investigate what to do about comments. shifting either up or down hurts them.
 //     *
-//     * @param  TextLine[] $lcsSide
-//     * @param  int        $len
-//     * @param  TextLine[] $original
+//     * @param TextLine[] $lcsSide
+//     * @param int        $len
+//     * @param TextLine[] $original
 //     *
 //     * @return TextLine[]
 //     */
@@ -142,7 +142,7 @@ declare(strict_types=1);
 //     * from 0) Note: there are 1 more lines than there are newline characters in text. Corollary 1: if the last
 //     * character is newline, the last line is empty Corollary 2: the empty string is 1 line.
 //     *
-//     * @param  string $text
+//     * @param string $text
 //     * @return TextLine[]
 //     */
 //    public static function getTextLines(string $text): array
@@ -173,8 +173,8 @@ declare(strict_types=1);
 //    /**
 //     * Returns the index of the next end of line marker ('\n' or '\r') after start.
 //     *
-//     * @param  string $text
-//     * @param  int $start
+//     * @param string $text
+//     * @param int $start
 //     * @return int
 //     */
 //    private static function getEOL(string $text, int $start): int

@@ -27,8 +27,8 @@ final class OldDifferencer
      * Finds the differences between two RangeComparatorInterfaces. The differences are returned as an array of
      * RangeDifferences. If no differences are detected an empty array is returned.
      *
-     * @param  RangeComparatorInterface $left
-     * @param  RangeComparatorInterface $right
+     * @param RangeComparatorInterface $left
+     * @param RangeComparatorInterface $right
      * @return RangeDifference[]
      */
     public static function findDifferences(RangeComparatorInterface $left, RangeComparatorInterface $right): array
@@ -144,10 +144,10 @@ final class OldDifferencer
     /**
      * Tests if two ranges are equal
      *
-     * @param  RangeComparatorInterface $a
-     * @param  int                      $ai
-     * @param  RangeComparatorInterface $b
-     * @param  int                      $bi
+     * @param RangeComparatorInterface $a
+     * @param int                      $ai
+     * @param RangeComparatorInterface $b
+     * @param int                      $bi
      * @return bool
      */
     private static function rangesEqual(
@@ -164,7 +164,7 @@ final class OldDifferencer
      * addition, indices are changed such that the ranges are 1) open, i.e, the end of the range is not included, and 2)
      * are zero based.
      *
-     * @param  LinkedRangeDifference $start
+     * @param LinkedRangeDifference $start
      * @return RangeDifference[]
      */
     private static function createDifferencesRanges(LinkedRangeDifference $start): array
@@ -237,7 +237,7 @@ final class OldDifferencer
     /**
      * Reverses the range differences.
      *
-     * @param  LinkedRangeDifference $start
+     * @param LinkedRangeDifference $start
      * @return LinkedRangeDifference
      */
     private static function reverseDifferences(LinkedRangeDifference $start): LinkedRangeDifference

@@ -20,7 +20,7 @@ class TextOnlyComparator implements RangeComparatorInterface
     private $leafs = [];
 
     /**
-     * @param  TagNode $tree
+     * @param TagNode $tree
      */
     public function __construct(TagNode $tree)
     {
@@ -28,7 +28,7 @@ class TextOnlyComparator implements RangeComparatorInterface
     }
 
     /**
-     * @param  TagNode $tree
+     * @param TagNode $tree
      * @return void
      */
     private function addRecursive(TagNode $tree): void
@@ -52,9 +52,9 @@ class TextOnlyComparator implements RangeComparatorInterface
     }
 
     /**
-     * @param  int                      $owni
-     * @param  RangeComparatorInterface $other
-     * @param  int                      $otheri
+     * @param int                      $owni
+     * @param RangeComparatorInterface $other
+     * @param int                      $otheri
      * @return bool
      */
     public function rangesEqual(int $owni, RangeComparatorInterface $other, int $otheri): bool
@@ -67,7 +67,7 @@ class TextOnlyComparator implements RangeComparatorInterface
     }
 
     /**
-     * @param  int $index
+     * @param int $index
      * @return TextNode
      *
      * @throws OutOfBoundsException

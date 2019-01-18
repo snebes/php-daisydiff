@@ -18,7 +18,7 @@ class DelimiterAtom extends TextAtom
     }
 
     /**
-     * @param  string $s
+     * @param string $s
      * @return bool
      */
     public static function isValidDelimiter(?string $s): bool
@@ -70,7 +70,7 @@ class DelimiterAtom extends TextAtom
     }
 
     /**
-     * @param  string $s
+     * @param string $s
      * @return bool
      */
     private function isValidDelimiterAtom(?string $s): bool

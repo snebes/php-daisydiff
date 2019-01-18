@@ -41,7 +41,7 @@ class TagToStringTest extends TestCase
         $tagStyle   = new TagToString($root, TagChangeSemantic::STYLE);
         $tagUnknown = new TagToString($root, TagChangeSemantic::UNKNOWN);
 
-        $changeText = new ChangeText(10);
+        $changeText = new ChangeText();
         $newText    = '<a href="">Click here</a>';
         $changeText->addText($newText);
 
@@ -70,7 +70,7 @@ class TagToStringTest extends TestCase
         $tagStyle   = new TagToString($root, TagChangeSemantic::STYLE);
         $tagUnknown = new TagToString($root, TagChangeSemantic::UNKNOWN);
 
-        $changeText = new ChangeText(10);
+        $changeText = new ChangeText();
         $newText    = '<a href="">Click here</a>';
         $changeText->addText($newText);
 
@@ -103,7 +103,7 @@ class TagToStringTest extends TestCase
 
         $tagMoved = new TagToString($root, TagChangeSemantic::MOVED);
 
-        $changeText = new ChangeText(10);
+        $changeText = new ChangeText();
         $newText    = '<a href="">Click here</a>';
         $changeText->addText($newText);
 

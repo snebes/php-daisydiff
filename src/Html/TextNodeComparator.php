@@ -252,12 +252,12 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
      * Marks the given range as deleted. In the output, the range will be formatted as specified by the parameter
      * anOutputFormat.
      *
-     * @param  int                $start
-     * @param  int                $end
-     * @param  TextNodeComparator $oldComp
-     * @param  int                $before
-     * @param  int                $after
-     * @param  string             $outputFormat
+     * @param int                $start
+     * @param int                $end
+     * @param TextNodeComparator $oldComp
+     * @param int                $before
+     * @param int                $after
+     * @param string             $outputFormat
      */
     public function markAsDeleted(
         int $start,

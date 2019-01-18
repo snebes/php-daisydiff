@@ -18,7 +18,7 @@ class TagAtom implements AtomInterface
     private $internalIdentifiers = '';
 
     /**
-     * @param  string $s
+     * @param string $s
      * @throws InvalidArgumentException
      */
     public function __construct(string $s)
@@ -57,7 +57,7 @@ class TagAtom implements AtomInterface
     }
 
     /**
-     * @param  string $s
+     * @param string $s
      * @return bool
      */
     public static function isValidTag(string $s): bool

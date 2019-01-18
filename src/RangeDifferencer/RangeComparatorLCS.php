@@ -32,9 +32,9 @@ class RangeComparatorLCS extends LCS
     }
 
     /**
-     * @param  RangeComparatorInterface $left
-     * @param  RangeComparatorInterface $right
-     * @param  LCSSettings              $settings
+     * @param RangeComparatorInterface $left
+     * @param RangeComparatorInterface $right
+     * @param LCSSettings              $settings
      * @return RangeDifference[]
      */
     public static function findDifferences(
@@ -172,15 +172,15 @@ class RangeComparatorLCS extends LCS
 
         return $differences;
     }
-//
+
 //    /**
 //     * This method takes an LCS result interspersed with zeros (i.e. empty slots from the LCS algorithm), compacts it
 //     * and shifts the LCS chunks as far towards the front as possible. This tends to produce good results most of the
 //     * time.
 //     *
-//     * @param  int[]                    $lcsSide
-//     * @param  int                      $length
-//     * @param  RangeComparatorInterface $comparator
+//     * @param int[]                    $lcsSide
+//     * @param int                      $length
+//     * @param RangeComparatorInterface $comparator
 //     * @return void
 //     */
 //    private function compactAndShiftLCS(array $lcsSide, int $length, RangeComparatorInterface $comparator): void

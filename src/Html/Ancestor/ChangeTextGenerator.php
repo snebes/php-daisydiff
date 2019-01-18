@@ -30,8 +30,8 @@ class ChangeTextGenerator
     private const MAX_OUTPUT_LINE_LENGTH = 55;
 
     /**
-     * @param  AncestorComparator $ancestorComparator
-     * @param  AncestorComparator $other
+     * @param AncestorComparator $ancestorComparator
+     * @param AncestorComparator $other
      */
     public function __construct(AncestorComparator $ancestorComparator, AncestorComparator $other)
     {
@@ -42,7 +42,7 @@ class ChangeTextGenerator
     }
 
     /**
-     * @param  RangeDifference[] $differences
+     * @param RangeDifference[] $differences
      * @return ChangeText
      */
     public function getChanged(array $differences): ChangeText
@@ -135,7 +135,7 @@ class ChangeTextGenerator
     }
 
     /**
-     * @param  int $i
+     * @param int $i
      * @return TagNode
      */
     private function getAncestor(int $i): TagNode

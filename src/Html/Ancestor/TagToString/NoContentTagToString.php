@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -12,14 +18,13 @@ use DaisyDiff\Html\Ancestor\ChangeText;
 class NoContentTagToString extends TagToString
 {
     /**
-     * @param  ChangeText $text
-     * @return void
+     * @param ChangeText $text
      */
     public function getAddedDescription(ChangeText $text): void
     {
-        $text->addText(sprintf('%s %s ', $this->getChangedTo(), mb_strtolower($this->getArticle())));
+        $text->addText(\sprintf('%s %s ', $this->getChangedTo(), \mb_strtolower($this->getArticle())));
         $text->addHtml('<b>');
-        $text->addText(mb_strtolower($this->getDescription()));
+        $text->addText(\mb_strtolower($this->getDescription()));
         $text->addHtml('</b>');
 
         $this->addAttributes($text, $this->node->getAttributes());
@@ -35,14 +40,13 @@ class NoContentTagToString extends TagToString
     }
 
     /**
-     * @param  ChangeText $text
-     * @return void
+     * @param ChangeText $text
      */
     public function getRemovedDescription(ChangeText $text): void
     {
-        $text->addText(sprintf('%s %s ', $this->getChangedFrom(), mb_strtolower($this->getArticle())));
+        $text->addText(\sprintf('%s %s ', $this->getChangedFrom(), \mb_strtolower($this->getArticle())));
         $text->addHtml('<b>');
-        $text->addText(mb_strtolower($this->getDescription()));
+        $text->addText(\mb_strtolower($this->getDescription()));
         $text->addHtml('</b>');
 
         $this->addAttributes($text, $this->node->getAttributes());
