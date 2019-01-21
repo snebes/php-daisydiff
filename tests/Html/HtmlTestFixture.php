@@ -1,4 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html;
 
@@ -47,7 +55,7 @@ class HtmlTestFixture
         $differ  = new HtmlDiffer($output);
         $differ->diff($leftComparator, $rightComparator);
 
-        return strval($content);
+        return $content->__toString();
     }
 
     /**
@@ -85,6 +93,6 @@ class HtmlTestFixture
         $differ  = new HtmlDiffer($output);
         $differ->diff3($ancestorComparator, $leftComparator, $rightComparator);
 
-        return strval($content);
+        return $content->__toString();
     }
 }

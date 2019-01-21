@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -91,20 +97,12 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
                 if (!$newStarted && $mod->getOutputType() === ModificationType::ADDED) {
                     $attrs = ['class' => 'diff-html-added'];
 
-                    if ($mod->isFirstOfId()) {
-                        $attrs['id'] = sprintf('%s-%s-%s', $mod->getOutputType(), $this->prefix, $mod->getId());
-                    }
-
                     $this->addAttributes($mod, $attrs);
                     $this->handler->startElement('ins', $attrs);
 
                     $newStarted = true;
                 } else if (!$changeStarted && $mod->getOutputType() == ModificationType::CHANGED) {
                     $attrs = ['class' => 'diff-html-changed'];
-
-                    if ($mod->isFirstOfId()) {
-                        $attrs['id'] = sprintf('%s-%s-%s', $mod->getOutputType(), $this->prefix, $mod->getId());
-                    }
 
                     $this->addAttributes($mod, $attrs);
                     $this->handler->startElement('span', $attrs);
@@ -114,20 +112,12 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
                 } else if (!$remStarted && $mod->getOutputType() == ModificationType::REMOVED) {
                     $attrs = ['class' => 'diff-html-removed'];
 
-                    if ($mod->isFirstOfId()) {
-                        $attrs['id'] = sprintf('%s-%s-%s', $mod->getOutputType(), $this->prefix, $mod->getId());
-                    }
-
                     $this->addAttributes($mod, $attrs);
                     $this->handler->startElement('del', $attrs);
 
                     $remStarted = true;
                 } else if (!$conflictStarted && $mod->getOutputType() == ModificationType::CONFLICT) {
                     $attrs = ['class' => 'diff-html-conflict'];
-
-                    if ($mod->isFirstOfId()) {
-                        $attrs['id'] = sprintf('%s-%s-%s', $mod->getOutputType(), $this->prefix, $mod->getId());
-                    }
 
                     $this->addAttributes($mod, $attrs);
                     $this->handler->startElement('span', $attrs);
