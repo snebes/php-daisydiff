@@ -10,9 +10,9 @@ namespace DaisyDiff\Html\Dom;
 class WhiteSpaceNode extends TextNode
 {
     /**
-     * @param TagNode $parent
-     * @param string  $s
-     * @param Node $like
+     * @param TagNode   $parent
+     * @param string    $s
+     * @param Node|null $like
      */
     public function __construct(?TagNode $parent, string $s, ?Node $like = null)
     {
@@ -32,7 +32,7 @@ class WhiteSpaceNode extends TextNode
      */
     public static function isWhiteSpace(string $c): bool
     {
-        switch (mb_substr($c, 0, 1)) {
+        switch ($c) {
             case ' ':
             case "\t":
             case "\r":

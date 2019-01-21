@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -25,15 +31,15 @@ class ModificationTest extends TestCase
         $id   = 123;
 
         $newM->setId($id);
-        $this->assertEquals($id, $newM->getId());
+        $this->assertSame($id, $newM->getId());
     }
 
     public function testGetTypes(): void
     {
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);
 
-        $this->assertEquals(ModificationType::ADDED, $newM->getType());
-        $this->assertEquals(ModificationType::REMOVED, $newM->getOutputType());
+        $this->assertSame(ModificationType::ADDED, $newM->getType());
+        $this->assertSame(ModificationType::REMOVED, $newM->getOutputType());
     }
 
     public function testGetSetPrevious(): void
@@ -41,7 +47,7 @@ class ModificationTest extends TestCase
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);
 
         $newM->setPrevious($newM);
-        $this->assertEquals($newM, $newM->getPrevious());
+        $this->assertSame($newM, $newM->getPrevious());
 
         $newM->setPrevious(null);
         $this->assertNull($newM->getPrevious());
@@ -52,7 +58,7 @@ class ModificationTest extends TestCase
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);
 
         $newM->setNext($newM);
-        $this->assertEquals($newM, $newM->getNext());
+        $this->assertSame($newM, $newM->getNext());
 
         $newM->setNext(null);
         $this->assertNull($newM->getNext());
@@ -63,10 +69,10 @@ class ModificationTest extends TestCase
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);
         $changes = '<b>UIC</b>';
 
-        $this->assertEmpty($newM->getChanges());
+        $this->assertSame('', $newM->getChanges());
 
         $newM->setChanges($changes);
-        $this->assertEquals($changes, $newM->getChanges());
+        $this->assertSame($changes, $newM->getChanges());
     }
 
     public function testIsFirstOfId(): void
@@ -88,6 +94,6 @@ class ModificationTest extends TestCase
 
         $htmlLayoutChanges[] = new HtmlLayoutChange();
         $newM->setHtmlLayoutChanges($htmlLayoutChanges);
-        $this->assertEquals($htmlLayoutChanges, $newM->getHtmlLayoutChanges());
+        $this->assertSame($htmlLayoutChanges, $newM->getHtmlLayoutChanges());
     }
 }

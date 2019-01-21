@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -30,7 +36,7 @@ class Modification
     /** @var string */
     private $changes = '';
 
-    /** @var string[] */
+    /** @var HtmlLayoutChange[] */
     private $htmlLayoutChanges = [];
 
     /**
@@ -39,7 +45,7 @@ class Modification
      */
     public function __construct(string $type, string $outputType)
     {
-        $this->type       = $type;
+        $this->type = $type;
         $this->outputType = $outputType;
     }
 
@@ -82,7 +88,7 @@ class Modification
     }
 
     /**
-     * @return Modification
+     * @return Modification|null
      */
     public function getPrevious(): ?Modification
     {
@@ -90,7 +96,7 @@ class Modification
     }
 
     /**
-     * @param Modification $mod
+     * @param Modification|null $mod
      */
     public function setPrevious(?Modification $mod): void
     {
@@ -98,7 +104,7 @@ class Modification
     }
 
     /**
-     * @return Modification
+     * @return Modification|null
      */
     public function getNext(): ?Modification
     {
@@ -106,7 +112,7 @@ class Modification
     }
 
     /**
-     * @param Modification $mod
+     * @param Modification|null $mod
      */
     public function setNext(?Modification $mod): void
     {
@@ -146,7 +152,7 @@ class Modification
     }
 
     /**
-     * @return string[]
+     * @return HtmlLayoutChange[]
      */
     public function getHtmlLayoutChanges(): array
     {
@@ -154,7 +160,7 @@ class Modification
     }
 
     /**
-     * @param string[] $htmlLayoutChanges
+     * @param HtmlLayoutChange[] $htmlLayoutChanges
      */
     public function setHtmlLayoutChanges(array $htmlLayoutChanges): void
     {

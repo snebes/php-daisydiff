@@ -9,6 +9,11 @@ use PHPUnit\Framework\TestCase;
  */
 class LCSSettingsTest extends TestCase
 {
+    protected function setUp()
+    {
+        $this->markTestSkipped();
+    }
+
     public function testTooLong(): void
     {
         $tooLong  = 10000000.0;

@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -14,7 +20,6 @@ class ChangeText
 
     /**
      * @param string $s
-     * @return void
      */
     public function addText(string $s): void
     {
@@ -26,7 +31,6 @@ class ChangeText
 
     /**
      * @param string $s
-     * @return void
      */
     public function addHtml(string $s): void
     {
@@ -47,9 +51,9 @@ class ChangeText
      */
     private function clean(string $s): string
     {
-        $search  = array("\n", "\r", '<', '>', "'", '"');
-        $replace = array('', '', '&lt;', '&gt;', '&#39;', '&#34;');
+        $search = ["\n", "\r", '<', '>', "'", '"'];
+        $replace = ['', '', '&lt;', '&gt;', '&#39;', '&#34;'];
 
-        return str_replace($search, $replace, $s);
+        return \str_replace($search, $replace, $s);
     }
 }

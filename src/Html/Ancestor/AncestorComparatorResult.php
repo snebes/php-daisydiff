@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -30,13 +36,10 @@ final class AncestorComparatorResult
 
     /**
      * @param bool $value
-     * @return self
      */
-    public function setChanged(bool $value): self
+    public function setChanged(bool $value): void
     {
         $this->changed = $value;
-
-        return $this;
     }
 
     /**
@@ -49,13 +52,10 @@ final class AncestorComparatorResult
 
     /**
      * @param string|null $value
-     * @return self
      */
-    public function setChanges(?string $value): self
+    public function setChanges(?string $value): void
     {
         $this->changes = $value ?? '';
-
-        return $this;
     }
 
     /**
@@ -68,12 +68,9 @@ final class AncestorComparatorResult
 
     /**
      * @param HtmlLayoutChange[] $value
-     * @return self
      */
-    public function setHtmlLayoutChanges(?array $value): self
+    public function setHtmlLayoutChanges(?array $value): void
     {
         $this->htmlLayoutChanges = $value ?? [];
-
-        return $this;
     }
 }

@@ -40,63 +40,60 @@ class HtmlDiffer
         TextNodeComparator $leftComparator,
         TextNodeComparator $rightComparator
     ): void {
-        $settings = new LCSSettings();
-        $settings->setUseGreedyMethod(false);
-
         /** @var RangeDifference[] $differences */
-        $differences = RangeDifferencer::findDifferences3(
-            $ancestorComparator, $leftComparator, $rightComparator, $settings);
+        $differences = RangeDifferencer::findDifferences3($ancestorComparator, $leftComparator, $rightComparator);
         $pDifferences = $this->preProcess($differences);
 
         $currentIndexAncestor = 0;
         $currentIndexLeft     = 0;
         $currentIndexRight    = 0;
 
+        /** @var RangeDifference $d */
         foreach ($pDifferences as $d) {
-            $tempKind = $d->kind();
+            $tempKind = $d->getKind();
 
-            if (RangeDifference::ANCESTOR == $tempKind) {
+            if (RangeDifference::ANCESTOR === $tempKind) {
                 // Ignore, we won't show pseudo-conflicts currently (left and right have the same change).
                 continue;
             }
 
-            if ($d->leftStart() > $currentIndexLeft) {
+            if ($d->getLeftStart() > $currentIndexLeft) {
                 $ancestorComparator->handlePossibleChangedPart(
-                    $currentIndexLeft, $d->leftStart(),
-                    $currentIndexAncestor, $d->ancestorStart(),
+                    $currentIndexLeft, $d->getLeftStart(),
+                    $currentIndexAncestor, $d->getAncestorStart(),
                     $leftComparator);
             }
 
-            if ($d->rightStart() > $currentIndexRight) {
+            if ($d->getRightStart() > $currentIndexRight) {
                 $ancestorComparator->handlePossibleChangedPart(
-                    $currentIndexRight, $d->rightStart(),
-                    $currentIndexAncestor, $d->ancestorStart(),
+                    $currentIndexRight, $d->getRightStart(),
+                    $currentIndexAncestor, $d->getAncestorStart(),
                     $rightComparator);
             }
 
             if (RangeDifference::CONFLICT == $tempKind || RangeDifference::LEFT == $tempKind) {
                 // Conflicts and changes on the left side.
-                if ($d->leftLength() > 0) {
+                if ($d->getLeftLength() > 0) {
                     $ancestorComparator->markAsDeleted(
-                        $d->leftStart(), $d->leftEnd(), $leftComparator,
-                        $d->ancestorStart(), $d->ancestorEnd(), ModificationType::ADDED);
+                        $d->getLeftStart(), $d->getLeftEnd(), $leftComparator,
+                        $d->getAncestorStart(), $d->getAncestorEnd(), ModificationType::ADDED);
                 }
             }
 
             if (RangeDifference::CONFLICT == $tempKind || RangeDifference::RIGHT == $tempKind) {
                 // Conflicts and changes on the right side.
-                if ($d->rightLength() > 0) {
+                if ($d->getRightLength() > 0) {
                     $ancestorComparator->markAsDeleted(
-                        $d->rightStart(), $d->rightEnd(), $rightComparator,
-                        $d->ancestorStart(), $d->ancestorEnd(), ModificationType::ADDED);
+                        $d->getRightStart(), $d->getRightEnd(), $rightComparator,
+                        $d->getAncestorStart(), $d->getAncestorEnd(), ModificationType::ADDED);
                 }
             }
 
-            $ancestorComparator->markAsNew($d->ancestorStart(), $d->ancestorEnd(), ModificationType::REMOVED);
+            $ancestorComparator->markAsNew($d->getAncestorStart(), $d->getAncestorEnd(), ModificationType::REMOVED);
 
-            $currentIndexAncestor = $d->ancestorEnd();
-            $currentIndexLeft     = $d->leftEnd();
-            $currentIndexRight    = $d->rightEnd();
+            $currentIndexAncestor = $d->getAncestorEnd();
+            $currentIndexLeft     = $d->getLeftEnd();
+            $currentIndexRight    = $d->getRightEnd();
         }
 
         if ($currentIndexLeft < $leftComparator->getRangeCount()) {
@@ -127,12 +124,8 @@ class HtmlDiffer
      */
     public function diff(TextNodeComparator $leftComparator, TextNodeComparator $rightComparator): void
     {
-        // Configure LCS.
-        $settings = new LCSSettings();
-        $settings->setUseGreedyMethod(true);
-
         /** @var RangeDifference[] $differences */
-        $differences = RangeDifferencer::findDifferences($leftComparator, $rightComparator, $settings);
+        $differences = RangeDifferencer::findDifferences($leftComparator, $rightComparator);
 
         /** @var RangeDifference[] */
         $pDifferences = $this->preProcess($differences);
@@ -140,24 +133,24 @@ class HtmlDiffer
         $currentIndexRight = 0;
 
         foreach ($pDifferences as $d) {
-            if ($d->leftStart() > $currentIndexLeft) {
+            if ($d->getLeftStart() > $currentIndexLeft) {
                 $rightComparator->handlePossibleChangedPart(
-                    $currentIndexLeft, $d->leftStart(),
-                    $currentIndexRight, $d->rightStart(),
+                    $currentIndexLeft, $d->getLeftStart(),
+                    $currentIndexRight, $d->getRightStart(),
                     $leftComparator);
             }
 
-            if ($d->leftLength() > 0) {
+            if ($d->getLeftLength() > 0) {
                 $rightComparator->markAsDeleted(
-                    $d->leftStart(), $d->leftEnd(),
+                    $d->getLeftStart(), $d->getLeftEnd(),
                     $leftComparator,
-                    $d->rightStart(), $d->rightEnd());
+                    $d->getRightStart(), $d->getRightEnd());
             }
 
-            $rightComparator->markAsNew($d->rightStart(), $d->rightEnd());
+            $rightComparator->markAsNew($d->getRightStart(), $d->getRightEnd());
 
-            $currentIndexLeft  = $d->leftEnd();
-            $currentIndexRight = $d->rightEnd();
+            $currentIndexLeft  = $d->getLeftEnd();
+            $currentIndexRight = $d->getRightEnd();
         }
 
         if ($currentIndexLeft < $leftComparator->getRangeCount()) {

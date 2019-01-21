@@ -1,15 +1,19 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
 namespace DaisyDiff\Html\Dom;
 
-use RuntimeException;
-
 /**
- * DOM Tree Builder.
+ * Creates a DOM tree from SAX-like events.
  */
-final class DomTreeBuilder
+class DomTreeBuilder
 {
     /** @var TextNode[] */
     private $textNodes = [];
@@ -49,7 +53,7 @@ final class DomTreeBuilder
      */
     public function __construct()
     {
-        $this->bodyNode      = new BodyNode();
+        $this->bodyNode = new BodyNode();
         $this->currentParent = $this->bodyNode;
     }
 
@@ -78,15 +82,34 @@ final class DomTreeBuilder
     }
 
     /**
-     * @return void
+     * Starts the document, if one has not already been started.
+     *
+     * @throws \RuntimeException
      */
     public function startDocument(): void
     {
         if ($this->documentStarted) {
-            throw new RuntimeException('This Handler only accepts one document.', 8000);
+            throw new \RuntimeException('This Handler only accepts one document.', 8000);
         }
 
         $this->documentStarted = true;
+    }
+
+    /**
+     * Ends the document, if a document is started.
+     *
+     * @throws \RuntimeException
+     */
+    public function endDocument(): void
+    {
+        if (!$this->documentStarted || $this->documentEnded) {
+            throw new \RuntimeException();
+        }
+
+        $this->endWord();
+
+        $this->documentEnded = true;
+        $this->documentStarted = false;
     }
 
     /**
@@ -98,40 +121,29 @@ final class DomTreeBuilder
     }
 
     /**
-     * @return void
-     */
-    public function endDocument(): void
-    {
-        if (!$this->documentStarted || $this->documentEnded) {
-            throw new RuntimeException('No document is open.', 8001);
-        }
-
-        $this->endWord();
-
-        $this->documentEnded   = true;
-        $this->documentStarted = false;
-    }
-
-    /**
      * @param mixed  $xmlParser
      * @param string $qName
      * @param array  $attributes
-     * @return void
+     *
+     * @throws \RuntimeException
      */
     public function startElement($xmlParser, string $qName, array $attributes = []): void
     {
-        assert($xmlParser);
+        // Required parameter, but not used.
+        \assert($xmlParser);
+
+        $qName = \mb_strtolower($qName);
 
         if (!$this->documentStarted || $this->documentEnded) {
-            throw new RuntimeException('No document is open.', 8002);
+            throw new \RuntimeException();
         }
 
         if ($this->bodyStarted && !$this->bodyEnded) {
             $this->endWord();
 
-            $newTagNode          = new TagNode($this->currentParent, $qName, $attributes);
+            $newTagNode = new TagNode($this->currentParent, $qName, $attributes);
             $this->currentParent = $newTagNode;
-            $this->lastSibling   = null;
+            $this->lastSibling = null;
 
             if ($this->whiteSpaceBeforeThis && $newTagNode->isInline()) {
                 $this->currentParent->setWhiteBefore(true);
@@ -146,9 +158,9 @@ final class DomTreeBuilder
             if ($this->isSeparatingTag($newTagNode)) {
                 $this->addSeparatorNode();
             }
-        } else if ($this->bodyStarted) {
+        } elseif ($this->bodyStarted) {
             // Ignoring element after body tag closed.
-        } else if (0 === strcasecmp($qName, 'body')) {
+        } elseif ('body' === $qName) {
             $this->bodyStarted = true;
         }
     }
@@ -156,20 +168,24 @@ final class DomTreeBuilder
     /**
      * @param mixed  $xmlParser
      * @param string $qName
-     * @return void
+     *
+     * @throws \RuntimeException
      */
     public function endElement($xmlParser, string $qName): void
     {
-        assert($xmlParser);
+        // Required parameter, but not used.
+        \assert($xmlParser);
+
+        $qName = \mb_strtolower($qName);
 
         if (!$this->documentStarted || $this->documentEnded) {
-            throw new RuntimeException('No document is open.', 8003);
+            throw new \RuntimeException();
         }
 
-        if (0 === strcasecmp($qName, 'body')) {
+        if ('body' === $qName) {
             $this->bodyEnded = true;
-        } else if ($this->bodyStarted && !$this->bodyEnded) {
-            if (0 === strcasecmp($qName, 'img')) {
+        } elseif ($this->bodyStarted && !$this->bodyEnded) {
+            if ('img' === $qName) {
                 // Insert a dummy leaf for the image.
                 $img = new ImageNode($this->currentParent, $this->currentParent->getAttributes());
                 $img->setWhiteBefore($this->whiteSpaceBeforeThis);
@@ -185,7 +201,7 @@ final class DomTreeBuilder
                 $this->lastSibling = null;
             }
 
-            if (0 === strcasecmp($qName, 'pre')) {
+            if ('pre' === $qName) {
                 $this->numberOfActivePreTags--;
             }
 
@@ -193,7 +209,7 @@ final class DomTreeBuilder
                 $this->addSeparatorNode();
             }
 
-            $this->currentParent        = $this->currentParent->getParent();
+            $this->currentParent = $this->currentParent->getParent();
             $this->whiteSpaceBeforeThis = false;
         }
     }
@@ -201,18 +217,19 @@ final class DomTreeBuilder
     /**
      * @param mixed  $xmlParser
      * @param string $chars
-     * @return void
+     *
+     * @throws \RuntimeException
      */
     public function characters($xmlParser, string $chars): void
     {
-        assert($xmlParser);
+        \assert($xmlParser);
 
         if (!$this->documentStarted || $this->documentEnded) {
-            throw new RuntimeException('No document is open.', 8004);
+            throw new \RuntimeException();
         }
 
-        for ($i = 0, $iMax = mb_strlen($chars); $i < $iMax; $i++) {
-            $c = mb_substr($chars, $i, 1);
+        for ($i = 0, $iMax = \mb_strlen($chars); $i < $iMax; $i++) {
+            $c = \mb_substr($chars, $i, 1);
 
             if ($this->isDelimiter($c)) {
                 $this->endWord();
@@ -228,8 +245,8 @@ final class DomTreeBuilder
                     $textNode->setWhiteBefore($this->whiteSpaceBeforeThis);
 
                     $this->whiteSpaceBeforeThis = false;
-                    $this->lastSibling          = $textNode;
-                    $this->textNodes[]          = $textNode;
+                    $this->lastSibling = $textNode;
+                    $this->textNodes[] = $textNode;
                 }
             } else {
                 $this->newWord .= $c;
@@ -242,14 +259,14 @@ final class DomTreeBuilder
      */
     private function endWord(): void
     {
-        if (mb_strlen($this->newWord) > 0) {
+        if (\mb_strlen($this->newWord) > 0) {
             $node = new TextNode($this->currentParent, $this->newWord);
             $node->setWhiteBefore($this->whiteSpaceBeforeThis);
 
             $this->whiteSpaceBeforeThis = false;
-            $this->lastSibling          = $node;
-            $this->textNodes[]          = $node;
-            $this->newWord              = '';
+            $this->lastSibling = $node;
+            $this->textNodes[] = $node;
+            $this->newWord = '';
         }
     }
 
@@ -275,7 +292,7 @@ final class DomTreeBuilder
         }
 
         // Don't add multiple separators.
-        if ($this->textNodes[count($this->textNodes) - 1] instanceof SeparatingNode) {
+        if ($this->textNodes[\count($this->textNodes) - 1] instanceof SeparatingNode) {
             return;
         }
 
@@ -320,7 +337,9 @@ final class DomTreeBuilder
             case ':':
                 return true;
             default:
-                return false;
+                break;
         }
+
+        return false;
     }
 }

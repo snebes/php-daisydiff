@@ -1,4 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Modification;
 
@@ -12,16 +20,16 @@ class HtmlLayoutChangeTest extends TestCase
     public function testGetSetType(): void
     {
         $tagAdd = new HtmlLayoutChange();
-        $tagAdd->setType(HtmlLayoutChangeType::TAG_ADDED);
+        $tagAdd->setType(HtmlLayoutChange::TAG_ADDED);
 
         $tagRemoved = new HtmlLayoutChange();
-        $tagRemoved->setType(HtmlLayoutChangeType::TAG_REMOVED);
+        $tagRemoved->setType(HtmlLayoutChange::TAG_REMOVED);
 
         $nullTag = new HtmlLayoutChange();
         $nullTag->setType(null);
 
-        $this->assertEquals(HtmlLayoutChangeType::TAG_ADDED, $tagAdd->getType());
-        $this->assertEquals(HtmlLayoutChangeType::TAG_REMOVED, $tagRemoved->getType());
+        $this->assertSame(HtmlLayoutChange::TAG_ADDED, $tagAdd->getType());
+        $this->assertSame(HtmlLayoutChange::TAG_REMOVED, $tagRemoved->getType());
         $this->assertNull($nullTag->getType());
     }
 
@@ -34,10 +42,10 @@ class HtmlLayoutChangeTest extends TestCase
         $nullTag = new HtmlLayoutChange();
         $nullTag->setOpeningTag(null);
 
-        $this->assertEquals('<p>', $tagAdd->getOpeningTag());
-        $this->assertEquals('</p>', $tagAdd->getEndingTag());
+        $this->assertSame('<p>', $tagAdd->getOpeningTag());
+        $this->assertSame('</p>', $tagAdd->getEndingTag());
         $this->assertNull($nullTag->getOpeningTag());
-        $this->assertEquals('', $nullTag->getEndingTag());
+        $this->assertSame('', $nullTag->getEndingTag());
 
         $nullTag->setEndingTag(null);
         $this->assertNull($nullTag->getEndingTag());

@@ -9,6 +9,11 @@ use PHPUnit\Framework\TestCase;
  */
 class RangeDifferenceTest extends TestCase
 {
+    protected function setUp()
+    {
+        $this->markTestSkipped();
+    }
+
     public function testRangeDifferenceExample1(): void
     {
         $difference = new RangeDifference(RangeDifference::LEFT);

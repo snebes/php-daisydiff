@@ -1,9 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Ancestor;
 
 use DaisyDiff\Html\Dom\TagNode;
-use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -11,119 +18,73 @@ use PHPUnit\Framework\TestCase;
  */
 class AncestorComparatorTest extends TestCase
 {
-    public function testGetRangeCount(): void
+    /** @var AncestorComparator */
+    private $comp;
+
+    /** @var Tagnode */
+    private $root;
+
+    /** @var Tagnode */
+    private $intermediate;
+
+    protected function setUp()
     {
-        $root = new TagNode(null, 'root');
-        $intermediate = new TagNode(null, 'middle');
+        $this->root = new TagNode(null, 'root');
+        $this->intermediate = new TagNode(null, 'middle');
 
         $ancestors = [];
-        $ancestors[] = $root;
-        $ancestors[] = $intermediate;
+        $ancestors[] = $this->root;
+        $ancestors[] = $this->intermediate;
 
-        $comp = new AncestorComparator($ancestors);
+        $this->comp = new AncestorComparator($ancestors);
+    }
 
-        $this->assertEquals(2, $comp->getRangeCount());
+    public function testGetRangeCount(): void
+    {
+        $this->assertSame(2, $this->comp->getRangeCount());
     }
 
     public function testRangesEqual(): void
     {
-        $root = new TagNode(null, 'root');
-        $intermediate = new TagNode(null, 'middle');
-
-        $ancestors = [];
-        $ancestors[] = $root;
-        $ancestors[] = $intermediate;
-
-        $comp = new AncestorComparator($ancestors);
-
-        $this->assertFalse($comp->rangesEqual(0, $comp, 1));
-        $this->assertTrue($comp->rangesEqual(0, $comp, 0));
+        $this->assertFalse($this->comp->rangesEqual(0, $this->comp, 1));
+        $this->assertTrue($this->comp->rangesEqual(0, $this->comp, 0));
     }
 
     public function testSkipRangeComparison(): void
     {
-        $root = new TagNode(null, 'root');
-        $intermediate = new TagNode(null, 'middle');
-
-        $ancestors = [];
-        $ancestors[] = $root;
-        $ancestors[] = $intermediate;
-
-        $comp = new AncestorComparator($ancestors);
-
-        $this->assertFalse($comp->skipRangeComparison(0, 1, $comp));
+        $this->assertFalse($this->comp->skipRangeComparison(0, 1, $this->comp));
     }
 
     public function testGetAncestor(): void
     {
-        $root = new TagNode(null, 'root');
-        $intermediate = new TagNode(null, 'middle');
-
-        $ancestors = [];
-        $ancestors[] = $root;
-        $ancestors[] = $intermediate;
-
-        $comp = new AncestorComparator($ancestors);
-
-        $this->assertEquals($root, $comp->getAncestor(0));
+        $this->assertSame($this->root, $this->comp->getAncestor(0));
     }
 
     /**
-     * @expectedException OutOfBoundsException
+     * @expectedException \OutOfBoundsException
      */
     public function testGetAncestorException(): void
     {
-        $root = new TagNode(null, 'root');
-        $intermediate = new TagNode(null, 'middle');
-
-        $ancestors = [];
-        $ancestors[] = $root;
-        $ancestors[] = $intermediate;
-
-        $comp = new AncestorComparator($ancestors);
-
-        try {
-            $comp->getAncestor(3);
-        } catch (OutOfBoundsException $e) {
-            $this->assertEquals('Index: 3, Size: 2', $e->getMessage());
-            throw $e;
-        }
+        $this->comp->getAncestor(3);
     }
 
     public function testGetCompareTxt(): void
     {
-        $root = new TagNode(null, 'root');
-        $intermediate = new TagNode(null, 'middle');
-
-        $ancestors = [];
-        $ancestors[] = $root;
-        $ancestors[] = $intermediate;
-
-        $comp = new AncestorComparator($ancestors);
-
-        $this->assertEquals('', $comp->getCompareTxt());
+        $this->assertSame('', $this->comp->getCompareTxt());
     }
 
-   public function testGetResult(): void
-   {
-       $root = new TagNode(null, 'root');
-       $intermediate = new TagNode(null, 'middle');
+    public function testGetResult(): void
+    {
+        $html = new TagNode(null, 'html');
+        $body = new TagNode(null, 'body');
 
-       $firstNodeList = [];
-       $firstNodeList[] = $root;
-       $firstNodeList[] = $intermediate;
+        $secondNodeList = [];
+        $secondNodeList[] = $html;
+        $secondNodeList[] = $body;
 
-       $html = new TagNode(null, 'html');
-       $body = new TagNode(null, 'body');
+        $other = new AncestorComparator($secondNodeList);
 
-       $secondNodeList = [];
-       $secondNodeList[] = $html;
-       $secondNodeList[] = $body;
-
-       $comp  = new AncestorComparator($firstNodeList);
-       $other = new AncestorComparator($secondNodeList);
-
-       $this->assertFalse($comp->getResult($comp)->isChanged());
-       $this->assertTrue($comp->getResult($other)->isChanged());
-   }
+        $this->assertFalse($this->comp->getResult($this->comp)->isChanged());
+        $this->assertTrue($this->comp->getResult($other)->isChanged());
+    }
 }

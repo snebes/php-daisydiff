@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -6,8 +12,6 @@ namespace DaisyDiff\Html\Ancestor;
 
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Dom\TextNode;
-use DaisyDiff\RangeDifferencer\Core\LCSSettings;
-use OutOfBoundsException;
 use SN\RangeDifferencer\RangeComparatorInterface;
 use SN\RangeDifferencer\RangeDifferencer;
 
@@ -20,6 +24,8 @@ class TextOnlyComparator implements RangeComparatorInterface
     private $leafs = [];
 
     /**
+     * Default values.
+     *
      * @param TagNode $tree
      */
     public function __construct(TagNode $tree)
@@ -29,7 +35,6 @@ class TextOnlyComparator implements RangeComparatorInterface
 
     /**
      * @param TagNode $tree
-     * @return void
      */
     private function addRecursive(TagNode $tree): void
     {
@@ -48,19 +53,16 @@ class TextOnlyComparator implements RangeComparatorInterface
      */
     public function getRangeCount(): int
     {
-        return count($this->leafs);
+        return \count($this->leafs);
     }
 
     /**
-     * @param int                      $owni
-     * @param RangeComparatorInterface $other
-     * @param int                      $otheri
-     * @return bool
+     * {@inheritdoc}
      */
-    public function rangesEqual(int $owni, RangeComparatorInterface $other, int $otheri): bool
+    public function rangesEqual(int $thisIndex, RangeComparatorInterface $other, int $otherIndex): bool
     {
         if ($other instanceof TextOnlyComparator) {
-            return $this->getLeaf($owni)->isSameText($other->getLeaf($otheri));
+            return $this->getLeaf($thisIndex)->isSameText($other->getLeaf($otherIndex));
         }
 
         return false; // @codeCoverageIgnore
@@ -70,15 +72,15 @@ class TextOnlyComparator implements RangeComparatorInterface
      * @param int $index
      * @return TextNode
      *
-     * @throws OutOfBoundsException
+     * @throws \OutOfBoundsException
      */
     public function getLeaf(int $index): TextNode
     {
-        if (array_key_exists($index, $this->leafs)) {
-            return $this->leafs[$index];
-        } else {
-            throw new OutOfBoundsException(sprintf('Index: %d, Size: %d', $index, count($this->leafs)));
+        if (!isset($this->leafs[$index])) {
+            throw new \OutOfBoundsException(\sprintf('Index: %d, Size: %d', $index,count($this->leafs)));
         }
+
+        return $this->leafs[$index];
     }
 
     /**
@@ -95,23 +97,16 @@ class TextOnlyComparator implements RangeComparatorInterface
      */
     public function getMatchRatio(TextOnlyComparator $other): float
     {
-        $settings = new LCSSettings();
-        $settings->setUseGreedyMethod(true);
-        $settings->setPowLimit(1.5);
-        $settings->setTooLong(150 * 150);
-
         $differences   = RangeDifferencer::findDifferences($other, $this);
         $distanceOther = 0;
         $distanceThis  = 0;
 
         foreach ($differences as $d) {
-            $distanceOther += $d->leftLength();
+            $distanceOther += $d->getLeftLength();
+            $distanceThis += $d->getRightLength();
         }
 
-        foreach ($differences as $d) {
-            $distanceThis += $d->rightLength();
-        }
-
-        return floatval(((0.0 + $distanceOther) / $other->getRangeCount() + (0.0 + $distanceThis) / $this->getRangeCount()) / 2.0);
+        return (float) ((0.0 + $distanceOther) / $other->getRangeCount() +
+                (0.0 + $distanceThis) / $this->getRangeCount()) / 2;
     }
 }

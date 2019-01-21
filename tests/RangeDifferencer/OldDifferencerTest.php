@@ -10,6 +10,11 @@ use PHPUnit\Framework\TestCase;
  */
 class OldDifferencerTest extends TestCase
 {
+    protected function setUp()
+    {
+        $this->markTestSkipped();
+    }
+
     public function testFindDifferencesExample1(): void
     {
         $oldText = '<p> This is a blue book</p>';

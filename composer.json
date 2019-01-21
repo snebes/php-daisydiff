@@ -17,6 +17,7 @@
     "require": {
         "php": ">=7.1.0",
         "ext-mbstring": "*",
+        "ext-xml": "*",
         "psr/log": "^1.0",
         "snebes/range-differencer": "^1.0"
     },

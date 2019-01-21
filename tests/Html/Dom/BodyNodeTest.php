@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -19,10 +25,9 @@ class BodyNodeTest extends TestCase
 
     public function testCopyTreeWithChildren(): void
     {
-        $body         = new BodyNode();
+        $body = new BodyNode();
         $intermediate = new TagNode($body, 'middle');
         $body->addChild($intermediate);
-
         $leaf = new TagNode($intermediate, 'leaf');
         $intermediate->addChild($leaf);
 
@@ -31,15 +36,14 @@ class BodyNodeTest extends TestCase
 
     public function testGetMinimalDeletedSet(): void
     {
-        $body         = new BodyNode();
+        $body = new BodyNode();
         $intermediate = new TagNode($body, 'middle');
         $body->addChild($intermediate);
-
         $leaf = new TagNode($intermediate, 'leaf');
         $intermediate->addChild($leaf);
 
         $nodes = [];
-        $this->assertEquals($nodes, $body->getMinimalDeletedSet(0));
-        $this->assertEquals($nodes, $leaf->getMinimalDeletedSet(0));
+        $this->assertSame($nodes, $body->getMinimalDeletedSet(0));
+        $this->assertSame($nodes, $leaf->getMinimalDeletedSet(0));
     }
 }

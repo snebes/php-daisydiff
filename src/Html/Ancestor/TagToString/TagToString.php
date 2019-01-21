@@ -14,7 +14,6 @@ use DaisyDiff\Html\Ancestor\ChangeText;
 use DaisyDiff\Html\Ancestor\TagChangeSemantic;
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Modification\HtmlLayoutChange;
-use DaisyDiff\Html\Modification\HtmlLayoutChangeType;
 
 /**
  * TagToString
@@ -56,7 +55,7 @@ class TagToString
         $this->htmlLayoutChange = new HtmlLayoutChange();
         $this->htmlLayoutChange->setEndingTag($this->node->getEndTag());
         $this->htmlLayoutChange->setOpeningTag($this->node->getOpeningTag());
-        $this->htmlLayoutChange->setType(HtmlLayoutChangeType::TAG_REMOVED);
+        $this->htmlLayoutChange->setType(HtmlLayoutChange::TAG_REMOVED);
 
         if ($this->sem === TagChangeSemantic::MOVED) {
             $text->addText(\sprintf('%s %s ', $this->getMovedOutOf(), \mb_strtolower($this->getArticle())));
@@ -87,7 +86,7 @@ class TagToString
         $this->htmlLayoutChange = new HtmlLayoutChange();
         $this->htmlLayoutChange->setEndingTag($this->node->getEndTag());
         $this->htmlLayoutChange->setOpeningTag($this->node->getOpeningTag());
-        $this->htmlLayoutChange->setType(HtmlLayoutChangeType::TAG_ADDED);
+        $this->htmlLayoutChange->setType(HtmlLayoutChange::TAG_ADDED);
 
         if ($this->sem === TagChangeSemantic::MOVED) {
             $text->addText(\sprintf('%s %s ', $this->getMovedTo(), \mb_strtolower($this->getArticle())));

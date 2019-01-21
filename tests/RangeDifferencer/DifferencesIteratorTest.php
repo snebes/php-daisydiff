@@ -7,8 +7,16 @@ use DaisyDiff\RangeDifferencer\RangeDifferencer;
 use DaisyDiff\Tag\TagComparator;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * DifferencesIteratorTest
+ */
 class DifferencesIteratorTest extends TestCase
 {
+    protected function setUp()
+    {
+        $this->markTestSkipped();
+    }
+
     /**
      * @return RangeDifferencer[]
      */

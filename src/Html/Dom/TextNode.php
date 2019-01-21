@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -13,10 +19,10 @@ use DaisyDiff\Html\Modification\ModificationType;
 class TextNode extends Node
 {
     /** @var string */
-    protected $s = '';
+    private $s = '';
 
     /** @var Modification */
-    protected $modification;
+    private $modification;
 
     /**
      * @param TagNode $parent
@@ -26,8 +32,8 @@ class TextNode extends Node
     {
         parent::__construct($parent);
 
-        $this->s            = $s;
         $this->modification = new Modification(ModificationType::NONE, ModificationType::NONE);
+        $this->s = $s;
     }
 
     /**
@@ -50,16 +56,14 @@ class TextNode extends Node
     }
 
     /**
-     * @param int $id
-     * @return array
+     * {@inheritdoc}
      */
     public function getMinimalDeletedSet(int $id): array
     {
-        $nodes        = [];
+        $nodes = [];
         $modification = $this->getModification();
 
-        if (null !== $modification && $modification->getType() === ModificationType::REMOVED &&
-            $modification->getId() === $id) {
+        if ($modification->getType() === ModificationType::REMOVED && $modification->getId() === $id) {
             $nodes = [$this];
         }
 
@@ -92,7 +96,7 @@ class TextNode extends Node
             return false;
         }
 
-        return 0 === strcmp($this->getText(), $other->getText());
+        return $this->getText() === $other->getText();
     }
 
     /**

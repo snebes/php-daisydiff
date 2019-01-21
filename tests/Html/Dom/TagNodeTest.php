@@ -1,14 +1,16 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
 namespace DaisyDiff\Html\Dom;
 
-use InvalidArgumentException;
-use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
-use TypeError;
 
 /**
  * TagNode Tests.
@@ -21,11 +23,11 @@ class TagNodeTest extends TestCase
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
 
-        $this->assertEquals($intermediate, $root->getChild(0));
+        $this->assertSame($intermediate, $root->getChild(0));
     }
 
     /**
-     * @expectedException TypeError
+     * @expectedException \TypeError
      */
     public function testAddChildNullExcpetion(): void
     {
@@ -34,7 +36,7 @@ class TagNodeTest extends TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testAddChildExcpetion(): void
     {
@@ -42,12 +44,7 @@ class TagNodeTest extends TestCase
         $errorRoot = new TagNode(null, 'errorRoot');
         $intermediate = new TagNode($errorRoot, 'middle');
 
-        try {
-            $root->addChild($intermediate);
-        } catch (InvalidArgumentException $e) {
-            $this->assertEquals('The new child must have this node as a parent.', $e->getMessage());
-            throw $e;
-        }
+        $root->addChild($intermediate);
     }
 
     public function testAddChildIndex(): void
@@ -55,36 +52,24 @@ class TagNodeTest extends TestCase
         $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate, 0);
-
         $leaf = new TagNode($root, 'leaf');
         $root->addChild($leaf, 1);
 
-        try {
-            $root->addChild(null, 4);
-        } catch (TypeError $e) {
-        }
-
-        $this->assertEquals($leaf, $root->getChild(1));
+        $this->assertSame($leaf, $root->getChild(1));
     }
 
     /**
-     * @expectedException TypeError
+     * @expectedException \TypeError
      */
     public function testAddChildIndexNullException(): void
     {
         $root = new TagNode(null, 'root');
-
-        try {
-            $root->addChild(null, 1);
-        } catch (TypeError $e) {
-            $this->assertEquals(0, $e->getCode());
-            throw $e;
-        }
+        $root->addChild(null, 1);
     }
 
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testAddChildIndexException(): void
     {
@@ -92,27 +77,21 @@ class TagNodeTest extends TestCase
         $errorRoot = new TagNode(null, 'errorRoot');
         $intermediate = new TagNode($errorRoot, 'middle');
 
-        try {
-            $root->addChild($intermediate, 0);
-        } catch (InvalidArgumentException $e) {
-            $this->assertEquals('The new child must have this node as a parent.', $e->getMessage());
-            throw $e;
-        }
+        $root->addChild($intermediate, 0);
     }
 
     public function testSetRoot(): void
     {
-        $refMethod = new ReflectionMethod(TagNode::class, 'setRoot');
+        $refMethod = new \ReflectionMethod(TagNode::class, 'setRoot');
         $refMethod->setAccessible(true);
 
         $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $leaf = new TagNode($intermediate, 'leaf');
-
         $intermediate->addChild($leaf);
         $refMethod->invoke($intermediate, $root);
 
-        $this->assertEquals($root, $intermediate->getRoot());
+        $this->assertSame($root, $intermediate->getRoot());
     }
 
     public function testGetIndexOf(): void
@@ -120,14 +99,13 @@ class TagNodeTest extends TestCase
         $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
-
         $leaf1 = new TagNode($intermediate, 'leaf1');
         $intermediate->addChild($leaf1);
         $leaf2 = new TagNode($intermediate, 'leaf2');
         $intermediate->addChild($leaf2);
 
-        $this->assertEquals(-1, $root->getIndexOf($leaf1));
-        $this->assertEquals(2, $intermediate->getIndexOf($leaf2));
+        $this->assertSame(-1, $root->getIndexOf($leaf1));
+        $this->assertSame(2, $intermediate->getIndexOf($leaf2));
     }
 
     public function testGetChild(): void
@@ -135,18 +113,17 @@ class TagNodeTest extends TestCase
         $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
-
         $leaf1 = new TagNode($intermediate, 'leaf1');
         $intermediate->addChild($leaf1);
         $leaf2 = new TagNode($intermediate, 'leaf2');
         $intermediate->addChild($leaf2);
 
-        $this->assertEquals($leaf1, $intermediate->getChild(1));
-        $this->assertEquals($leaf2, $intermediate->getChild(2));
+        $this->assertSame($leaf1, $intermediate->getChild(1));
+        $this->assertSame($leaf2, $intermediate->getChild(2));
     }
 
     /**
-     * @expectedException OutOfBoundsException
+     * @expectedException \OutOfBoundsException
      */
     public function testGetChildException(): void
     {
@@ -154,12 +131,7 @@ class TagNodeTest extends TestCase
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
 
-        try {
-            $root->getChild(5);
-        } catch (OutOfBoundsException $e) {
-            $this->assertEquals('Index: 5, Size: 2', $e->getMessage());
-            throw $e;
-        }
+        $root->getChild(5);
     }
 
     public function testGetNumChildren(): void
@@ -167,12 +139,11 @@ class TagNodeTest extends TestCase
         $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
-
         $leaf = new TagNode($root, 'leaf');
         $root->addChild($leaf);
 
-        $this->assertEquals(4, $root->getNumChildren());
-        $this->assertEquals(0, $leaf->getNumChildren());
+        $this->assertSame(4, $root->getNumChildren());
+        $this->assertSame(0, $leaf->getNumChildren());
     }
 
     public function testGetIterator(): void
@@ -180,18 +151,17 @@ class TagNodeTest extends TestCase
         $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
-
         $leaf = new TagNode($root, 'leaf');
         $root->addChild($leaf);
 
         $iterator = $root->getIterator();
         $iterator->next();
-        $this->assertEquals($intermediate, $iterator->current());
+        $this->assertSame($intermediate, $iterator->current());
     }
 
     public function testGetQName(): void
     {
-        $root = new TagNode(null, 'root');
+        $root = new TagNode(null, 'rOoT');
 
         $this->assertEquals('root', $root->getQName());
     }
@@ -224,7 +194,7 @@ class TagNodeTest extends TestCase
 
     public function testIsSimilarTag(): void
     {
-        $refMethod = new ReflectionMethod(TagNode::class, 'isSimilarTag');
+        $refMethod = new \ReflectionMethod(TagNode::class, 'isSimilarTag');
         $refMethod->setAccessible(true);
 
         $root1 = new TagNode(null, 'root');
@@ -241,10 +211,10 @@ class TagNodeTest extends TestCase
 
     public function testGetOpeningTag(): void
     {
-        $html  = '<table class="table" width="500">';
+        $html = '<table width="500" height="75">';
         $attrs = [
-            'class' => 'table',
-            'width' => 500,
+            'width'  => '500',
+            'height' => '75',
         ];
 
         $root = new TagNode(null, 'table', $attrs);
@@ -252,7 +222,7 @@ class TagNodeTest extends TestCase
 
         $this->assertEquals('<middle>', $intermediate->getOpeningTag());
         $this->assertEquals($html, $root->getOpeningTag());
-        $this->assertEquals($html, strval($root));
+        $this->assertEquals($html, $root->__toString());
     }
 
     public function testGetEndTag(): void
@@ -290,7 +260,6 @@ class TagNodeTest extends TestCase
         $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
-
         $leaf1 = new TagNode($intermediate, 'leaf1');
         $intermediate->addChild($leaf1);
         $leaf2 = new TagNode($intermediate, 'leaf2');
@@ -304,10 +273,10 @@ class TagNodeTest extends TestCase
         $root = new TagNode(null, 'root');
         $textNode = new TextNode($root, 'Content of the root node');
         $intermediate = new TagNode($root, 'root');
-        $text = new TextNode($intermediate, 'Content of the intermdeiate node');
+        $text = new TextNode($intermediate, 'Content of the intermediate node');
 
-        $this->assertEquals('Content of the root node', strval($textNode));
-        $this->assertEquals('Content of the intermdeiate node', strval($text));
+        $this->assertSame('Content of the root node', $textNode->__toString());
+        $this->assertSame('Content of the intermediate node', $text->__toString());
         $this->assertEquals(0.25, $root->getMatchRatio($intermediate), '', 0.1);
     }
 
@@ -316,14 +285,13 @@ class TagNodeTest extends TestCase
         $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
-
         $leaf1 = new TagNode($intermediate, 'leaf1');
         $intermediate->addChild($leaf1);
         $leaf2 = new TagNode($intermediate, 'leaf2');
         $intermediate->addChild($leaf2);
 
-        $this->assertEquals($leaf1, $root->getLeftMostChild());
-        $this->assertEquals($leaf2, $root->getRightMostChild());
+        $this->assertSame($leaf1, $root->getLeftMostChild());
+        $this->assertSame($leaf2, $root->getRightMostChild());
     }
 
     public function testIsPre(): void

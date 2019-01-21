@@ -35,7 +35,7 @@ class AncestorComparatorResultTest extends TestCase
     public function testGetChanges(): void
     {
         $result = new AncestorComparatorResult();
-        $this->assertEmpty($result->getChanges());
+        $this->assertSame('', $result->getChanges());
     }
 
     public function testSetChanges(): void
@@ -43,13 +43,13 @@ class AncestorComparatorResultTest extends TestCase
         $result = new AncestorComparatorResult();
         $result->setChanges('blue');
 
-        $this->assertEquals('blue', $result->getChanges());
+        $this->assertSame('blue', $result->getChanges());
     }
 
     public function testGetHtmlLayoutChanges(): void
     {
         $result = new AncestorComparatorResult();
-        $this->assertEquals([], $result->getHtmlLayoutChanges());
+        $this->assertSame([], $result->getHtmlLayoutChanges());
     }
 
     public function testSetHtmlLayoutChanges(): void
@@ -59,6 +59,6 @@ class AncestorComparatorResultTest extends TestCase
         $changes = [new HtmlLayoutChange()];
         $result->setHtmlLayoutChanges($changes);
 
-        $this->assertEquals($changes, $result->getHtmlLayoutChanges());
+        $this->assertSame($changes, $result->getHtmlLayoutChanges());
     }
 }
