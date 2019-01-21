@@ -88,7 +88,7 @@ class TagNode extends Node implements IteratorAggregate
     {
         $key = \array_search($node, $this->children, true);
 
-        if (false !== $key) {
+        if (false !== $key && is_int($key)) {
             return $key;
         }
 
