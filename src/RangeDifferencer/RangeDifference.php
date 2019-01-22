@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -94,9 +100,19 @@ class RangeDifference
      *
      * @return int
      */
-    public function kind(): int
+    public function getKind(): int
     {
         return $this->kind;
+    }
+
+    /**
+     * @param int $kind
+     * @return self
+     */
+    public function setKind(int $kind): self
+    {
+        $this->kind = $kind;
+        return $this;
     }
 
     /**
@@ -104,9 +120,19 @@ class RangeDifference
      *
      * @return int
      */
-    public function ancestorStart(): int
+    public function getAncestorStart(): int
     {
         return $this->ancestorStart;
+    }
+
+    /**
+     * @param int $ancestorStart
+     * @return self
+     */
+    public function setAncestorStart(int $ancestorStart): self
+    {
+        $this->ancestorStart = $ancestorStart;
+        return $this;
     }
 
     /**
@@ -114,9 +140,19 @@ class RangeDifference
      *
      * @return int
      */
-    public function ancestorLength(): int
+    public function getAncestorLength(): int
     {
         return $this->ancestorLength;
+    }
+
+    /**
+     * @param int $ancestorLength
+     * @return self
+     */
+    public function setAncestorLength(int $ancestorLength): self
+    {
+        $this->ancestorLength = $ancestorLength;
+        return $this;
     }
 
     /**
@@ -124,7 +160,7 @@ class RangeDifference
      *
      * @return int
      */
-    public function ancestorEnd(): int
+    public function getAncestorEnd(): int
     {
         return $this->ancestorStart + $this->ancestorLength;
     }
@@ -134,9 +170,19 @@ class RangeDifference
      *
      * @return int
      */
-    public function rightStart(): int
+    public function getRightStart(): int
     {
         return $this->rightStart;
+    }
+
+    /**
+     * @param int $rightStart
+     * @return self
+     */
+    public function setRightStart(int $rightStart): self
+    {
+        $this->rightStart = $rightStart;
+        return $this;
     }
 
     /**
@@ -144,9 +190,19 @@ class RangeDifference
      *
      * @return int
      */
-    public function rightLength(): int
+    public function getRightLength(): int
     {
         return $this->rightLength;
+    }
+
+    /**
+     * @param int $rightLength
+     * @return self
+     */
+    public function setRightLength(int $rightLength): self
+    {
+        $this->rightLength = $rightLength;
+        return $this;
     }
 
     /**
@@ -154,7 +210,7 @@ class RangeDifference
      *
      * @return int
      */
-    public function rightEnd(): int
+    public function getRightEnd(): int
     {
         return $this->rightStart + $this->rightLength;
     }
@@ -164,9 +220,19 @@ class RangeDifference
      *
      * @return int
      */
-    public function leftStart(): int
+    public function getLeftStart(): int
     {
         return $this->leftStart;
+    }
+
+    /**
+     * @param int $leftStart
+     * @return self
+     */
+    public function setLeftStart(int $leftStart): self
+    {
+        $this->leftStart = $leftStart;
+        return $this;
     }
 
     /**
@@ -174,9 +240,19 @@ class RangeDifference
      *
      * @return int
      */
-    public function leftLength(): int
+    public function getLeftLength(): int
     {
         return $this->leftLength;
+    }
+
+    /**
+     * @param int $leftLength
+     * @return self
+     */
+    public function setLeftLength(int $leftLength): self
+    {
+        $this->leftLength = $leftLength;
+        return $this;
     }
 
     /**
@@ -184,7 +260,7 @@ class RangeDifference
      *
      * @return int
      */
-    public function leftEnd(): int
+    public function getLeftEnd(): int
     {
         return $this->leftStart + $this->leftLength;
     }
@@ -194,9 +270,9 @@ class RangeDifference
      *
      * @return int
      */
-    public function maxLength(): int
+    public function getMaxLength(): int
     {
-        return max($this->rightLength, $this->leftLength, $this->ancestorLength);
+        return \max($this->rightLength, $this->leftLength, $this->ancestorLength);
     }
 
     /**
@@ -206,14 +282,13 @@ class RangeDifference
     public function equals(RangeDifference $other): bool
     {
         return
-            $this->kind           == $other->kind() &&
-            $this->leftStart      == $other->leftStart() &&
-            $this->leftLength     == $other->leftLength() &&
-            $this->rightStart     == $other->rightStart() &&
-            $this->rightLength    == $other->rightLength() &&
-            $this->ancestorStart  == $other->ancestorStart() &&
-            $this->ancestorLength == $other->ancestorLength()
-        ;
+            $this->kind           === $other->getKind() &&
+            $this->leftStart      === $other->getLeftStart() &&
+            $this->leftLength     === $other->getLeftLength() &&
+            $this->rightStart     === $other->getRightStart() &&
+            $this->rightLength    === $other->getRightLength() &&
+            $this->ancestorStart  === $other->getAncestorStart() &&
+            $this->ancestorLength === $other->getAncestorLength();
     }
 
     /**
@@ -221,53 +296,14 @@ class RangeDifference
      */
     public function __toString(): string
     {
-        $str = 'RangeDifference {';
-
-        switch ($this->kind) {
-            case self::NOCHANGE:
-                $str .= 'NOCHANGE';
-                break;
-            case self::CHANGE:
-                $str .= 'CHANGE/RIGHT';
-                break;
-            case self::CONFLICT:
-                $str .= 'CONFLICT';
-                break;
-            case self::LEFT:
-                $str .= 'LEFT';
-                break;
-            case self::ERROR:
-                $str .= 'ERROR';
-                break;
-            case self::ANCESTOR:
-                $str .= 'ANCESTOR';
-                break;
-            default:
-                break;
-        }
-
-        $str .= ', ';
-        $str .= sprintf('Left: %s Right: %s',
-            $this->toRangeString($this->leftStart, $this->leftLength),
-            $this->toRangeString($this->rightStart, $this->rightLength)
-        );
+        $str = sprintf('Left: (%d, %d) Right: (%d, %d)',
+            $this->getLeftStart(), $this->getLeftLength(),
+            $this->getRightStart(), $this->getRightLength());
 
         if ($this->ancestorLength > 0 || $this->ancestorStart > 0) {
-            $str .= sprintf(' Ancestor: %s', $this->toRangeString($this->ancestorStart, $this->ancestorLength));
+            $str .= sprintf(' Ancestor: (%d, %d)', $this->getAncestorStart(), $this->getAncestorLength());
         }
 
-        $str .= '}';
-
         return $str;
-    }
-
-    /**
-     * @param int $start
-     * @param int $length
-     * @return string
-     */
-    private function toRangeString(int $start, int $length): string
-    {
-        return sprintf('(%d, %d)', $start, $length);
     }
 }

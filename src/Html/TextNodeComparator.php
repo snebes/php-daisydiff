@@ -425,7 +425,8 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                 }
 
                 // array_pop removes last array element, and returns it.
-                $nextLeaf = (array_pop($deletedNodes))->copyTree(); // @todo may not want to renumber indices
+                $node = \array_pop($deletedNodes);
+                $nextLeaf = $node->copyTree();
                 $nextLeaf->setParent($nextResult->getLastCommonParent());
                 $nextResult->getLastCommonParent()->addChild($nextLeaf, $nextResult->getIndexInLastCommonParent());
             } else {

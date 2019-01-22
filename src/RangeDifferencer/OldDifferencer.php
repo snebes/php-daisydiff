@@ -1,12 +1,14 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
 namespace DaisyDiff\RangeDifferencer;
-
-use ReflectionException;
-use ReflectionProperty;
-use RuntimeException;
 
 /**
  * The algorithm used is an objectified version of one described in: A File Comparison Program, by Webb Miller and
@@ -37,22 +39,22 @@ final class OldDifferencer
         assert(get_class($right) === get_class($left));
 
         $rightSize = $right->getRangeCount();
-        $leftSize  = $left->getRangeCount();
+        $leftSize = $left->getRangeCount();
 
         // Differences matrix:
         // Only the last d of each diagonal is stored, i.e., $lastDiagonal[$k] = row of d
-        $diagLen = 2 * max($rightSize, $leftSize);
+        $diagLen = (int) 2 * \max($rightSize, $leftSize);
         $maxDiagonal = $diagLen;
 
         /** @var int[] The row containing the last d */
-        $lastDiagonal = array_fill(0, $diagLen + 1, 0);
+        $lastDiagonal = \array_fill(0, $diagLen + 1, 0);
 
         // On diagonal $k ($lastDiagonal[$k] = $row
-        $origin = intval($diagLen / 2);
+        $origin = (int) $diagLen / 2;
 
         // Script corresponding to $d[$k]
         /** @var LinkedRangeDifference */
-        $script = array_fill(0, $diagLen + 1, null);
+        $script = \array_fill(0, $diagLen + 1, null);
         $row = 0;
 
         // Find common prefix.
@@ -63,8 +65,8 @@ final class OldDifferencer
         $lastDiagonal[$origin] = $row;
         $script[$origin] = null;
 
-        $lower = ($row == $rightSize)? $origin + 1 : $origin - 1;
-        $upper = ($row == $leftSize)?  $origin - 1 : $origin + 1;
+        $lower = ($row === $rightSize) ? $origin + 1 : $origin - 1;
+        $upper = ($row === $leftSize) ? $origin - 1 : $origin + 1;
 
         if ($lower > $upper) {
             return [];
@@ -83,29 +85,27 @@ final class OldDifferencer
             // For each relevant diagonal (-d, -d+2, ... d-2, d)
             for ($k = $lower; $k <= $upper; $k += 2) {
                 // $k is the current diagonal.
-                if ($k == $origin - $d || $k != $origin + $d && $lastDiagonal[$k + 1] >= $lastDiagonal[$k - 1]) {
+                if ($k === $origin - $d || $k !== $origin + $d && $lastDiagonal[$k + 1] >= $lastDiagonal[$k - 1]) {
                     // Move down.
-                    $row  = $lastDiagonal[$k + 1] + 1;
+                    $row = $lastDiagonal[$k + 1] + 1;
                     $edit = new LinkedRangeDifference($script[$k + 1], LinkedRangeDifference::DELETE);
                 } else {
                     // Move right.
-                    $row  = $lastDiagonal[$k - 1];
+                    $row = $lastDiagonal[$k - 1];
                     $edit = new LinkedRangeDifference($script[$k - 1], LinkedRangeDifference::INSERT);
                 }
 
                 $col = $row + $k - $origin;
 
-                try {
-                    // $edit->rightStart = $row;
-                    $refProp = new ReflectionProperty($edit, 'rightStart');
-                    $refProp->setAccessible(true);
-                    $refProp->setValue($edit, $row);
+                // $edit->rightStart = $row;
+                $refProp = new \ReflectionProperty($edit, 'rightStart');
+                $refProp->setAccessible(true);
+                $refProp->setValue($edit, $row);
 
-                    // $edit->leftStart = $col;
-                    $refProp = new ReflectionProperty($edit, 'leftStart');
-                    $refProp->setAccessible(true);
-                    $refProp->setValue($edit, $col);
-                } catch (ReflectionException $e) {} // @codeCoverageIgnore
+                // $edit->leftStart = $col;
+                $refProp = new \ReflectionProperty($edit, 'leftStart');
+                $refProp->setAccessible(true);
+                $refProp->setValue($edit, $col);
 
                 assert($k >= 0 && $k <= $maxDiagonal);
                 $script[$k] = $edit;
@@ -120,15 +120,15 @@ final class OldDifferencer
                 assert($k >= 0 && $k <= $maxDiagonal);
                 $lastDiagonal[$k] = $row;
 
-                if ($row == $rightSize && $col == $leftSize) {
+                if ($row === $rightSize && $col === $leftSize) {
                     return self::createDifferencesRanges($script[$k]);
                 }
 
-                if ($row == $rightSize) {
+                if ($row === $rightSize) {
                     $lower = $k + 2;
                 }
 
-                if ($col == $leftSize) {
+                if ($col === $leftSize) {
                     $upper = $k - 2;
                 }
             }
@@ -138,7 +138,7 @@ final class OldDifferencer
         }
 
         // Too many differences.
-        throw new RuntimeException('Too many differences to compute.'); // @codeCoverageIgnore
+        throw new \RuntimeException(); // @codeCoverageIgnore
     }
 
     /**
@@ -172,41 +172,30 @@ final class OldDifferencer
         $ep = self::reverseDifferences($start);
         $result = [];
 
-        try {
-            $refRightStart = new ReflectionProperty(RangeDifference::class, 'rightStart');
-            $refRightLength = new ReflectionProperty(RangeDifference::class, 'rightLength');
-            $refLeftStart = new ReflectionProperty(RangeDifference::class, 'leftStart');
-            $refLeftLength = new ReflectionProperty(RangeDifference::class, 'leftLength');
-            $refRightStart->setAccessible(true);
-            $refRightLength->setAccessible(true);
-            $refLeftStart->setAccessible(true);
-            $refLeftLength->setAccessible(true);
-        } catch (ReflectionException $e) {} // @codeCoverageIgnore
-
         while (null !== $ep) {
             $es = new RangeDifference(RangeDifference::CHANGE);
 
             if ($ep->isInsert()) {
-                $refRightStart->setValue($es, $ep->rightStart() + 1);
-                $refLeftStart->setValue($es, $ep->leftStart());
+                $es->setRightStart($ep->getRightStart() + 1);
+                $es->setLeftStart($ep->getLeftStart() + 1);
                 $b = $ep;
 
                 do {
                     $ep = $ep->getNext();
-                    $refLeftLength->setValue($es, $es->leftLength() + 1);
-                } while (null !== $ep && $ep->isInsert() && $ep->rightStart() == $b->rightStart());
+                    $es->setLeftLength($es->getLeftLength() + 1);
+                } while (null !== $ep && $ep->isInsert() && $ep->getRightStart() === $b->getRightStart());
             } else {
-                $refRightStart->setValue($es, $ep->rightStart());
-                $refLeftStart->setValue($es, $ep->leftStart());
+                $es->setRightStart($ep->getRightStart());
+                $es->setLeftStart($ep->getLeftStart());
 
                 // Deleted lines.
                 do {
-                    $a  = $ep;
+                    $a = $ep;
                     $ep = $ep->getNext();
-                    $refRightLength->setValue($es, $es->rightLength() + 1);
-                } while (null !== $ep && $ep->isDelete() && $ep->rightStart() == $a->rightStart() + 1);
+                    $es->setRightLength($es->getRightLength() + 1);
+                } while (null !== $ep && $ep->isDelete() && $ep->getRightStart() === $a->getRightStart() + 1);
 
-                $change = (null !== $ep && $ep->isInsert() && $ep->rightStart() == $a->rightStart());
+                $change = (null !== $ep && $ep->isInsert() && $ep->getRightStart() === $a->getRightStart());
 
                 if ($change) {
                     $b = $ep;
@@ -214,19 +203,19 @@ final class OldDifferencer
                     // Replacement lines.
                     do {
                         $ep = $ep->getNext();
-                        $refLeftLength->setValue($es, $es->leftLength() + 1);
-                    } while (null !== $ep && $ep->isInsert() && $ep->rightStart() == $b->rightStart());
+                        $es->setLeftLength($es->getLeftLength() + 1);
+                    } while (null !== $ep && $ep->isInsert() && $ep->getRightStart() === $b->getRightStart());
                 } else {
-                    $refLeftLength->setValue($es, 0);
+                    $es->setLeftLength(0);
                 }
 
                 // Meaning of range changes from "insert after", to "replace with".
-                $refLeftStart->setValue($es, $es->leftStart() + 1);
+                $es->setLeftStart($es->getLeftStart() + 1);
             }
 
             // The script commands are 1 based, subtract one to make them zero based.
-            $refRightStart->setValue($es, $es->rightStart() - 1);
-            $refLeftStart->setValue($es, $es->leftStart() - 1);
+            $es->setRightStart($es->getRightStart() - 1);
+            $es->setLeftStart($es->getLeftStart() - 1);
 
             $result[] = $es;
         }
