@@ -68,9 +68,11 @@ abstract class LCS
         // The common prefixes and suffixes are always part of some LCS, include them now to reduce our search space.
         $max = \min($length1, $length2);
 
-        for ($forwardBound = 0;
-             $forwardBound < $max && $this->isRangeEqual($forwardBound, $forwardBound);
-             $forwardBound++) {
+        for (
+            $forwardBound = 0;
+            $forwardBound < $max && $this->isRangeEqual($forwardBound, $forwardBound);
+            $forwardBound++
+        ) {
             $this->setLcs($forwardBound, $forwardBound);
         }
 
