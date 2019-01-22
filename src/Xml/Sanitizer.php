@@ -273,7 +273,7 @@ class Sanitizer
         $docType = "<!DOCTYPE html [\n";
 
         foreach (self::$htmlEntities as $entity => $hex) {
-            $docType .= sprintf('<!ENTITY %s "&#%s;">', $entity, $hex);
+            $docType .= \sprintf('<!ENTITY %s "&#%s;">', $entity, $hex);
         }
 
         $docType .= "]>\n";

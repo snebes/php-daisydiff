@@ -170,10 +170,10 @@ class TagToString
         $arr = [];
 
         foreach ($attributes as $qName => $value) {
-            $arr[] = sprintf('%s %s', $this->translateArgument($qName), $value);
+            $arr[] = \sprintf('%s %s', $this->translateArgument($qName), $value);
         }
 
-        $text->addText(sprintf('%s %s', \mb_strtolower($this->getWith()), \implode(', ', $arr)));
+        $text->addText(\sprintf('%s %s', \mb_strtolower($this->getWith()), \implode(', ', $arr)));
     }
 
     /**
@@ -242,7 +242,7 @@ class TagToString
      */
     protected function getArticle(): string
     {
-        return $this->getString(sprintf('diff-%s-article', $this->node->getQName()));
+        return $this->getString(\sprintf('diff-%s-article', $this->node->getQName()));
     }
 
     /**

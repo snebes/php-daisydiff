@@ -21,7 +21,7 @@ class Xml
         $s = '<' . $qName;
 
         foreach ($attributes as $attr => $value) {
-            $s .= sprintf(' %s="%s"', $attr, $value);
+            $s .= \sprintf(' %s="%s"', $attr, $value);
         }
 
         $s .= '>';
@@ -37,6 +37,6 @@ class Xml
      */
     public static function closeElement(string $qName): string
     {
-        return sprintf('</%s>', $qName);
+        return \sprintf('</%s>', $qName);
     }
 }

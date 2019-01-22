@@ -302,12 +302,12 @@ class RangeDifference
      */
     public function __toString(): string
     {
-        $str = sprintf('Left: (%d, %d) Right: (%d, %d)',
+        $str = \sprintf('Left: (%d, %d) Right: (%d, %d)',
             $this->getLeftStart(), $this->getLeftLength(),
             $this->getRightStart(), $this->getRightLength());
 
         if ($this->ancestorLength > 0 || $this->ancestorStart > 0) {
-            $str .= sprintf(' Ancestor: (%d, %d)', $this->getAncestorStart(), $this->getAncestorLength());
+            $str .= \sprintf(' Ancestor: (%d, %d)', $this->getAncestorStart(), $this->getAncestorLength());
         }
 
         return $str;

@@ -180,22 +180,22 @@ class HtmlSaxDiffOutput implements DiffOutputInterface
 //
 //        // Add previous changes.
 //        if (null === $mod->getPrevious()) {
-//            $attrs['previous'] = sprintf('first-%s', $this->prefix);
+//            $attrs['previous'] = \sprintf('first-%s', $this->prefix);
 //        } else {
-//            $attrs['previous'] = sprintf('%s-%s-%s',
+//            $attrs['previous'] = \sprintf('%s-%s-%s',
 //                $mod->getPrevious()->getOutputType(),
 //                $this->prefix,
 //                $mod->getPrevious()->getId());
 //        }
 //
 //        // Add changeId.
-//        $attrs['changeId'] = sprintf('%s-%s-%s', $mod->getOutputType(), $this->prefix, $mod->getId());
+//        $attrs['changeId'] = \sprintf('%s-%s-%s', $mod->getOutputType(), $this->prefix, $mod->getId());
 //
 //        // Add next changes.
 //        if (null === $mod->getNext()) {
-//            $attrs['next'] = sprintf('last-%s', $this->prefix);
+//            $attrs['next'] = \sprintf('last-%s', $this->prefix);
 //        } else {
-//            $attrs['next'] = sprintf('%s-%s-%s',
+//            $attrs['next'] = \sprintf('%s-%s-%s',
 //                $mod->getNext()->getOutputType(),
 //                $this->prefix,
 //                $mod->getNext()->getId());

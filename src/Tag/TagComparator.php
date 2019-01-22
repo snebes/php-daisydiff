@@ -120,7 +120,7 @@ class TagComparator implements AtomSplitterInterface
             return $this->atoms[$i];
         }
 
-        throw new \OutOfBoundsException(sprintf('Index: %d, Size: %d', $i, \count($this->atoms)));
+        throw new \OutOfBoundsException(\sprintf('Index: %d, Size: %d', $i, \count($this->atoms)));
     }
 
     /**

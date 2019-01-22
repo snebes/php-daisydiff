@@ -98,7 +98,7 @@ class TagAtom implements AtomInterface
      */
     public function __toString(): string
     {
-        return sprintf('TagAtom: %s', $this->getFullText());
+        return \sprintf('TagAtom: %s', $this->getFullText());
     }
 
     /** {@inheritdoc} */

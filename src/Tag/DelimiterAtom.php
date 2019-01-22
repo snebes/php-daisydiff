@@ -96,7 +96,7 @@ class DelimiterAtom extends TextAtom
         $search = ["\n", "\r", "\t"];
         $replace = ["\\\\n", "\\\\r", "\\\\t"];
 
-        return sprintf('DelimiterAtom: %s', \str_replace($search, $replace, $this->getFullText()));
+        return \sprintf('DelimiterAtom: %s', \str_replace($search, $replace, $this->getFullText()));
     }
 
     /** {@inheritdoc} */

@@ -67,7 +67,7 @@ class TextAtom implements AtomInterface
      */
     public function __toString(): string
     {
-        return sprintf('TextAtom: %s', $this->getFullText());
+        return \sprintf('TextAtom: %s', $this->getFullText());
     }
 
     /** {@inheritdoc} */

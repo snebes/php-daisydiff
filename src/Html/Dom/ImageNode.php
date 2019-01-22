@@ -25,7 +25,7 @@ class ImageNode extends TextNode
      */
     public function __construct(?TagNode $parent, array $attributes = [])
     {
-        parent::__construct($parent, sprintf('<img>%s</img>', $attributes['src'] ?? ''));
+        parent::__construct($parent, \sprintf('<img>%s</img>', $attributes['src'] ?? ''));
         $this->attributes = $attributes;
     }
 

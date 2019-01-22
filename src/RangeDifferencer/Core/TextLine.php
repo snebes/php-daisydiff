@@ -53,6 +53,6 @@ declare(strict_types=1);
 //     */
 //    public function __toString(): string
 //    {
-//        return sprintf("%d %s\n", $this->number, $this->text);
+//        return \sprintf("%d %s\n", $this->number, $this->text);
 //    }
 //}
