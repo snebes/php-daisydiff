@@ -86,12 +86,12 @@ class RangeDifference
         int $ancestorStart = 0,
         int $ancestorLength = 0
     ) {
-        $this->kind           = $kind;
-        $this->rightStart     = $rightStart;
-        $this->rightLength    = $rightLength;
-        $this->leftStart      = $leftStart;
-        $this->leftLength     = $leftLength;
-        $this->ancestorStart  = $ancestorStart;
+        $this->kind = $kind;
+        $this->rightStart = $rightStart;
+        $this->rightLength = $rightLength;
+        $this->leftStart = $leftStart;
+        $this->leftLength = $leftLength;
+        $this->ancestorStart = $ancestorStart;
         $this->ancestorLength = $ancestorLength;
     }
 
@@ -288,12 +288,12 @@ class RangeDifference
     public function equals(RangeDifference $other): bool
     {
         return
-            $this->kind           === $other->getKind() &&
-            $this->leftStart      === $other->getLeftStart() &&
-            $this->leftLength     === $other->getLeftLength() &&
-            $this->rightStart     === $other->getRightStart() &&
-            $this->rightLength    === $other->getRightLength() &&
-            $this->ancestorStart  === $other->getAncestorStart() &&
+            $this->kind === $other->getKind() &&
+            $this->leftStart === $other->getLeftStart() &&
+            $this->leftLength === $other->getLeftLength() &&
+            $this->rightStart === $other->getRightStart() &&
+            $this->rightLength === $other->getRightLength() &&
+            $this->ancestorStart === $other->getAncestorStart() &&
             $this->ancestorLength === $other->getAncestorLength();
     }
 
