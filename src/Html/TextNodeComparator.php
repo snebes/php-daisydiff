@@ -20,8 +20,8 @@ use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Dom\TextNode;
 use DaisyDiff\Html\Modification\Modification;
 use DaisyDiff\Html\Modification\ModificationType;
+use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
 use IteratorAggregate;
-use SN\RangeDifferencer\RangeComparatorInterface;
 
 /**
  * A comparator that generates a DOM tree of sorts from handling SAX events. Then it can be used to compute the
@@ -103,9 +103,8 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
      * @param int    $end
      * @param string $outputFormat
      */
-//    public function markAsNew(int $start, int $end, string $outputFormat = ModificationType::ADDED): void
-    public function markAsNew(int $start, int $end, string $outputFormat): void
-    {   // @todo validate above
+    public function markAsNew(int $start, int $end, string $outputFormat = ModificationType::ADDED): void
+    {
         if ($end <= $start) {
             return;
         }
@@ -175,7 +174,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
         TextNodeComparator $leftComparator
     ): void {
         // $leftEnd is not used below.
-        assert(is_int($leftEnd));
+        \assert(\is_int($leftEnd));
 
         $i = $rightStart;
         $j = $leftStart;
@@ -265,9 +264,8 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
         int $end,
         TextNodeComparator $oldComp,
         int $before,
-        int $after,
-        string $outputFormat
-//        string $outputFormat = ModificationType::REMOVED
+        int $after = 0,
+        string $outputFormat = ModificationType::REMOVED
     ): void
     {
         if ($end <= $start) {

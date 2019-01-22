@@ -1,4 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
 
 namespace DaisyDiff\RangeDifferencer;
 
@@ -10,43 +18,35 @@ use PHPUnit\Framework\TestCase;
  */
 class OldDifferencerTest extends TestCase
 {
-    protected function setUp()
-    {
-        $this->markTestSkipped();
-    }
-
     public function testFindDifferencesExample1(): void
     {
         $oldText = '<p> This is a blue book</p>';
         $newText = '<p> This is a <b>big</b> blue book</p>';
-
-        $left  = new TagComparator($oldText);
+        $left = new TagComparator($oldText);
         $right = new TagComparator($newText);
 
-        $differenceRanges = OldDifferencer::findDifferences($left, $right);
-        $this->assertContains('Left: (8, 0) Right: (8, 4)', strval($differenceRanges[0]));
+        $ranges = OldDifferencer::findDifferences($left, $right);
+        $this->assertSame('Left: (8, 0) Right: (8, 4)', $ranges[0]->__toString());
     }
 
     public function testFindDifferencesExample2(): void
     {
         $oldText = '<p> This is a blue book</p>';
         $newText = '<p> This is a <b>big</b> blue book</p>';
-
-        $left  = new TagComparator($oldText);
+        $left = new TagComparator($oldText);
         $right = new TagComparator($newText);
 
-        $differenceRanges = OldDifferencer::findDifferences($right, $left);
-        $this->assertContains('Left: (8, 4) Right: (8, 0)', strval($differenceRanges[0]));
+        $ranges = OldDifferencer::findDifferences($right, $left);
+        $this->assertSame('Left: (9, 4) Right: (8, 0)', $ranges[0]->__toString());
     }
 
     public function testFindDifferencesExample3(): void
     {
         $oldText = '<p> This is a blue book</p>';
-
-        $left  = new TagComparator($oldText);
+        $left = new TagComparator($oldText);
         $right = new TagComparator($oldText);
 
-        $differenceRanges = OldDifferencer::findDifferences($right, $left);
-        $this->assertEquals(0, count($differenceRanges));
+        $ranges = OldDifferencer::findDifferences($right, $left);
+        $this->assertCount(0, $ranges);
     }
 }

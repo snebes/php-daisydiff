@@ -382,8 +382,6 @@ class TagNode extends Node implements IteratorAggregate
     }
 
     /**
-     * Remove child.
-     *
      * @param Node $node
      */
     public function removeChild(Node $node): void
@@ -391,8 +389,7 @@ class TagNode extends Node implements IteratorAggregate
         $key = \array_search($node, $this->children, true);
 
         if (false !== $key) {
-//            \array_splice($this->children, $key, 1);
-            unset($this->children[$key]);
+            \array_splice($this->children, $key, 1);
         }
     }
 

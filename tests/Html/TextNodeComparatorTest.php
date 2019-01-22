@@ -189,7 +189,7 @@ class TextNodeComparatorTest extends TestCase
     {
         $tree = new DomTreeBuilder();
         $comp = new TextNodeComparator($tree);
-        $textNodes = $this->getTextNodes($comp);
+        $this->getTextNodes($comp);
 
         $lastModified = $comp->getLastModified();
         $m = new Modification(ModificationType::REMOVED, ModificationType::REMOVED);
@@ -198,7 +198,7 @@ class TextNodeComparatorTest extends TestCase
 
         $comp->markAsDeleted(0, 2, $comp, 1);
 
-        $this->assertEquals('removed', strval($lastModified[0]->getOutputType()));
+        $this->assertEquals('removed', $lastModified[0]->getOutputType());
     }
 
     public function testExpandWhiteSpace(): void

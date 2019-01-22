@@ -12,8 +12,9 @@ namespace DaisyDiff\Html\Ancestor;
 
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Dom\TextNode;
-use SN\RangeDifferencer\RangeComparatorInterface;
-use SN\RangeDifferencer\RangeDifferencer;
+use DaisyDiff\RangeDifferencer\Core\LCSSettings;
+use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
+use DaisyDiff\RangeDifferencer\RangeDifferencer;
 
 /**
  * A comparator that compares only the elements of text inside a given tag.
@@ -96,7 +97,12 @@ class TextOnlyComparator implements RangeComparatorInterface
      */
     public function getMatchRatio(TextOnlyComparator $other): float
     {
-        $differences = RangeDifferencer::findDifferences($other, $this);
+        $settings = new LCSSettings();
+        $settings->setUseGreedyMethod(true);
+        $settings->setPowLimit(1.5);
+        $settings->setTooLong(150 * 150);
+
+        $differences = RangeDifferencer::findDifferences($other, $this, $settings);
         $distanceOther = 0;
         $distanceThis = 0;
 
@@ -105,7 +111,7 @@ class TextOnlyComparator implements RangeComparatorInterface
             $distanceThis += $d->getRightLength();
         }
 
-        return (float) ((0.0 + $distanceOther) / $other->getRangeCount() +
-                (0.0 + $distanceThis) / $this->getRangeCount()) / 2;
+        return (float) (((0.0 + $distanceOther) / $other->getRangeCount() +
+                (0.0 + $distanceThis) / $this->getRangeCount()) / 2);
     }
 }

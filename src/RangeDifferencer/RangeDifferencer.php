@@ -192,7 +192,7 @@ final class RangeDifferencer
      * @param RangeComparatorInterface $left
      * @param RangeComparatorInterface $right
      * @param LCSSettings|null         $settings
-     * @return array
+     * @return RangeDifference[]
      */
     public static function findRanges3(
         RangeComparatorInterface $ancestor,

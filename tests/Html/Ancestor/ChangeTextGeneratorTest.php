@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace DaisyDiff\Html\Ancestor;
 
 use DaisyDiff\Html\Dom\TagNode;
+use DaisyDiff\RangeDifferencer\RangeDifferencer;
 use PHPUnit\Framework\TestCase;
-use SN\RangeDifferencer\RangeDifferencer;
 
 /**
  * ChangeTextGenerator Tests.

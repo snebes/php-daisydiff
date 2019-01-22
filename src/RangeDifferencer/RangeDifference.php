@@ -108,6 +108,8 @@ class RangeDifference
     /**
      * @param int $kind
      * @return self
+     *
+     * @codeCoverageIgnore
      */
     public function setKind(int $kind): self
     {
@@ -128,6 +130,8 @@ class RangeDifference
     /**
      * @param int $ancestorStart
      * @return self
+     *
+     * @codeCoverageIgnore
      */
     public function setAncestorStart(int $ancestorStart): self
     {
@@ -148,6 +152,8 @@ class RangeDifference
     /**
      * @param int $ancestorLength
      * @return self
+     *
+     * @codeCoverageIgnore
      */
     public function setAncestorLength(int $ancestorLength): self
     {

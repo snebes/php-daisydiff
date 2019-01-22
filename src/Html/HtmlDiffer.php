@@ -12,8 +12,8 @@ namespace DaisyDiff\Html;
 
 use DaisyDiff\Html\Modification\ModificationType;
 use DaisyDiff\Output\DiffOutputInterface;
-use SN\RangeDifferencer\RangeDifference;
-use SN\RangeDifferencer\RangeDifferencer;
+use DaisyDiff\RangeDifferencer\RangeDifference;
+use DaisyDiff\RangeDifferencer\RangeDifferencer;
 
 /**
  * Takes TextNodeComparator instances, computes the difference between them, marks the changes, and outputs a merged

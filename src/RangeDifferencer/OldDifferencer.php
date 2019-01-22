@@ -43,14 +43,14 @@ final class OldDifferencer
 
         // Differences matrix:
         // Only the last d of each diagonal is stored, i.e., $lastDiagonal[$k] = row of d
-        $diagLen = (int) 2 * \max($rightSize, $leftSize);
+        $diagLen = (int) (2 * \max($rightSize, $leftSize));
         $maxDiagonal = $diagLen;
 
         /** @var int[] The row containing the last d */
         $lastDiagonal = \array_fill(0, $diagLen + 1, 0);
 
         // On diagonal $k ($lastDiagonal[$k] = $row
-        $origin = (int) $diagLen / 2;
+        $origin = (int) ($diagLen / 2);
 
         // Script corresponding to $d[$k]
         /** @var LinkedRangeDifference */
@@ -85,7 +85,7 @@ final class OldDifferencer
             // For each relevant diagonal (-d, -d+2, ... d-2, d)
             for ($k = $lower; $k <= $upper; $k += 2) {
                 // $k is the current diagonal.
-                if ($k === $origin - $d || $k !== $origin + $d && $lastDiagonal[$k + 1] >= $lastDiagonal[$k - 1]) {
+                if ($k == $origin - $d || $k != $origin + $d && $lastDiagonal[$k + 1] >= $lastDiagonal[$k - 1]) {
                     // Move down.
                     $row = $lastDiagonal[$k + 1] + 1;
                     $edit = new LinkedRangeDifference($script[$k + 1], LinkedRangeDifference::DELETE);
@@ -97,15 +97,8 @@ final class OldDifferencer
 
                 $col = $row + $k - $origin;
 
-                // $edit->rightStart = $row;
-                $refProp = new \ReflectionProperty($edit, 'rightStart');
-                $refProp->setAccessible(true);
-                $refProp->setValue($edit, $row);
-
-                // $edit->leftStart = $col;
-                $refProp = new \ReflectionProperty($edit, 'leftStart');
-                $refProp->setAccessible(true);
-                $refProp->setValue($edit, $col);
+                $edit->setRightStart($row);
+                $edit->setLeftStart($col);
 
                 assert($k >= 0 && $k <= $maxDiagonal);
                 $script[$k] = $edit;

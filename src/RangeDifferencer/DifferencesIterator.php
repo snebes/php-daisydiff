@@ -64,13 +64,13 @@ class DifferencesIterator
         return $this->fDifference;
     }
 
-//    /**
-//     * @return int
-//     */
-//    public function getIndex(): int
-//    {
-//        return $this->fIndex;
-//    }
+    /**
+     * @return int
+     */
+    public function getIndex(): int
+    {
+        return $this->fIndex;
+    }
 
     /**
      * @return array
