@@ -41,8 +41,7 @@ class TextOnlyComparator implements RangeComparatorInterface
         foreach ($tree as $child) {
             if ($child instanceof TagNode) {
                 $this->addRecursive($child);
-            }
-            elseif ($child instanceof TextNode) {
+            } elseif ($child instanceof TextNode) {
                 $this->leafs[] = $child;
             }
         }
@@ -77,7 +76,7 @@ class TextOnlyComparator implements RangeComparatorInterface
     public function getLeaf(int $index): TextNode
     {
         if (!isset($this->leafs[$index])) {
-            throw new \OutOfBoundsException(\sprintf('Index: %d, Size: %d', $index,count($this->leafs)));
+            throw new \OutOfBoundsException(\sprintf('Index: %d, Size: %d', $index, \count($this->leafs)));
         }
 
         return $this->leafs[$index];
@@ -97,16 +96,16 @@ class TextOnlyComparator implements RangeComparatorInterface
      */
     public function getMatchRatio(TextOnlyComparator $other): float
     {
-        $differences   = RangeDifferencer::findDifferences($other, $this);
+        $differences = RangeDifferencer::findDifferences($other, $this);
         $distanceOther = 0;
-        $distanceThis  = 0;
+        $distanceThis = 0;
 
         foreach ($differences as $d) {
             $distanceOther += $d->getLeftLength();
             $distanceThis += $d->getRightLength();
         }
 
-        return (float) ((0.0 + $distanceOther) / $other->getRangeCount() +
+        return (float)((0.0 + $distanceOther) / $other->getRangeCount() +
                 (0.0 + $distanceThis) / $this->getRangeCount()) / 2;
     }
 }
