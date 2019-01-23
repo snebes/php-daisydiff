@@ -180,7 +180,6 @@ final class OldDifferencer
             } else {
                 $es->setRightStart($ep->getRightStart());
                 $es->setLeftStart($ep->getLeftStart());
-                $a = $ep;
 
                 // Deleted lines.
                 do {
