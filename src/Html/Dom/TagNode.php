@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -6,10 +12,7 @@ namespace DaisyDiff\Html\Dom;
 
 use ArrayIterator;
 use DaisyDiff\Html\Ancestor\TextOnlyComparator;
-use DaisyDiff\Xml\Xml;
-use InvalidArgumentException;
 use IteratorAggregate;
-use OutOfBoundsException;
 
 /**
  * Node that can contain other nodes. Represents an HTML tag.
@@ -17,13 +20,13 @@ use OutOfBoundsException;
 class TagNode extends Node implements IteratorAggregate
 {
     /** @var Node[] */
-    protected $children = [];
+    private $children = [];
 
     /** @var string */
-    protected $qName;
+    private $qName;
 
     /** @var array */
-    protected $attributes = [];
+    private $attributes = [];
 
     /**
      * @param TagNode|null $parent
@@ -33,11 +36,7 @@ class TagNode extends Node implements IteratorAggregate
     public function __construct(?TagNode $parent, string $qName, array $attributes = [])
     {
         parent::__construct($parent);
-
-        $this->qName = $qName;
-
-        unset($attributes['style']);
-        ksort($attributes);
+        $this->qName = \mb_strtolower($qName);
         $this->attributes = $attributes;
     }
 
@@ -48,16 +47,16 @@ class TagNode extends Node implements IteratorAggregate
      * @param Node $node
      * @param int  $index
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function addChild(Node $node, int $index = null): void
     {
         if ($node->getParent() !== $this) {
-            throw new InvalidArgumentException('The new child must have this node as a parent.');
+            throw new \InvalidArgumentException('The new child must have this node as a parent.');
         }
 
-        if (is_int($index)) {
-            array_splice($this->children, $index, 0, [$node]);
+        if (\is_int($index)) {
+            \array_splice($this->children, $index, 0, [$node]);
         } else {
             $this->children[] = $node;
         }
@@ -87,9 +86,9 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function getIndexOf(Node $node): int
     {
-        $key = array_search($node, $this->children, true);
+        $key = \array_search($node, $this->children, true);
 
-        if (false !== $key) {
+        if (false !== $key && is_int($key)) {
             return $key;
         }
 
@@ -100,7 +99,7 @@ class TagNode extends Node implements IteratorAggregate
      * @param int $index
      * @return Node
      *
-     * @throws OutOfBoundsException
+     * @throws \OutOfBoundsException
      */
     public function getChild(int $index): Node
     {
@@ -108,7 +107,7 @@ class TagNode extends Node implements IteratorAggregate
             return $this->children[$index];
         }
 
-        throw new OutOfBoundsException(sprintf('Index: %d, Size: %d', $index, count($this->children)));
+        throw new \OutOfBoundsException(\sprintf('Index: %d, Size: %d', $index, \count($this->children)));
     }
 
     /**
@@ -126,7 +125,7 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function getNumChildren(): int
     {
-        return count($this->children);
+        return \count($this->children);
     }
 
     /**
@@ -149,7 +148,7 @@ class TagNode extends Node implements IteratorAggregate
      * Checks tags for being semantically equivalent if it's from a different tree and for being the same object if it's
      * from the same tree as $this tag.
      *
-     * @param  TagNode $other
+     * @param TagNode $other
      * @return bool
      */
     public function isSameTag(?TagNode $other): bool
@@ -165,7 +164,7 @@ class TagNode extends Node implements IteratorAggregate
      * Considers tags from different trees equal if they have same name and equivalent attributes. No attention paid to
      * the content (children) of the tag. Considers tags from the same tree equal if it is the same object.
      *
-     * @param  TagNode $tagNode
+     * @param TagNode $tagNode
      * @return bool
      */
     public function equals(TagNode $tagNode): bool
@@ -202,7 +201,7 @@ class TagNode extends Node implements IteratorAggregate
      * Returns true if this tag is similar to the given other tag. The tags may be from different trees. If the tag name
      * and attributes are the same, the result will be true.
      *
-     * @param  Node $other
+     * @param Node $other
      * @return bool
      */
     protected function isSimilarTag(Node $other): bool
@@ -210,7 +209,7 @@ class TagNode extends Node implements IteratorAggregate
         $result = false;
 
         if ($other instanceof TagNode) {
-            if (0 === strcasecmp($this->getQName(), $other->getQName())) {
+            if ($this->getQName() === $other->getQName()) {
                 $result = $this->hasSameAttributes($other->getAttributes());
             }
         }
@@ -226,7 +225,15 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function getOpeningTag(): string
     {
-        return Xml::openElement($this->getQName(), $this->getAttributes());
+        $s = '<' . $this->getQName();
+
+        foreach ($this->getAttributes() as $name => $value) {
+            $s .= \sprintf(' %s="%s"', $name, $value);
+        }
+
+        $s .= '>';
+
+        return $s;
     }
 
     /**
@@ -236,7 +243,7 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function getEndTag(): string
     {
-        return Xml::closeElement($this->getQName());
+        return \sprintf('</%s>', $this->getQName());
     }
 
     /**
@@ -261,7 +268,7 @@ class TagNode extends Node implements IteratorAggregate
         $nodes = [];
 
         // No-content tags are never included in the set.
-        if (0 === count($this->children)) {
+        if (0 === \count($this->children)) {
             return $nodes;
         }
 
@@ -270,10 +277,10 @@ class TagNode extends Node implements IteratorAggregate
 
         foreach ($this->children as $child) {
             $childrenChildren = $child->getMinimalDeletedSet($id);
-            $nodes            = array_merge($nodes, $childrenChildren);
+            $nodes = \array_merge($nodes, $childrenChildren);
 
             if (!$hasNotDeletedDescendant &&
-                !(1 === count($childrenChildren) && in_array($child, $childrenChildren, true))) {
+                !(1 === \count($childrenChildren) && \in_array($child, $childrenChildren, true))) {
                 // This child is not entirely deleted.
                 $hasNotDeletedDescendant = true;
             }
@@ -305,9 +312,9 @@ class TagNode extends Node implements IteratorAggregate
      * new doc. (means they either has been deleted or changed arguments). The "parent" parameter in that case is the
      * deepest common parent between the deleted node and its surrounding remaining siblings.
      *
-     * @param  TagNode $parent
-     * @param  Node    $split
-     * @param  bool    $includeLeft
+     * @param TagNode $parent
+     * @param Node    $split
+     * @param bool    $includeLeft
      * @return bool
      */
     public function splitUntil(TagNode $parent, Node $split, bool $includeLeft): bool
@@ -320,8 +327,8 @@ class TagNode extends Node implements IteratorAggregate
             $part1->setParent($this->getParent());
             $part2->setParent($this->getParent());
 
-            $i    = 0;
-            $iMax = count($this->children);
+            $i = 0;
+            $iMax = \count($this->children);
 
             while ($i < $iMax && $this->children[$i] !== $split) {
                 $this->children[$i]->setParent($part1);
@@ -375,16 +382,14 @@ class TagNode extends Node implements IteratorAggregate
     }
 
     /**
-     * Remove child.
-     *
      * @param Node $node
      */
     public function removeChild(Node $node): void
     {
-        $key = array_search($node, $this->children, true);
+        $key = \array_search($node, $this->children, true);
 
-        if (false !== $key) {
-            array_splice($this->children, $key, 1);
+        if (false !== $key && is_int($key)) {
+            \array_splice($this->children, $key, 1);
         }
     }
 
@@ -399,7 +404,7 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function isBlockLevel(): bool
     {
-        return in_array(mb_strtolower($this->getQName()), self::$blocks);
+        return \in_array($this->getQName(), self::$blocks, true);
     }
 
     /**
@@ -434,9 +439,10 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function getMatchRatio(TagNode $other): float
     {
-        $textComp = new TextOnlyComparator($other);
+        $thisComp = new TextOnlyComparator($this);
+        $otherComp = new TextOnlyComparator($other);
 
-        return $textComp->getMatchRatio(new TextOnlyComparator($this));
+        return $otherComp->getMatchRatio($thisComp);
     }
 
     /**
@@ -444,8 +450,8 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function expandWhiteSpace(): void
     {
-        $shift               = 0;
-        $spaceAdded          = false;
+        $shift = 0;
+        $spaceAdded = false;
         $numOriginalChildren = $this->getNumChildren();
 
         for ($i = 0; $i < $numOriginalChildren; $i++) {
@@ -505,6 +511,6 @@ class TagNode extends Node implements IteratorAggregate
      */
     public function isPre(): bool
     {
-        return 0 === strcasecmp('pre', $this->getQName());
+        return 'pre' === $this->getQName();
     }
 }

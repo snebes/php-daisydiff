@@ -12,17 +12,17 @@ use Exception;
 interface TextDiffOutputInterface
 {
     /**
-     * @param  string $text
+     * @param string $text
      */
     public function addClearPart(string $text): void;
 
     /**
-     * @param  string $text
+     * @param string $text
      */
     public function addRemovedPart(string $text): void;
 
     /**
-     * @param  string $text
+     * @param string $text
      */
     public function addAddedPart(string $text): void;
 }

@@ -1,12 +1,16 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
 namespace DaisyDiff\Tag;
 
 use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
-use Exception;
-use OutOfBoundsException;
 
 /**
  * Takes a String and generates tokens/atoms that can be used by LCS. This comparator is used specifically for arguments
@@ -18,8 +22,9 @@ class ArgumentComparator implements AtomSplitterInterface
     private $atoms = [];
 
     /**
+     * Default values.
+     *
      * @param string $s
-     * @throws Exception
      */
     public function __construct(string $s)
     {
@@ -27,33 +32,32 @@ class ArgumentComparator implements AtomSplitterInterface
     }
 
     /**
-     * @param  string $s
-     * @return void
-     * @throws Exception
+     * @param string $s
+     * @throws \RuntimeException
      */
     private function generateAtoms(string $s): void
     {
-        if (count($this->atoms) > 0) {
-            throw new Exception('Atoms can only be split once.');
+        if (\count($this->atoms) > 0) {
+            throw new \RuntimeException('Atoms can only be split once.');
         }
 
         $currentWord = '';
 
-        for ($i = 0; $i < mb_strlen($s); $i++) {
-            $c = mb_substr($s, $i, 1);
+        for ($i = 0; $i < \mb_strlen($s); $i++) {
+            $c = \mb_substr($s, $i, 1);
 
-            if ($c == '<' || $c == '>') {
-                if (mb_strlen($currentWord) > 0) {
+            if ($c === '<' || $c === '>') {
+                if (\mb_strlen($currentWord) > 0) {
                     $this->atoms[] = new TextAtom($currentWord);
                 }
 
-                $this->atoms[] = new TextAtom('' . $c);
-                $currentWord   = '';
-            } else if (DelimiterAtom::isValidDelimiter('' . $c)) {
+                $this->atoms[] = new TextAtom($c);
+                $currentWord = '';
+            } elseif (DelimiterAtom::isValidDelimiter($c)) {
                 // A delimiter.
-                if (mb_strlen($currentWord) > 0) {
+                if (\mb_strlen($currentWord) > 0) {
                     $this->atoms[] = new TextAtom($currentWord);
-                    $currentWord   = '';
+                    $currentWord = '';
                 }
 
                 $this->atoms[] = new DelimiterAtom($c);
@@ -62,23 +66,24 @@ class ArgumentComparator implements AtomSplitterInterface
             }
         }
 
-        if (mb_strlen($currentWord) > 0) {
+        if (\mb_strlen($currentWord) > 0) {
             $this->atoms[] = new TextAtom($currentWord);
         }
     }
 
     /**
-     * @param  int $i
+     * @param int $i
      * @return AtomInterface
-     * @throws OutOfBoundsException
+     *
+     * @throws \OutOfBoundsException
      */
     public function getAtom(int $i): AtomInterface
     {
-        if ($i < 0 || $i >= count($this->atoms)) {
-            throw new OutOfBoundsException('There is no Atom with index ' . $i);
+        if (isset($this->atoms[$i])) {
+            return $this->atoms[$i];
         }
 
-        return $this->atoms[$i];
+        throw new \OutOfBoundsException(\sprintf('Index: %d, Size: %d', $i, \count($this->atoms)));
     }
 
     /**
@@ -86,13 +91,13 @@ class ArgumentComparator implements AtomSplitterInterface
      */
     public function getRangeCount(): int
     {
-        return count($this->atoms);
+        return \count($this->atoms);
     }
 
     /**
-     * @param  int                      $thisIndex
-     * @param  RangeComparatorInterface $other
-     * @param  int                      $otherIndex
+     * @param int                      $thisIndex
+     * @param RangeComparatorInterface $other
+     * @param int                      $otherIndex
      * @return bool
      */
     public function rangesEqual(int $thisIndex, RangeComparatorInterface $other, int $otherIndex): bool
@@ -105,9 +110,9 @@ class ArgumentComparator implements AtomSplitterInterface
     }
 
     /**
-     * @param  int                      $length
-     * @param  int                      $maxLength
-     * @param  RangeComparatorInterface $other
+     * @param int                      $length
+     * @param int                      $maxLength
+     * @param RangeComparatorInterface $other
      * @return bool
      */
     public function skipRangeComparison(int $length, int $maxLength, RangeComparatorInterface $other): bool
@@ -116,17 +121,17 @@ class ArgumentComparator implements AtomSplitterInterface
     }
 
     /**
-     * @param  int      $startAtom
-     * @param  int|null $endAtom
+     * @param int      $startAtom
+     * @param int|null $endAtom
      * @return string
      */
-    public function substring(int $startAtom, ?int $endAtom = null): string
+    public function substring(int $startAtom, int $endAtom = null): string
     {
         if (null === $endAtom) {
-            $endAtom = count($this->atoms);
+            $endAtom = \count($this->atoms);
         }
 
-        if ($startAtom == $endAtom) {
+        if ($startAtom === $endAtom) {
             return '';
         } else {
             $result = '';

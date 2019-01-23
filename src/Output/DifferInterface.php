@@ -15,8 +15,8 @@ interface DifferInterface
     /**
      * Compares two Node Trees.
      *
-     * @param  TextNodeComparator $leftComparator
-     * @param  TextNodeComparator $rightComparator
+     * @param TextNodeComparator $leftComparator
+     * @param TextNodeComparator $rightComparator
      * @return void
      * @throws Exception
      */

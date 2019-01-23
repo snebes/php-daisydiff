@@ -1,4 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Html\Ancestor\TagToString;
 
@@ -18,7 +26,7 @@ class NoContentTagToStringTest extends TestCase
         $div = new TagNode(null, 'div');
         $tagMoved = new NoContentTagToString($div, TagChangeSemantic::MOVED);
 
-        $changeText = new ChangeText(10);
+        $changeText = new ChangeText();
         $newText = 'Div tag to add styles';
         $changeText->addText($newText);
 
@@ -36,7 +44,7 @@ class NoContentTagToStringTest extends TestCase
         $div = new TagNode(null, 'form');
         $tagMoved = new NoContentTagToString($div, TagChangeSemantic::STYLE);
 
-        $changeText = new ChangeText(10);
+        $changeText = new ChangeText();
         $newText = 'Form to collect data';
         $changeText->addText($newText);
 

@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -17,10 +23,10 @@ class LinkedRangeDifference extends RangeDifference
     private $next;
 
     /**
-     * @param  LinkedRangeDifference $next
-     * @param  int                   $operation
+     * @param LinkedRangeDifference|null $next
+     * @param int                        $operation
      */
-    public function __construct(?LinkedRangeDifference $next, int $operation = RangeDifference::ERROR)
+    public function __construct(?LinkedRangeDifference $next = null, int $operation = RangeDifference::ERROR)
     {
         parent::__construct($operation);
         $this->next = $next;
@@ -39,7 +45,7 @@ class LinkedRangeDifference extends RangeDifference
      */
     public function isDelete(): bool
     {
-        return $this->kind() == self::DELETE;
+        return $this->getKind() === self::DELETE;
     }
 
     /**
@@ -47,13 +53,13 @@ class LinkedRangeDifference extends RangeDifference
      */
     public function isInsert(): bool
     {
-        return $this->kind() == self::INSERT;
+        return $this->getKind() === self::INSERT;
     }
 
     /**
-     * @param RangeDifference|null $next
+     * @param LinkedRangeDifference|null $next
      */
-    public function setNext(?RangeDifference $next): void
+    public function setNext(?LinkedRangeDifference $next): void
     {
         $this->next = $next;
     }

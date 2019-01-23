@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -31,13 +37,13 @@ interface AtomInterface
     public function getFullText(): string;
 
     /**
-     * @param  string $s
+     * @param string $s
      * @return bool
      */
     public function isValidAtom(string $s): bool;
 
     /**
-     * @param  AtomInterface $other
+     * @param AtomInterface $other
      * @return bool
      */
     public function equalsIdentifier(AtomInterface $other): bool;

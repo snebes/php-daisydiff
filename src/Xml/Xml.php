@@ -12,8 +12,8 @@ class Xml
     /**
      * Open XML element.
      *
-     * @param  string $qName
-     * @param  array  $attributes
+     * @param string $qName
+     * @param array  $attributes
      * @return string
      */
     public static function openElement(string $qName, array $attributes = []): string
@@ -21,7 +21,7 @@ class Xml
         $s = '<' . $qName;
 
         foreach ($attributes as $attr => $value) {
-            $s .= sprintf(' %s="%s"', $attr, $value);
+            $s .= \sprintf(' %s="%s"', $attr, $value);
         }
 
         $s .= '>';
@@ -32,11 +32,11 @@ class Xml
     /**
      * Shortcut to close an XML element.
      *
-     * @param  string $qName
+     * @param string $qName
      * @return string
      */
     public static function closeElement(string $qName): string
     {
-        return sprintf('</%s>', $qName);
+        return \sprintf('</%s>', $qName);
     }
 }

@@ -15,7 +15,7 @@ interface DiffOutputInterface
     /**
      * Parses a Node Tree and produces an output format.
      *
-     * @param  TagNode $node
+     * @param TagNode $node
      * @return void
      * @throws Exception
      */

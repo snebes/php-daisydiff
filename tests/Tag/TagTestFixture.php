@@ -1,8 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
 
 namespace DaisyDiff\Tag;
 
-use ArrayObject;
 use DaisyDiff\Output\TextDiffOutputInterface;
 
 /**
@@ -10,27 +17,31 @@ use DaisyDiff\Output\TextDiffOutputInterface;
  */
 class TagTestFixture
 {
+    /** @var string */
+    private $oldText = '';
+
+    /** @var string */
+    private $newText = '';
+
     /** @var TextOperation[] */
     private $results;
 
-    /**
-     * Default values.
-     */
     public function __construct()
     {
-        $this->results = new ArrayObject();
+        $this->results = new \ArrayObject();
     }
 
     /**
-     * @param  string $oldText
-     * @param  string $newText
-     * @return void
-     * @throws
+     * @param string $original
+     * @param string $modified
      */
-    public function performTagDiff(string $oldText, string $newText): void
+    public function performTagDiff(string $original, string $modified): void
     {
-        $oldComp = new TagComparator($oldText);
-        $newComp = new TagComparator($newText);
+        $this->oldText = $original;
+        $this->newText = $modified;
+
+        $oldComp = new TagComparator($original);
+        $newComp = new TagComparator($modified);
 
         $output = new DummyOutput($this->results);
         $differ = new TagDiffer($output);
@@ -47,7 +58,7 @@ class TagTestFixture
         $result = '';
 
         foreach ($this->results as $operation) {
-            if ($operation->getType() == TextOperation::ADD_TEXT) {
+            if ($operation->getType() === OperationType::ADD_TEXT) {
                 continue;
             }
 
@@ -67,7 +78,7 @@ class TagTestFixture
         $result = '';
 
         foreach ($this->results as $operation) {
-            if ($operation->getType() == TextOperation::REMOVE_TEXT) {
+            if ($operation->getType() === OperationType::REMOVE_TEXT) {
                 continue;
             }
 
@@ -87,20 +98,26 @@ class TagTestFixture
 }
 
 /**
+ * Type of changes as produced by the diff process.
+ */
+final class OperationType
+{
+    /** @const string */
+    const NO_CHANGE   = 'nochange';
+    const ADD_TEXT    = 'add';
+    const REMOVE_TEXT = 'remove';
+}
+
+/**
  * Simple operation for test cases only.
  */
 class TextOperation
 {
-    /** @const int */
-    const NO_CHANGE   = 0;
-    const ADD_TEXT    = 1;
-    const REMOVE_TEXT = -1;
-
     /** @var string */
     private $text = '';
 
-    /** @var int */
-    private $type = 0;
+    /** @var string */
+    private $type = OperationType::NO_CHANGE;
 
     /**
      * @return string
@@ -119,17 +136,17 @@ class TextOperation
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getType(): int
+    public function getType(): string
     {
         return $this->type;
     }
 
     /**
-     * @param int $type
+     * @param string $type
      */
-    public function setType(int $type): void
+    public function setType(string $type): void
     {
         $this->type = $type;
     }
@@ -144,9 +161,9 @@ class DummyOutput implements TextDiffOutputInterface
     private $results;
 
     /**
-     * @param ArrayObject $results
+     * @param \ArrayObject $results
      */
-    public function __construct(ArrayObject $results)
+    public function __construct(\ArrayObject $results)
     {
         $this->results = $results;
     }
@@ -158,7 +175,7 @@ class DummyOutput implements TextDiffOutputInterface
     {
         $operation = new TextOperation();
         $operation->setText($text);
-        $operation->setType(TextOperation::ADD_TEXT);
+        $operation->setType(OperationType::ADD_TEXT);
 
         $this->results[] = $operation;
     }
@@ -170,7 +187,7 @@ class DummyOutput implements TextDiffOutputInterface
     {
         $operation = new TextOperation();
         $operation->setText($text);
-        $operation->setType(TextOperation::REMOVE_TEXT);
+        $operation->setType(OperationType::REMOVE_TEXT);
 
         $this->results[] = $operation;
     }
@@ -182,7 +199,7 @@ class DummyOutput implements TextDiffOutputInterface
     {
         $operation = new TextOperation();
         $operation->setText($text);
-        $operation->setType(TextOperation::NO_CHANGE);
+        $operation->setType(OperationType::NO_CHANGE);
 
         $this->results[] = $operation;
     }

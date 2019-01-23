@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -10,20 +16,22 @@ namespace DaisyDiff\Tag;
 class DelimiterAtom extends TextAtom
 {
     /**
+     * Default values.
+     *
      * @param string $c
      */
     public function __construct(string $c)
     {
-        parent::__construct('' . $c);
+        parent::__construct($c);
     }
 
     /**
-     * @param  string $s
+     * @param string $s
      * @return bool
      */
     public static function isValidDelimiter(?string $s): bool
     {
-        if (empty($s) || mb_strlen($s) > 1) {
+        if (empty($s) || \mb_strlen($s) > 1) {
             return false;
         }
 
@@ -59,18 +67,20 @@ class DelimiterAtom extends TextAtom
             case ':':
                 return true;
             default:
-                return false;
+                break;
         }
+
+        return false;
     }
 
     /** {@inheritdoc} */
     public function isValidAtom(string $s): bool
     {
-        return parent::isValidAtom($s) && self::isValidDelimiterAtom($s);
+        return parent::isValidAtom($s) && $this->isValidDelimiterAtom($s);
     }
 
     /**
-     * @param  string $s
+     * @param string $s
      * @return bool
      */
     private function isValidDelimiterAtom(?string $s): bool
@@ -83,10 +93,10 @@ class DelimiterAtom extends TextAtom
      */
     public function __toString(): string
     {
-        $search  = ["\n", "\r", "\t"];
+        $search = ["\n", "\r", "\t"];
         $replace = ["\\\\n", "\\\\r", "\\\\t"];
 
-        return sprintf('DelimiterAtom: %s', str_replace($search, $replace, $this->getFullText()));
+        return \sprintf('DelimiterAtom: %s', \str_replace($search, $replace, $this->getFullText()));
     }
 
     /** {@inheritdoc} */
@@ -94,7 +104,7 @@ class DelimiterAtom extends TextAtom
     {
         return
             parent::equalsIdentifier($other) ||
-            ($other->getIdentifier() == '' || $other->getIdentifier() == "\n") &&
-            ($this->getIdentifier() == '' || $this->getIdentifier() == "\n");
+            ($other->getIdentifier() === '' || $other->getIdentifier() === "\n") &&
+            ($this->getIdentifier() === '' || $this->getIdentifier() === "\n");
     }
 }

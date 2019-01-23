@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -8,7 +14,6 @@ use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
 use DaisyDiff\RangeDifferencer\RangeDifference;
 use DaisyDiff\RangeDifferencer\RangeDifferencer;
-use OutOfBoundsException;
 
 /**
  * A comparator used when calculating the difference in ancestry of two Nodes.
@@ -19,10 +24,10 @@ class AncestorComparator implements RangeComparatorInterface
     private $ancestors = [];
 
     /** @var string */
-    private $compareTxt = '';
+    private $compareText = '';
 
     /**
-     * @param  TagNode[] $ancestors
+     * @param TagNode[] $ancestors
      */
     public function __construct(?array $ancestors)
     {
@@ -34,14 +39,11 @@ class AncestorComparator implements RangeComparatorInterface
      */
     public function getRangeCount(): int
     {
-        return count($this->ancestors);
+        return \count($this->ancestors);
     }
 
     /**
-     * @param  int                      $thisIndex
-     * @param  RangeComparatorInterface $other
-     * @param  int                      $otherIndex
-     * @return bool
+     * {@inheritdoc}
      */
     public function rangesEqual(int $thisIndex, RangeComparatorInterface $other, int $otherIndex): bool
     {
@@ -53,10 +55,7 @@ class AncestorComparator implements RangeComparatorInterface
     }
 
     /**
-     * @param  int                      $length
-     * @param  int                      $maxLength
-     * @param  RangeComparatorInterface $other
-     * @return bool
+     * {@inheritdoc}
      */
     public function skipRangeComparison(int $length, int $maxLength, RangeComparatorInterface $other): bool
     {
@@ -64,17 +63,18 @@ class AncestorComparator implements RangeComparatorInterface
     }
 
     /**
-     * @param  int $i
+     * @param int $index
      * @return TagNode|null
-     * @throws OutOfBoundsException
+     *
+     * @throws \OutOfBoundsException
      */
-    public function getAncestor(int $i): ?TagNode
+    public function getAncestor(int $index): ?TagNode
     {
-        if (array_key_exists($i, $this->ancestors)) {
-            return $this->ancestors[$i];
-        } else {
-            throw new OutOfBoundsException(sprintf('Index: %d, Size: %d', $i, count($this->ancestors)));
+        if (!isset($this->ancestors[$index])) {
+            throw new \OutOfBoundsException(\sprintf('Index: %d, Size: %d', $index, \count($this->ancestors)));
         }
+
+        return $this->ancestors[$index];
     }
 
     /**
@@ -82,11 +82,11 @@ class AncestorComparator implements RangeComparatorInterface
      */
     public function getCompareTxt(): string
     {
-        return $this->compareTxt;
+        return $this->compareText;
     }
 
     /**
-     * @param  AncestorComparator $other
+     * @param AncestorComparator $other
      * @return AncestorComparatorResult
      */
     public function getResult(AncestorComparator $other): AncestorComparatorResult
@@ -100,11 +100,11 @@ class AncestorComparator implements RangeComparatorInterface
             return $result;
         }
 
-        $changeTxt = new ChangeTextGenerator($this, $other);
+        $changeText = new ChangeTextGenerator($this, $other);
 
         $result->setChanged(true);
-        $result->setChanges(strval($changeTxt->getChanged($differences)));
-        $result->setHtmlLayoutChanges($changeTxt->getHtmlLayoutChanges());
+        $result->setChanges($changeText->getChanged($differences)->__toString());
+        $result->setHtmlLayoutChanges($changeText->getHtmlLayoutChanges());
 
         return $result;
     }

@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -21,7 +27,7 @@ class TextNodeTest extends TestCase
         /** @var TextNode $copyRoot */
         $copyRoot = $textRoot->copyTree();
 
-        $this->assertEquals($textRoot->getText(), $copyRoot->getText());
+        $this->assertSame($textRoot->getText(), $copyRoot->getText());
     }
 
     public function testGetLeftRightMostChild(): void
@@ -29,26 +35,17 @@ class TextNodeTest extends TestCase
         $root = new TagNode(null, 'root');
         $textRoot = new TextNode($root, 'root');
 
-        $this->assertEquals($textRoot, $textRoot->getLeftMostChild());
-        $this->assertEquals($textRoot, $textRoot->getRightMostChild());
+        $this->assertSame($textRoot, $textRoot->getLeftMostChild());
+        $this->assertSame($textRoot, $textRoot->getRightMostChild());
     }
-
-//    public function testGetModificationText(): void
-//    {
-//        $root = new TagNode(null, 'root');
-//        $textRoot = new TextNode($root, 'root');
-//        $textRoot->setModification(null);
-//
-//        $this->assertNull($textRoot->getModification());
-//    }
 
     public function testGetText(): void
     {
         $root = new TagNode(null, 'root');
         $textRoot = new TextNode($root, 'root');
 
-        $this->assertEquals('root', $textRoot->getText());
-        $this->assertEquals('root', strval($textRoot));
+        $this->assertSame('root', $textRoot->getText());
+        $this->assertSame('root', $textRoot->__toString());
     }
 
     public function testIsSameText(): void
@@ -66,15 +63,14 @@ class TextNodeTest extends TestCase
     {
         $root = new TagNode(null, 'root');
         $textRoot = new TextNode($root, 'contents of root node');
-        $intermediate = new TagNode($root, 'intermediate');
         $textIntermediate = new TextNode($root, 'contents of intermediate node');
 
-        $this->assertEquals([], $textRoot->getMinimalDeletedSet(0));
+        $this->assertSame([], $textRoot->getMinimalDeletedSet(0));
 
         $mod = new Modification(ModificationType::REMOVED, ModificationType::REMOVED);
         $mod->setId(0);
         $textIntermediate->setModification($mod);
 
-        $this->assertEquals([$textIntermediate], $textIntermediate->getMinimalDeletedSet(0));
+        $this->assertSame([$textIntermediate], $textIntermediate->getMinimalDeletedSet(0));
     }
 }

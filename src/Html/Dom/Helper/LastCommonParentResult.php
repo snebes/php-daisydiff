@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -32,7 +38,7 @@ class LastCommonParentResult
     }
 
     /**
-     * @param  TagNode $value
+     * @param TagNode $value
      * @return void
      */
     public function setLastCommonParent(?TagNode $value): void
@@ -65,7 +71,7 @@ class LastCommonParentResult
     }
 
     /**
-     * @param  int $value
+     * @param int $value
      * @return void
      */
     public function setLastCommonParentDepth(int $value): void
@@ -82,7 +88,7 @@ class LastCommonParentResult
     }
 
     /**
-     * @param  int $value
+     * @param int $value
      * @return void
      */
     public function setIndexInLastCommonParent(int $value): void

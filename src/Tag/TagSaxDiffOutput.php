@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -26,6 +32,8 @@ class TagSaxDiffOutput implements TextDiffOutputInterface
     private $addedId = 1;
 
     /**
+     * Default values.
+     *
      * @param ContentHandlerInterface $consumer
      */
     public function __construct(ContentHandlerInterface $consumer)
@@ -41,12 +49,15 @@ class TagSaxDiffOutput implements TextDiffOutputInterface
         $this->addBasicText($text);
     }
 
+    /**
+     * @param string $text
+     */
     private function addBasicText(string $text): void
     {
-        $c = str_split($text);
+        for ($i = 0, $iMax = \mb_strlen($text); $i < $iMax; $i++) {
+            $c = \mb_substr($text, $i, 1);
 
-        for ($i = 0; $i < count($c); $i++) {
-            switch ($c[$i]) {
+            switch ($c) {
                 case "\n":
                     $this->consumer->startElement('br');
                     $this->consumer->endElement('br');
@@ -76,7 +87,7 @@ class TagSaxDiffOutput implements TextDiffOutputInterface
                     break;
 
                 default:
-                    $this->consumer->characters($c[$i]);
+                    $this->consumer->characters($c);
                     break;
             }
         }

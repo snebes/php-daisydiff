@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -10,7 +16,7 @@ namespace DaisyDiff\Html\Dom;
 class BodyNode extends TagNode
 {
     /**
-     * Constructor.
+     * Default values.
      */
     public function __construct()
     {
@@ -24,7 +30,8 @@ class BodyNode extends TagNode
     {
         $newThis = new static();
 
-        foreach ($this->children as $child) {
+        /** @var Node $child */
+        foreach ($this->getIterator() as $child) {
             $newChild = $child->copyTree();
             $newChild->setParent($newThis);
             $newThis->addChild($newChild);
@@ -41,9 +48,10 @@ class BodyNode extends TagNode
     {
         $nodes = [];
 
-        foreach ($this->children as $child) {
+        /** @var Node $child */
+        foreach ($this->getIterator() as $child) {
             $childrenChildren = $child->getMinimalDeletedSet($id);
-            $nodes = array_merge($nodes, $childrenChildren);
+            $nodes = \array_merge($nodes, $childrenChildren);
         }
 
         return $nodes;

@@ -1,11 +1,16 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
 namespace DaisyDiff\Html\Dom;
 
 use DaisyDiff\Html\Dom\Helper\LastCommonParentResult;
-use InvalidArgumentException;
 
 /**
  * Represents any element in the DOM tree of a HTML file.
@@ -16,13 +21,13 @@ abstract class Node
     protected $parent;
 
     /** @var TagNode */
-    protected $root;
+    private $root;
 
     /** @var bool */
-    protected $whiteBefore = false;
+    private $whiteBefore = false;
 
     /** @var bool */
-    protected $whiteAfter = false;
+    private $whiteAfter = false;
 
     /**
      * This constructor not only sets the parameter as the parent for the created node, but also appends the created
@@ -37,7 +42,7 @@ abstract class Node
         if (null !== $parent) {
             $parent->addChild($this);
             $this->root = $parent->getRoot();
-        } else if ($this instanceof TagNode) {
+        } elseif ($this instanceof TagNode) {
             $this->root = $this;
         }
     }
@@ -97,32 +102,32 @@ abstract class Node
      */
     public function detectIgnorableWhiteSpace(): void
     {
-        // noop.
+        // no op.
     }
 
     /**
      * Descent the ancestors list for both nodes stopping either at the first no-match case or when either of the lists
      * is exhausted.
      *
-     * @param  Node|null $other
+     * @param Node|null $other
      * @return LastCommonParentResult
      */
     public function getLastCommonParent(?Node $other): LastCommonParentResult
     {
         if (null === $other) {
-            throw new InvalidArgumentException('The given TextNode is null.');
+            throw new \InvalidArgumentException('The given TextNode is null.');
         }
 
         $result = new LastCommonParentResult();
 
         // Note: these lists are never null, but sometimes are empty.
-        $myParents    = $this->getParentTree();
+        $myParents = $this->getParentTree();
         $otherParents = $other->getParentTree();
 
-        $i      = 1;
+        $i = 1;
         $isSame = true;
 
-        while ($isSame && $i < count($myParents) && $i < count($otherParents)) {
+        while ($isSame && $i < \count($myParents) && $i < \count($otherParents)) {
             if (!$myParents[$i]->isSameTag($otherParents[$i])) {
                 $isSame = false;
             } else {
@@ -138,10 +143,10 @@ abstract class Node
             // Found different parent.
             $result->setIndexInLastCommonParent($myParents[$i - 1]->getIndexOf($myParents[$i]));
             $result->setSplittingNeeded();
-        } else if (count($myParents) < count($otherParents)) {
+        } elseif (\count($myParents) < \count($otherParents)) {
             // Current node is not so deeply nested.
             $result->setIndexInLastCommonParent($myParents[$i - 1]->getIndexOf($this));
-        } else if (count($myParents) > count($otherParents)) {
+        } elseif (\count($myParents) > \count($otherParents)) {
             // All tags matched but there are tags left in this tree - other node is not so deeply nested.
             $result->setIndexInLastCommonParent($myParents[$i - 1]->getIndexOf($myParents[$i]));
             $result->setSplittingNeeded();
@@ -184,7 +189,7 @@ abstract class Node
     abstract public function copyTree(): Node;
 
     /**
-     * Return true only if one of the ancestors is a <pre> tag.  False otherwise, including the case where this node is
+     * Return true only if one of the ancestors is a <pre> tag. False otherwise, including the case where this node is
      * a <pre> tag.
      *
      * @return bool
@@ -210,13 +215,10 @@ abstract class Node
 
     /**
      * @param bool $value
-     * @return self
      */
-    public function setWhiteBefore(bool $value): self
+    public function setWhiteBefore(bool $value): void
     {
         $this->whiteBefore = $value;
-
-        return $this;
     }
 
     /**
@@ -229,13 +231,10 @@ abstract class Node
 
     /**
      * @param bool $value
-     * @return self
      */
-    public function setWhiteAfter(bool $value): self
+    public function setWhiteAfter(bool $value): void
     {
         $this->whiteAfter = $value;
-
-        return $this;
     }
 
     /**
@@ -247,4 +246,9 @@ abstract class Node
      * @return Node
      */
     abstract public function getRightMostChild(): Node;
+
+    /**
+     * @return string
+     */
+    abstract public function __toString(): string;
 }

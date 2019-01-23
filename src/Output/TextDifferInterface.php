@@ -15,8 +15,8 @@ interface TextDifferInterface
     /**
      * Compares two Node Trees.
      *
-     * @param  AtomSplitterInterface $leftComparator
-     * @param  AtomSplitterInterface $rightComparator
+     * @param AtomSplitterInterface $leftComparator
+     * @param AtomSplitterInterface $rightComparator
      * @throws Exception
      */
     public function diff(AtomSplitterInterface $leftComparator, AtomSplitterInterface $rightComparator): void;

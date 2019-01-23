@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -13,6 +19,10 @@ namespace DaisyDiff\Html\Modification;
  */
 final class HtmlLayoutChange
 {
+    /** @const string */
+    const TAG_ADDED   = 'added';
+    const TAG_REMOVED = 'removed';
+
     /** @var string */
     private $type;
 
@@ -31,14 +41,11 @@ final class HtmlLayoutChange
     }
 
     /**
-     * @param  string|null $value
-     * @return self
+     * @param string|null $value
      */
-    public function setType(?string $value): self
+    public function setType(?string $value): void
     {
         $this->type = $value;
-
-        return $this;
     }
 
     /**
@@ -50,14 +57,11 @@ final class HtmlLayoutChange
     }
 
     /**
-     * @param  string|null $value
-     * @return self
+     * @param string|null $value
      */
-    public function setOpeningTag(?string $value): self
+    public function setOpeningTag(?string $value): void
     {
         $this->openingTag = $value;
-
-        return $this;
     }
 
     /**
@@ -69,13 +73,10 @@ final class HtmlLayoutChange
     }
 
     /**
-     * @param  string|null $value
-     * @return self
+     * @param string|null $value
      */
-    public function setEndingTag(?string $value): self
+    public function setEndingTag(?string $value): void
     {
         $this->endingTag = $value;
-
-        return $this;
     }
 }

@@ -1,10 +1,14 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
 namespace DaisyDiff\Tag;
-
-use InvalidArgumentException;
 
 /**
  * An atom that represents a closing or opening tag.
@@ -18,21 +22,22 @@ class TagAtom implements AtomInterface
     private $internalIdentifiers = '';
 
     /**
-     * @param  string $s
-     * @throws InvalidArgumentException
+     * Default values.
+     *
+     * @param string $s
      */
     public function __construct(string $s)
     {
         if (!$this->isValidAtom($s)) {
-            throw new InvalidArgumentException('The given string is not a valid tag.');
+            throw new \InvalidArgumentException('The given string is not a valid tag.');
         }
 
         // Remove the < and >.
-        $s = mb_substr($s, 1, -1);
+        $s = \mb_substr($s, 1, -1);
 
-        if (false !== ($pos = mb_strpos($s, ' '))) {
-            $this->identifier          = mb_substr($s, 0, $pos);
-            $this->internalIdentifiers = mb_substr($s, $pos + 1);
+        if (($pos = \mb_strpos($s, ' ')) > 0) {
+            $this->identifier = \mb_substr($s, 0, $pos);
+            $this->internalIdentifiers = \mb_substr($s, $pos + 1);
         } else {
             $this->identifier = $s;
         }
@@ -57,24 +62,24 @@ class TagAtom implements AtomInterface
     }
 
     /**
-     * @param  string $s
+     * @param string $s
      * @return bool
      */
     public static function isValidTag(string $s): bool
     {
         return
-            0 == mb_strrpos($s, '<') &&
-            mb_strpos($s, '>') == mb_strlen($s) - 1 &&
-            mb_strlen($s) >= 3;
+            0 === \mb_strrpos($s, '<') &&
+            \mb_strpos($s, '>') === \mb_strlen($s) - 1 &&
+            \mb_strlen($s) >= 3;
     }
 
     /** {@inheritdoc} */
     public function getFullText(): string
     {
-        $s = sprintf('<%s', $this->identifier);
+        $s = '<' . $this->identifier;
 
         if ($this->hasInternalIdentifiers()) {
-            $s .= sprintf(' %s', $this->internalIdentifiers);
+            $s .= ' ' . $this->internalIdentifiers;
         }
 
         $s .= '>';
@@ -93,12 +98,12 @@ class TagAtom implements AtomInterface
      */
     public function __toString(): string
     {
-        return sprintf('TagAtom: %s', $this->getFullText());
+        return \sprintf('TagAtom: %s', $this->getFullText());
     }
 
     /** {@inheritdoc} */
     public function equalsIdentifier(AtomInterface $other): bool
     {
-        return 0 == strcmp($other->getIdentifier(), $this->getIdentifier());
+        return $other->getIdentifier() === $this->getIdentifier();
     }
 }

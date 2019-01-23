@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -7,7 +13,7 @@ namespace DaisyDiff\Html\Ancestor;
 use DaisyDiff\Html\Ancestor\TagToString\TagToStringFactory;
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Modification\HtmlLayoutChange;
-use DaisyDiff\RangeDifferencer\RangeDifference;
+use SN\RangeDifferencer\RangeDifference;
 
 /**
  * ChangeTextGenerator
@@ -26,12 +32,9 @@ class ChangeTextGenerator
     /** @var TagToStringFactory */
     private $factory;
 
-    /** @const int */
-    private const MAX_OUTPUT_LINE_LENGTH = 55;
-
     /**
-     * @param  AncestorComparator $ancestorComparator
-     * @param  AncestorComparator $other
+     * @param AncestorComparator $ancestorComparator
+     * @param AncestorComparator $other
      */
     public function __construct(AncestorComparator $ancestorComparator, AncestorComparator $other)
     {
@@ -42,20 +45,21 @@ class ChangeTextGenerator
     }
 
     /**
-     * @param  RangeDifference[] $differences
+     * @param RangeDifference[] $differences
      * @return ChangeText
      */
     public function getChanged(array $differences): ChangeText
     {
-        $text = new ChangeText(self::MAX_OUTPUT_LINE_LENGTH);
+        $text = new ChangeText();
         $rootListOpened = false;
 
-        if (count($differences) > 1) {
+        if (\count($differences) > 1) {
             $text->addHtml('<ul class="changelist">');
             $rootListOpened = true;
         }
 
-        for ($j = 0; $j < count($differences); $j++) {
+        for ($j = 0, $jMax = \count($differences); $j < $jMax; $j++) {
+            /** @var RangeDifference $d */
             $d = $differences[$j];
             $lvl1ListOpened = false;
 
@@ -63,13 +67,13 @@ class ChangeTextGenerator
                 $text->addHtml('<li>');
             }
 
-            if ($d->leftLength() + $d->rightLength() > 1) {
+            if ($d->getLeftLength() + $d->getRightLength() > 1) {
                 $text->addHtml('<ul class="changelist">');
                 $lvl1ListOpened = true;
             }
 
             // Left are the old ones.
-            for ($i = $d->leftStart(); $i < $d->leftEnd(); $i++) {
+            for ($i = $d->getLeftStart(), $iMax = $d->getLeftEnd(); $i < $iMax; $i++) {
                 if ($lvl1ListOpened) {
                     $text->addHtml('<li>');
                 }
@@ -83,7 +87,7 @@ class ChangeTextGenerator
             }
 
             // Right are the new ones.
-            for ($i = $d->rightStart(); $i < $d->rightEnd(); $i++) {
+            for ($i = $d->getRightStart(), $iMax = $d->getRightEnd(); $i < $iMax; $i++) {
                 if ($lvl1ListOpened) {
                     $text->addHtml('<li>');
                 }
@@ -114,7 +118,7 @@ class ChangeTextGenerator
 
     /**
      * @param ChangeText $text
-     * @param TagNode $ancestor
+     * @param TagNode    $ancestor
      */
     private function addTagOld(ChangeText $text, TagNode $ancestor): void
     {
@@ -125,7 +129,7 @@ class ChangeTextGenerator
 
     /**
      * @param ChangeText $text
-     * @param TagNode $ancestor
+     * @param TagNode    $ancestor
      */
     private function addTagNew(ChangeText $text, TagNode $ancestor): void
     {
@@ -135,7 +139,7 @@ class ChangeTextGenerator
     }
 
     /**
-     * @param  int $i
+     * @param int $i
      * @return TagNode
      */
     private function getAncestor(int $i): TagNode

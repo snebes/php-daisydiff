@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -11,7 +17,7 @@ namespace DaisyDiff\Html\Dom;
 class ImageNode extends TextNode
 {
     /** @var array */
-    protected $attributes = [];
+    private $attributes = [];
 
     /**
      * @param TagNode $parent
@@ -19,10 +25,8 @@ class ImageNode extends TextNode
      */
     public function __construct(?TagNode $parent, array $attributes = [])
     {
+        parent::__construct($parent, \sprintf('<img>%s</img>', $attributes['src'] ?? ''));
         $this->attributes = $attributes;
-
-        $src = array_key_exists('src', $this->attributes)? mb_strtolower($this->attributes['src']) : '';
-        parent::__construct($parent, "<img>{$src}</img>");
     }
 
     /**
@@ -34,7 +38,7 @@ class ImageNode extends TextNode
             return false;
         }
 
-        return 0 === strcasecmp($this->getText(), $other->getText());
+        return $this->getText() === $other->getText();
     }
 
     /**

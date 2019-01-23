@@ -1,68 +1,75 @@
-<?php declare(strict_types=1);
+<?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
 
 namespace RangeDifferencer;
 
 use DaisyDiff\RangeDifferencer\DifferencesIterator;
+use DaisyDiff\RangeDifferencer\RangeDifference;
 use DaisyDiff\RangeDifferencer\RangeDifferencer;
 use DaisyDiff\Tag\TagComparator;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * DifferencesIterator Tests
+ */
 class DifferencesIteratorTest extends TestCase
 {
-    /**
-     * @return RangeDifferencer[]
-     */
-    private function getDifferences(): array
+    /** @var RangeDifference[] */
+    private $ranges = [];
+
+    protected function setUp()
     {
         $oldText = '<p> This is a blue book</p>';
         $newText = '<p> This is a <b>big</b> blue book</p>';
-
         $oldComp = new TagComparator($oldText);
         $newComp = new TagComparator($newText);
 
-        return RangeDifferencer::findDifferences($oldComp, $newComp);
+        $this->ranges = RangeDifferencer::findDifferences($oldComp, $newComp);
     }
 
     public function testDifferencesIterator(): void
     {
-        $diffs    = $this->getDifferences();
-        $iterator = new DifferencesIterator($diffs);
+        $iterator = new DifferencesIterator($this->ranges);
 
-        $this->assertContains('Left: (8, 0) Right: (8, 4)', strval($diffs[0]));
-        $this->assertEquals(1, $iterator->getIndex());
+        $this->assertSame('Left: (8, 0) Right: (8, 4)', $this->ranges[0]->__toString());
+        $this->assertSame(1, $iterator->getIndex());
     }
 
     public function testDifferencesIteratorEmpty(): void
     {
         $iterator = new DifferencesIterator([]);
-        $this->assertEquals(0, $iterator->getIndex());
+        $this->assertSame(0, $iterator->getIndex());
     }
 
     public function testGetCount(): void
     {
-        $diffs    = $this->getDifferences();
-        $iterator = new DifferencesIterator($diffs);
+        $iterator = new DifferencesIterator($this->ranges);
 
-        $this->assertEquals(0, $iterator->getCount());
+        $this->assertSame(0, $iterator->getCount());
     }
 
     public function testGetCountEmpty(): void
     {
         $iterator = new DifferencesIterator([]);
 
-        $this->assertEquals(0, $iterator->getIndex());
+        $this->assertSame(0, $iterator->getIndex());
     }
 
     public function testNext(): void
     {
-        $diffs    = $this->getDifferences();
-        $iterator = new DifferencesIterator($diffs);
+        $iterator = new DifferencesIterator($this->ranges);
 
-        $this->assertContains('Left: (8, 0) Right: (8, 4)', strval($diffs[0]));
+        $this->assertSame('Left: (8, 0) Right: (8, 4)', $this->ranges[0]->__toString());
 
         $oldText = '<p> This is a green book about food</p>';
         $newText = '<p> This is a <b>big</b> blue book</p>';
-
         $oldComp = new TagComparator($oldText);
         $newComp = new TagComparator($newText);
 
@@ -71,40 +78,37 @@ class DifferencesIteratorTest extends TestCase
         $iterator = new DifferencesIterator($diffs);
         $iterator->next();
 
-        $this->assertContains('Left: (8, 1) Right: (8, 3)', strval($diffs[0]));
+        $this->assertSame('Left: (8, 1) Right: (8, 3)', $diffs[0]->__toString());
     }
 
     public function testNextNull(): void
     {
-        $diffs    = $this->getDifferences();
-        $iterator = new DifferencesIterator($diffs);
+        $iterator = new DifferencesIterator($this->ranges);
 
-        $this->assertContains('Left: (8, 0) Right: (8, 4)', strval($diffs[0]));
+        $this->assertSame('Left: (8, 0) Right: (8, 4)', $this->ranges[0]->__toString());
 
         $iterator->next();
         $iterator = new DifferencesIterator([]);
         $iterator->next();
 
-        $this->assertEquals(1, $iterator->getCount());
+        $this->assertSame(1, $iterator->getCount());
     }
 
     public function testOther(): void
     {
-        $diffs = $this->getDifferences();
-        $left  = new DifferencesIterator($diffs);
-        $right = new DifferencesIterator($diffs);
+        $left = new DifferencesIterator($this->ranges);
+        $right = new DifferencesIterator($this->ranges);
 
-        $this->assertEquals($right, $left->other($right, $left));
-        $this->assertEquals($left, $right->other($right, $left));
+        $this->assertSame($right, $left->other($right, $left));
+        $this->assertSame($left, $right->other($right, $left));
     }
 
     public function testRemoveAll(): void
     {
-        $diffs    = $this->getDifferences();
-        $iterator = new DifferencesIterator($diffs);
+        $iterator = new DifferencesIterator($this->ranges);
 
         $iterator->removeAll();
-        $this->assertEquals(0, $iterator->getCount());
+        $this->assertSame(0, $iterator->getCount());
     }
 
     public function testRemoveAllEmpty(): void
@@ -112,6 +116,6 @@ class DifferencesIteratorTest extends TestCase
         $iterator = new DifferencesIterator([]);
 
         $iterator->removeAll();
-        $this->assertEquals(0, $iterator->getCount());
+        $this->assertSame(0, $iterator->getCount());
     }
 }

@@ -1,12 +1,16 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
 namespace DaisyDiff\Html\Dom;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
 
 /**
  * Node Tests.
@@ -15,48 +19,40 @@ class NodeTest extends TestCase
 {
     public function testGetParentTree(): void
     {
-        $root         = new TagNode(null, 'root');
+        $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
-
         $leaf = new TagNode($intermediate, 'leaf');
         $intermediate->addChild($leaf);
 
-        $this->assertEquals([$root, $intermediate], $leaf->getParentTree());
+        $this->assertSame([$root, $intermediate], $leaf->getParentTree());
     }
 
     public function testGetRoot(): void
     {
-        $root         = new TagNode(null, 'root');
+        $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
 
-        $this->assertEquals($root, $intermediate->getRoot());
+        $this->assertSame($root, $intermediate->getRoot());
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testGetLastCommonParentNullException(): void
     {
-        $root         = new TagNode(null, 'root');
+        $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
-
-        try {
-            $root->getLastCommonParent(null);
-        } catch (InvalidArgumentException $e) {
-            $this->assertEquals('The given TextNode is null.', $e->getMessage());
-            throw $e;
-        }
+        $root->getLastCommonParent(null);
     }
 
     public function testGetLastCommonParent(): void
     {
-        $root         = new TagNode(null, 'root');
+        $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'intermediate');
         $root->addChild($intermediate);
-
         $leaf1 = new TagNode($intermediate, 'leaf');
         $intermediate->addChild($leaf1);
         $leaf2 = new TagNode($intermediate, 'leaf');
@@ -65,52 +61,48 @@ class NodeTest extends TestCase
         $parent = new TagNode(null, 'parent');
         $middle = new TagNode($parent, 'middle');
         $parent->addChild($middle);
-
         $leafNode = new TagNode($middle, 'leaf');
         $middle->addChild($leafNode);
 
-        $this->assertEquals($intermediate, $leaf1->getLastCommonParent($leaf2)->getLastCommonParent());
-        $this->assertEquals(1, $leaf1->getLastCommonParent($leaf2)->getLastCommonParentDepth());
-        $this->assertEquals(0, $leaf1->getLastCommonParent($leaf2)->getIndexInLastCommonParent());
-        $this->assertEquals($intermediate, $leaf1->getLastCommonParent($leaf1)->getLastCommonParent());
-        $this->assertEquals($parent, $leafNode->getLastCommonParent($intermediate)->getLastCommonParent());
-        $this->assertEquals($root, $leaf2->getLastCommonParent($middle)->getLastCommonParent());
-        $this->assertEquals($parent, $leafNode->getLastCommonParent($leaf2)->getLastCommonParent());
-        $this->assertEquals($root, $intermediate->getLastCommonParent($leafNode)->getLastCommonParent());
+        $this->assertSame($intermediate, $leaf1->getLastCommonParent($leaf2)->getLastCommonParent());
+        $this->assertSame(1, $leaf1->getLastCommonParent($leaf2)->getLastCommonParentDepth());
+        $this->assertSame(0, $leaf1->getLastCommonParent($leaf2)->getIndexInLastCommonParent());
+        $this->assertSame($intermediate, $leaf1->getLastCommonParent($leaf1)->getLastCommonParent());
+        $this->assertSame($parent, $leafNode->getLastCommonParent($intermediate)->getLastCommonParent());
+        $this->assertSame($root, $leaf2->getLastCommonParent($middle)->getLastCommonParent());
+        $this->assertSame($parent, $leafNode->getLastCommonParent($leaf2)->getLastCommonParent());
+        $this->assertSame($root, $intermediate->getLastCommonParent($leafNode)->getLastCommonParent());
     }
 
     public function testSetParentRoot(): void
     {
-        $refMethod = new ReflectionMethod(Node::class, 'setRoot');
+        $refMethod = new \ReflectionMethod(Node::class, 'setRoot');
         $refMethod->setAccessible(true);
 
-        $root   = new TagNode(null, 'root');
+        $root = new TagNode(null, 'root');
         $middle = new TagNode($root, 'middle');
         $refMethod->invoke($middle, $root);
-
         $leaf = new TagNode($root, 'leaf');
         $leaf->setParent($middle);
 
-        $this->assertEquals($middle, $leaf->getParent());
+        $this->assertSame($middle, $leaf->getParent());
         $leaf->setParent(null);
         $this->assertNull($leaf->getParent());
     }
 
     public function testInPre(): void
     {
-        $preRoot      = new TagNode(null, 'pre');
+        $preRoot = new TagNode(null, 'pre');
         $intermediate = new TagNode($preRoot, 'intermediate');
         $preRoot->addChild($intermediate);
-
         $leaf = new TagNode($intermediate, 'leaf');
         $intermediate->addChild($leaf);
 
         $this->assertTrue($leaf->inPre());
 
-        $root   = new TagNode(null, 'root');
+        $root = new TagNode(null, 'root');
         $middle = new TagNode($root, 'middle');
         $root->addChild($middle);
-
         $leaf = new TagNode($middle, 'leaf');
         $middle->addChild($leaf);
 
@@ -119,16 +111,17 @@ class NodeTest extends TestCase
 
     public function testIsWhiteBeforeAfter(): void
     {
-        $root         = new TagNode(null, 'root');
+        $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
 
         $this->assertFalse($root->isWhiteBefore());
-        $intermediate->setWhiteBefore(true);
-        $this->assertTrue($intermediate->isWhiteBefore());
-
         $this->assertFalse($root->isWhiteAfter());
+
+        $root->setWhiteBefore(true);
         $root->setWhiteAfter(true);
+
+        $this->assertTrue($root->isWhiteBefore());
         $this->assertTrue($root->isWhiteAfter());
     }
 

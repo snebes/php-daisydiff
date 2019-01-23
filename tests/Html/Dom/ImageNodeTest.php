@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -27,6 +33,8 @@ class ImageNodeTest extends TestCase
         $this->assertFalse($compareNode->isSameText($rootNode));
         $this->assertFalse($imgNode->isSameText(null));
         $this->assertFalse($rootNode->isSameText($root));
+
+        $this->assertSame('src', key($imgNode->getAttributes()));
     }
 
     public function testGetAttributes(): void
