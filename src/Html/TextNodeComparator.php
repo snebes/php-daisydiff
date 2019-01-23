@@ -406,7 +406,8 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
                 }
 
                 // array_shift removes first array element, and returns it.
-                $prevLeaf = (\array_shift($deletedNodes))->copyTree(); // @todo may not want to renumber indices
+                $node = \array_shift($deletedNodes);
+                $prevLeaf = $node->copyTree();
                 $prevLeaf->setParent($prevResult->getLastCommonParent());
                 $prevResult->getLastCommonParent()->addChild($prevLeaf, $prevResult->getIndexInLastCommonParent() + 1);
             } elseif ($prevResult->getLastCommonParentDepth() < $nextResult->getLastCommonParentDepth()) {

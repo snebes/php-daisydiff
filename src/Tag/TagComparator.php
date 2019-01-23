@@ -52,7 +52,7 @@ class TagComparator implements AtomSplitterInterface
 
         $currentWord = '';
 
-        for ($i = 0; $i < \mb_strlen($s); $i++) {
+        for ($i = 0, $iMax = \mb_strlen($s); $i < $iMax; $i++) {
             $c = \mb_substr($s, $i, 1);
 
             if ($c === '<' && TagAtom::isValidTag(\mb_substr($s, $i, \mb_strpos($s, '>', $i) + 1 - $i))) {

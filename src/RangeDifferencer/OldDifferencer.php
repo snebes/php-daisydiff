@@ -73,7 +73,7 @@ final class OldDifferencer
         }
 
         // For each value of the edit distance.
-        for ($d = 1; $d <= $maxDiagonal; $d++) {
+        for ($d = 1; $d <= $maxDiagonal; ++$d) {
             // $d is the current edit distance.
 
             if ($right->skipRangeComparison($d, $maxDiagonal, $left)) {
@@ -85,7 +85,7 @@ final class OldDifferencer
             // For each relevant diagonal (-d, -d+2, ... d-2, d)
             for ($k = $lower; $k <= $upper; $k += 2) {
                 // $k is the current diagonal.
-                if ($k == $origin - $d || $k != $origin + $d && $lastDiagonal[$k + 1] >= $lastDiagonal[$k - 1]) {
+                if ($k === $origin - $d || $k !== $origin + $d && $lastDiagonal[$k + 1] >= $lastDiagonal[$k - 1]) {
                     // Move down.
                     $row = $lastDiagonal[$k + 1] + 1;
                     $edit = new LinkedRangeDifference($script[$k + 1], LinkedRangeDifference::DELETE);
@@ -105,8 +105,8 @@ final class OldDifferencer
 
                 // Slide down the diagonal as far as possible.
                 while ($row < $rightSize && $col < $leftSize && self::rangesEqual($right, $row, $left, $col)) {
-                    $row++;
-                    $col++;
+                    ++$row;
+                    ++$col;
                 }
 
                 // Unreasonable value for diagonal index.
@@ -180,6 +180,7 @@ final class OldDifferencer
             } else {
                 $es->setRightStart($ep->getRightStart());
                 $es->setLeftStart($ep->getLeftStart());
+                $a = $ep;
 
                 // Deleted lines.
                 do {

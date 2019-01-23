@@ -60,10 +60,12 @@ class TagDiffer implements TextDifferInterface
 
             if ($pDifferences[$i]->getLeftLength() > 0) {
                 $this->output->addRemovedPart($leftString);
+
             }
 
             if ($pDifferences[$i]->getRightLength() > 0) {
                 $this->output->addAddedPart($rightString);
+
             }
 
             $rightAtom = $pDifferences[$i]->getRightEnd();
@@ -85,7 +87,6 @@ class TagDiffer implements TextDifferInterface
      * @param int                   $endRight
      * @param AtomSplitterInterface $leftComparator
      * @param AtomSplitterInterface $rightComparator
-     * @throws
      */
     private function parseNoChange(
         int $beginLeft,
@@ -106,11 +107,12 @@ class TagDiffer implements TextDifferInterface
                 !$rightComparator->getAtom($beginRight)->hasInternalIdentifiers() &&
                 !$leftComparator->getAtom($beginLeft)->hasInternalIdentifiers()) {
                 $s .= $rightComparator->getAtom($beginRight)->getFullText();
+
                 $beginRight++;
                 $beginLeft++;
             }
 
-            if (\mb_strlen($s) > 0) {
+            if (!empty($s)) {
                 $this->output->addClearPart($s);
                 $s = '';
             }
