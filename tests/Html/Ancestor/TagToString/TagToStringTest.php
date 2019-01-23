@@ -13,14 +13,14 @@ use ReflectionProperty;
  */
 class TagToStringTest extends TestCase
 {
-//    public function testDiffs(): void
-//    {
-//        $root = new TagNode(null, 'root');
-//        $intermediate = new TagNode($root, 'middle');
-//        $root->addChild($intermediate);
-//
-//        $tagToString = new TagToString($root, TagChangeSemantic::STYLE);
-//
+    public function testDiffs(): void
+    {
+        $root = new TagNode(null, 'root');
+        $intermediate = new TagNode($root, 'middle');
+        $root->addChild($intermediate);
+
+        $tagToString = new TagToString($root, TagChangeSemantic::STYLE);
+
 //        $this->assertEquals('Moved to', $tagToString->getMovedTo());
 //        $this->assertEquals('Style added', $tagToString->getStyleAdded());
 //        $this->assertEquals('Added', $tagToString->getAdded());
@@ -28,9 +28,9 @@ class TagToStringTest extends TestCase
 //        $this->assertEquals('Style removed', $tagToString->getStyleRemoved());
 //        $this->assertEquals('Removed', $tagToString->getRemoved());
 //        $this->assertEquals('And', $tagToString->getAnd());
-//        $this->assertEquals('!diff-root!', $tagToString->getDescription());
-//    }
-//
+        $this->assertEquals('!diff-root!', $tagToString->getDescription());
+    }
+
 //    public function testGetRemovedDescription(): void
 //    {
 //        $root = new TagNode(null, 'root');
