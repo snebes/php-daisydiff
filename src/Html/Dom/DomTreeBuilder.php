@@ -45,7 +45,7 @@ class DomTreeBuilder
     /** @var int */
     private $numberOfActivePreTags = 0;
 
-    /** @var Node */
+    /** @var Node|null */
     private $lastSibling;
 
     /**

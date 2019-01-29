@@ -10,8 +10,6 @@ declare(strict_types=1);
 
 namespace DaisyDiff\Html;
 
-require 'HtmlTestFixture.php';
-
 use PHPUnit\Framework\TestCase;
 
 /**

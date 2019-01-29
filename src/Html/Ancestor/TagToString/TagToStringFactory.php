@@ -89,7 +89,7 @@ class TagToStringFactory
 
     /**
      * @param string $str
-     * @return string<TagChangeSemantic>
+     * @return string
      */
     private function getChangeSemantic(string $str): string
     {

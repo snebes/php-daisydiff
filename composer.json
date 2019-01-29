@@ -13,6 +13,11 @@
             "DaisyDiff\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "DaisyDiff\\": "tests/"
+        }
+    },
     "license": "MIT",
     "require": {
         "php": ">=7.1.0",
@@ -21,6 +26,7 @@
         "psr/log": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.5"
+        "phpunit/phpunit": "^7.5",
+        "phpstan/phpstan": "^0.11.1"
     }
 }
