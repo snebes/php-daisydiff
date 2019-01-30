@@ -65,6 +65,7 @@ abstract class Node
      */
     public function getParentTree(): array
     {
+        /** @var TagNode[] $ancestors */
         $ancestors = [];
 
         for ($ancestor = $this->getParent(); null !== $ancestor; $ancestor = $ancestor->getParent()) {
@@ -118,7 +119,7 @@ abstract class Node
         $i = 1;
         $isSame = true;
 
-        while ($isSame && $i < $myParentsCount && $otherParentsCount) {
+        while ($isSame && $i < $myParentsCount && $i < $otherParentsCount) {
             if (!$myParents[$i]->isSameTag($otherParents[$i])) {
                 $isSame = false;
             } else {

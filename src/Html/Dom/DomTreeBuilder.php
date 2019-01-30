@@ -82,6 +82,14 @@ class DomTreeBuilder
     }
 
     /**
+     * @return bool
+     */
+    public function isDocumentEnded(): bool
+    {
+        return $this->documentEnded;
+    }
+
+    /**
      * Starts the document, if one has not already been started.
      *
      * @throws \RuntimeException
@@ -89,7 +97,7 @@ class DomTreeBuilder
     public function startDocument(): void
     {
         if ($this->documentStarted) {
-            throw new \RuntimeException('This Handler only accepts one document.', 8000);
+            throw new \RuntimeException('This Handler only accepts one document.');
         }
 
         $this->documentStarted = true;
@@ -110,14 +118,6 @@ class DomTreeBuilder
 
         $this->documentEnded = true;
         $this->documentStarted = false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDocumentEnded(): bool
-    {
-        return $this->documentEnded;
     }
 
     /**

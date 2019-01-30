@@ -10,18 +10,17 @@ namespace DaisyDiff\Html\Dom;
 class WhiteSpaceNode extends TextNode
 {
     /**
-     * @param TagNode   $parent
-     * @param string    $s
-     * @param Node|null $like
+     * @param TagNode|null $parent
+     * @param string       $s
+     * @param Node|null     $like
      */
-    public function __construct(?TagNode $parent, string $s, ?Node $like = null)
+    public function __construct(?TagNode $parent, string $s, ?Node $like)
     {
         parent::__construct($parent, $s);
 
         if ($like instanceof TextNode) {
             $newModification = clone $like->getModification();
             $newModification->setFirstOfId(false);
-
             $this->setModification($newModification);
         }
     }

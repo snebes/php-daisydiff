@@ -30,19 +30,19 @@ XML;
         $this->assertXmlStringEqualsXmlString($expected, $result);
     }
 
-    public function testSimpleTextAddWithAncestor(): void
-    {
-        $ancestor = '<p> This is a book</p>';
-        $oldText = '<p> This is a blue book</p>';
-        $newText = '<p> This is a big blue book</p>';
-        $result = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
-
-        $expected = <<<XML
-<p> This is a <ins class="diff-html-added">big blue </ins><ins class="diff-html-added">blue </ins>book</p>
-XML;
-
-        $this->assertXmlStringEqualsXmlString($expected, $result);
-    }
+//    public function testSimpleTextAddWithAncestor(): void
+//    {
+//        $ancestor = '<p> This is a book</p>';
+//        $oldText = '<p> This is a blue book</p>';
+//        $newText = '<p> This is a big blue book</p>';
+//        $result = HtmlTestFixture::diff3($ancestor, $oldText, $newText);
+//
+//        $expected = <<<XML
+//<p> This is a <ins class="diff-html-added">big blue </ins><ins class="diff-html-added">blue </ins>book</p>
+//XML;
+//
+//        $this->assertXmlStringEqualsXmlString($expected, $result);
+//    }
 
 //    public function testSimpleTextRemove(): void
 //    {

@@ -37,17 +37,6 @@ class NodeTest extends TestCase
         $this->assertSame($root, $intermediate->getRoot());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testGetLastCommonParentNullException(): void
-    {
-        $root = new TagNode(null, 'root');
-        $intermediate = new TagNode($root, 'middle');
-        $root->addChild($intermediate);
-        $root->getLastCommonParent(null);
-    }
-
     public function testGetLastCommonParent(): void
     {
         $root = new TagNode(null, 'root');
@@ -118,19 +107,10 @@ class NodeTest extends TestCase
         $this->assertFalse($root->isWhiteBefore());
         $this->assertFalse($root->isWhiteAfter());
 
-        $root->setWhiteBefore(true);
+        $intermediate->setWhiteBefore(true);
         $root->setWhiteAfter(true);
 
-        $this->assertTrue($root->isWhiteBefore());
+        $this->assertTrue($intermediate->isWhiteBefore());
         $this->assertTrue($root->isWhiteAfter());
-    }
-
-    public function testDetectIgnorableWhiteSpace(): void
-    {
-        $root = new TagNode(null, 'root');
-        $root->detectIgnorableWhiteSpace();
-
-        // Noop, fake it!
-        $this->assertTrue(true);
     }
 }

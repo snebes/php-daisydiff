@@ -41,8 +41,8 @@ class TextNode extends Node
      */
     public function copyTree(): Node
     {
-        $node = clone $this;
-        $node->setParent(null);
+        $node = new static(null, $this->s);
+        $node->setModification(clone $this->modification);
 
         return $node;
     }
@@ -56,6 +56,14 @@ class TextNode extends Node
     }
 
     /**
+     * @return Node
+     */
+    public function getRightMostChild(): Node
+    {
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getMinimalDeletedSet(int $id): array
@@ -64,18 +72,10 @@ class TextNode extends Node
         $modification = $this->getModification();
 
         if ($modification->getType() === ModificationType::REMOVED && $modification->getId() === $id) {
-            $nodes = [$this];
+            $nodes[] = $this;
         }
 
         return $nodes;
-    }
-
-    /**
-     * @return Node
-     */
-    public function getRightMostChild(): Node
-    {
-        return $this;
     }
 
     /**
@@ -90,13 +90,13 @@ class TextNode extends Node
      * @param Node $other
      * @return bool
      */
-    public function isSameText(?Node $other): bool
+    public function isSameText(Node $other): bool
     {
-        if (null === $other || !$other instanceof TextNode) {
-            return false;
+        if ($other instanceof TextNode) {
+            return $this->getText() === $other->getText();
         }
 
-        return $this->getText() === $other->getText();
+        return false;
     }
 
     /**

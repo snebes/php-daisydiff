@@ -461,7 +461,7 @@ class DomTreeBuilderTest extends TestCase
     public function testUnitCharacters2(): void
     {
         $chars = 'a a.a,a"a\'a(a)a?a:a;a!a{a}a-a+a*a=a_a[a]a|';
-        $tree  = new DomTreeBuilder();
+        $tree = new DomTreeBuilder();
 
         $refProp = new \ReflectionProperty($tree, 'numberOfActivePreTags');
         $refProp->setAccessible(true);
@@ -552,7 +552,7 @@ class DomTreeBuilderTest extends TestCase
      */
     public function testCharactersException(): void
     {
-        $tree  = new DomTreeBuilder();
+        $tree = new DomTreeBuilder();
         $flags = [
             'documentStarted' => false,
             'documentEnded'   => true,

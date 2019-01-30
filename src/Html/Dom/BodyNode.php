@@ -20,7 +20,7 @@ class BodyNode extends TagNode
      */
     public function __construct()
     {
-        parent::__construct(null, 'body', []);
+        parent::__construct(null, 'body');
     }
 
     /**
@@ -48,7 +48,6 @@ class BodyNode extends TagNode
     {
         $nodes = [];
 
-        /** @var Node $child */
         foreach ($this->getIterator() as $child) {
             $childrenChildren = $child->getMinimalDeletedSet($id);
             $nodes = \array_merge($nodes, $childrenChildren);
