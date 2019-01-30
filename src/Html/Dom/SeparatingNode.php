@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Dom;
+namespace SN\DaisyDiff\Html\Dom;
 
 /**
  * This is an artificial text node whose sole purpose is to separate text nodes, so that they cannot be treated as a

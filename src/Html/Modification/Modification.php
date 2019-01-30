@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Modification;
+namespace SN\DaisyDiff\Html\Modification;
 
 /**
  * Modification model.

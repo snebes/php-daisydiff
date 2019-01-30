@@ -8,12 +8,12 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Ancestor;
+namespace SN\DaisyDiff\Html\Ancestor;
 
-use DaisyDiff\Html\Dom\TagNode;
-use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
-use DaisyDiff\RangeDifferencer\RangeDifference;
-use DaisyDiff\RangeDifferencer\RangeDifferencer;
+use SN\DaisyDiff\Html\Dom\TagNode;
+use SN\DaisyDiff\RangeDifferencer\RangeComparatorInterface;
+use SN\DaisyDiff\RangeDifferencer\RangeDifference;
+use SN\DaisyDiff\RangeDifferencer\RangeDifferencer;
 
 /**
  * A comparator used when calculating the difference in ancestry of two Nodes.

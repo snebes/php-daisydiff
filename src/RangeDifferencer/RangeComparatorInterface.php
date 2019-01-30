@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\RangeDifferencer;
+namespace SN\DaisyDiff\RangeDifferencer;
 
 /**
  * For breaking an object to compare into a sequence of comparable entities.

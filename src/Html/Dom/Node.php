@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Dom;
+namespace SN\DaisyDiff\Html\Dom;
 
-use DaisyDiff\Html\Dom\Helper\LastCommonParentResult;
+use SN\DaisyDiff\Html\Dom\Helper\LastCommonParentResult;
 
 /**
  * Represents any element in the DOM tree of a HTML file.

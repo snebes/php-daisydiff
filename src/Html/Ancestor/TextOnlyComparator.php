@@ -8,13 +8,13 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Ancestor;
+namespace SN\DaisyDiff\Html\Ancestor;
 
-use DaisyDiff\Html\Dom\TagNode;
-use DaisyDiff\Html\Dom\TextNode;
-use DaisyDiff\RangeDifferencer\Core\LCSSettings;
-use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
-use DaisyDiff\RangeDifferencer\RangeDifferencer;
+use SN\DaisyDiff\Html\Dom\TagNode;
+use SN\DaisyDiff\Html\Dom\TextNode;
+use SN\DaisyDiff\RangeDifferencer\Core\LCSSettings;
+use SN\DaisyDiff\RangeDifferencer\RangeComparatorInterface;
+use SN\DaisyDiff\RangeDifferencer\RangeDifferencer;
 
 /**
  * A comparator that compares only the elements of text inside a given tag.

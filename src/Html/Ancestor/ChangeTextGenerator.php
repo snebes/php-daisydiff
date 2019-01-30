@@ -8,13 +8,13 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Ancestor;
+namespace SN\DaisyDiff\Html\Ancestor;
 
-use DaisyDiff\Html\Ancestor\TagToString\TagToStringFactory;
-use DaisyDiff\Html\ChangeText;
-use DaisyDiff\Html\Dom\TagNode;
-use DaisyDiff\Html\Modification\HtmlLayoutChange;
-use DaisyDiff\RangeDifferencer\RangeDifference;
+use SN\DaisyDiff\Html\Ancestor\TagToString\TagToStringFactory;
+use SN\DaisyDiff\Html\ChangeText;
+use SN\DaisyDiff\Html\Dom\TagNode;
+use SN\DaisyDiff\Html\Modification\HtmlLayoutChange;
+use SN\DaisyDiff\RangeDifferencer\RangeDifference;
 
 /**
  * ChangeTextGenerator

@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Dom;
+namespace SN\DaisyDiff\Html\Dom;
 
 /**
  * Represents whitespace in the HTML file.

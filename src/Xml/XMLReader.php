@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Xml;
+namespace SN\DaisyDiff\Xml;
 
-use DaisyDiff\Html\Dom\DomTreeBuilder;
+use SN\DaisyDiff\Html\Dom\DomTreeBuilder;
 
 /**
  * XMLReader implementation.

@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Ancestor;
+namespace SN\DaisyDiff\Html\Ancestor;
 
-use DaisyDiff\Html\Dom\TagNode;
+use SN\DaisyDiff\Html\Dom\TagNode;
 use PHPUnit\Framework\TestCase;
 
 /**

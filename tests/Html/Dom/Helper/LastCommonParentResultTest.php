@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Dom\Helper;
+namespace SN\DaisyDiff\Html\Dom\Helper;
 
-use DaisyDiff\Html\Dom\TagNode;
+use SN\DaisyDiff\Html\Dom\TagNode;
 use PHPUnit\Framework\TestCase;
 
 /**

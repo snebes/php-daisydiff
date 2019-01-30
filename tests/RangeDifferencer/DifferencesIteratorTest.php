@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\RangeDifferencer;
+namespace SN\DaisyDiff\RangeDifferencer;
 
-use DaisyDiff\Tag\TagComparator;
+use SN\DaisyDiff\Tag\TagComparator;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff;
+namespace SN\DaisyDiff;
 
 use Exception;
 use PHPUnit\Framework\TestCase;

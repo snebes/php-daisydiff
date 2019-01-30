@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\RangeDifferencer;
+namespace SN\DaisyDiff\RangeDifferencer;
 
 /**
  * The algorithm used is an objectified version of one described in: A File Comparison Program, by Webb Miller and

@@ -8,10 +8,10 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html;
+namespace SN\DaisyDiff\Html;
 
-use DaisyDiff\Html\Dom\DomTreeBuilder;
-use DaisyDiff\Xml\XMLReader;
+use SN\DaisyDiff\Html\Dom\DomTreeBuilder;
+use SN\DaisyDiff\Xml\XMLReader;
 
 /**
  * TestCase for HTML diffing. Can be used in unit tests. See HtmlDifferText for example.

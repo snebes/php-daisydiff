@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\RangeDifferencer\Core;
+namespace SN\DaisyDiff\RangeDifferencer\Core;
 
 /**
  * Longest Common Subsequence Settings.

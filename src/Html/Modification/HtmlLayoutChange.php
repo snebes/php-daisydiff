@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Modification;
+namespace SN\DaisyDiff\Html\Modification;
 
 /**
  * This class holds the removal or addition of HTML tags around text. It contains the same information that is presented

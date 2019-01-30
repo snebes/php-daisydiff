@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Ancestor\TagToString;
+namespace SN\DaisyDiff\Html\Ancestor\TagToString;
 
-use DaisyDiff\Html\ChangeText;
+use SN\DaisyDiff\Html\ChangeText;
 
 /**
  * Anchor <a> tag to string.

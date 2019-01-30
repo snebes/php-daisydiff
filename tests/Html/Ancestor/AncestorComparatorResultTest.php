@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Ancestor;
+namespace SN\DaisyDiff\Html\Ancestor;
 
-use DaisyDiff\Html\Modification\HtmlLayoutChange;
+use SN\DaisyDiff\Html\Modification\HtmlLayoutChange;
 use PHPUnit\Framework\TestCase;
 
 /**

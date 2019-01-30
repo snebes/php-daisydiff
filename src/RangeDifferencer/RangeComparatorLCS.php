@@ -8,10 +8,10 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\RangeDifferencer;
+namespace SN\DaisyDiff\RangeDifferencer;
 
-use DaisyDiff\RangeDifferencer\Core\LCS;
-use DaisyDiff\RangeDifferencer\Core\LCSSettings;
+use SN\DaisyDiff\RangeDifferencer\Core\LCS;
+use SN\DaisyDiff\RangeDifferencer\Core\LCSSettings;
 
 /**
  * Longest Common Subsequence RangeComparator
