@@ -22,7 +22,8 @@ class ModificationTest extends TestCase
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);
         $clonedModification = clone $newM;
 
-        $this->assertFalse($newM === $clonedModification);
+        $this->assertNotSame($clonedModification, $newM);
+        $this->assertEquals($clonedModification, $newM);
     }
 
     public function testSetId(): void
@@ -79,10 +80,10 @@ class ModificationTest extends TestCase
     {
         $newM = new Modification(ModificationType::ADDED, ModificationType::REMOVED);
 
-        $this->assertFalse($newM->isFirstOfID());
+        $this->assertFalse($newM->isFirstOfId());
 
         $newM->setFirstOfID(true);
-        $this->assertTrue($newM->isFirstOfID());
+        $this->assertTrue($newM->isFirstOfId());
     }
 
     public function testGetHtmlLayoutChanges(): void
@@ -94,6 +95,7 @@ class ModificationTest extends TestCase
 
         $htmlLayoutChanges[] = new HtmlLayoutChange();
         $newM->setHtmlLayoutChanges($htmlLayoutChanges);
+
         $this->assertSame($htmlLayoutChanges, $newM->getHtmlLayoutChanges());
     }
 }

@@ -28,6 +28,7 @@ class TextNodeTest extends TestCase
         $copyRoot = $textRoot->copyTree();
 
         $this->assertSame($textRoot->getText(), $copyRoot->getText());
+        $this->assertSame($textRoot->getModification(), $copyRoot->getModification());
     }
 
     public function testGetLeftRightMostChild(): void

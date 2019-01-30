@@ -43,8 +43,7 @@ HTML;
 //
 //        $this->assertXmlStringEqualsXmlString($expected, $result);
 //    }
-// <p> This is a <del class="diff-html-removed">book</del> book</p>
-// <p> This is a <del class="diff-html-removed">blue </del>book</p>
+
     public function testSimpleTextRemove(): void
     {
         $oldText = '<p> This is a blue book</p>';
@@ -170,5 +169,19 @@ HTML;
         $this->assertEquals(0, HtmlDiffer::score(1, 2, 0, 0, 9), '', 0.5);
         $this->assertEquals(0.6, HtmlDiffer::score(0, 2, 0, 2), '', 0.5);
         $this->assertEquals(3.3, HtmlDiffer::score(7, 6, 8), '', 0.5);
+    }
+
+    /**
+     * @expectedException  \Exception
+     */
+    public function testScoreException(): void
+    {
+        try {
+            HtmlDiffer::score(1, 2);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\OutOfRangeException::class, $e);
+
+            throw $e;
+        }
     }
 }

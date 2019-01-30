@@ -27,9 +27,10 @@ class SeparatingNode extends TextNode
     }
 
     /**
-     * {@inheritdoc}
+     * @param Node|null $other
+     * @return bool
      */
-    public function equals(Node $other): bool
+    public function equals(?Node $other): bool
     {
         // No other separator is equal to this one. This has the effect that text nodes separated by such a separator
         // can never be treated as a text sequence by the RangeDifferencer/TextNodeComparator.

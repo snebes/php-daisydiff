@@ -32,7 +32,7 @@ class ImageNode extends TextNode
     /**
      * {@inheritdoc}
      */
-    public function isSameText(Node $other): bool
+    public function isSameText(?Node $other): bool
     {
         if (!$other instanceof ImageNode) {
             return false;

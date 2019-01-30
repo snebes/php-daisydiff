@@ -37,6 +37,8 @@ class TextNode extends Node
     }
 
     /**
+     * @todo Check if we need to deep clone this.
+     *
      * @return Node
      */
     public function copyTree(): Node
@@ -87,10 +89,10 @@ class TextNode extends Node
     }
 
     /**
-     * @param Node $other
+     * @param Node|null $other
      * @return bool
      */
-    public function isSameText(Node $other): bool
+    public function isSameText(?Node $other): bool
     {
         if ($other instanceof TextNode) {
             return $this->getText() === $other->getText();

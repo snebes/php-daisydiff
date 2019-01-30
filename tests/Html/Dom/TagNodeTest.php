@@ -29,6 +29,22 @@ class TagNodeTest extends TestCase
     }
 
     /**
+     * @expectedException \Error
+     */
+    public function testAddChildNullException(): void
+    {
+        $root = new TagNode(null, 'root');
+
+        try {
+            $root->addChild(null);
+        } catch (\Error $e) {
+            $this->assertInstanceOf(\TypeError::class, $e);
+
+            throw $e;
+        }
+    }
+
+    /**
      * @expectedException \Exception
      */
     public function testAddChildException(): void
@@ -58,6 +74,22 @@ class TagNodeTest extends TestCase
     }
 
     /**
+     * @expectedException \Error
+     */
+    public function testAddChildIndexNullException(): void
+    {
+        $root = new TagNode(null, 'root');
+
+        try {
+            $root->addChild(null, 1);
+        } catch (\Error $e) {
+            $this->assertInstanceOf(\TypeError::class, $e);
+
+            throw $e;
+        }
+    }
+
+    /**
      * @expectedException \Exception
      */
     public function testAddChildIndexException(): void
@@ -67,7 +99,7 @@ class TagNodeTest extends TestCase
         $intermediate = new TagNode($errorRoot, 'middle');
 
         try {
-        $root->addChild($intermediate, 0);
+            $root->addChild($intermediate, 0);
         } catch (\Exception $e) {
             $this->assertInstanceOf(\InvalidArgumentException::class, $e);
 
@@ -113,8 +145,10 @@ class TagNodeTest extends TestCase
         $leaf2 = new TagNode($intermediate, 'leaf2');
         $intermediate->addChild($leaf2);
 
+        $this->assertSame($leaf1, $intermediate->getChild(0));
         $this->assertSame($leaf1, $intermediate->getChild(1));
         $this->assertSame($leaf2, $intermediate->getChild(2));
+        $this->assertSame($leaf2, $intermediate->getChild(3));
     }
 
     /**
@@ -143,6 +177,7 @@ class TagNodeTest extends TestCase
         $leaf = new TagNode($root, 'leaf');
         $root->addChild($leaf);
 
+        // $intermediate and $leaf are added to $root twice in these tests.
         $this->assertSame(4, $root->getNumChildren());
         $this->assertSame(0, $leaf->getNumChildren());
     }
@@ -165,7 +200,7 @@ class TagNodeTest extends TestCase
     {
         $root = new TagNode(null, 'rOoT');
 
-        $this->assertEquals('root', $root->getQName());
+        $this->assertSame('root', $root->getQName());
     }
 
     public function testIsSameTag(): void
@@ -204,7 +239,7 @@ class TagNodeTest extends TestCase
 
     public function testGetOpeningTag(): void
     {
-        $html = '<table width="500" border="1">';
+        $expected = '<table width="500" border="1">';
         $attrs = [
             'width'  => '500',
             'border' => '1',
@@ -213,9 +248,9 @@ class TagNodeTest extends TestCase
         $root = new TagNode(null, 'table', $attrs);
         $intermediate = new TagNode(null, 'middle');
 
-        $this->assertEquals('<middle>', $intermediate->getOpeningTag());
-        $this->assertEquals($html, $root->getOpeningTag());
-        $this->assertEquals($html, $root->__toString());
+        $this->assertSame('<middle>', $intermediate->getOpeningTag());
+        $this->assertSame($expected, $root->getOpeningTag());
+        $this->assertSame($expected, $root->__toString());
     }
 
     public function testGetEndTag(): void
@@ -224,8 +259,8 @@ class TagNodeTest extends TestCase
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
 
-        $this->assertEquals('</middle>', $intermediate->getEndTag());
-        $this->assertEquals('</root>', $root->getEndTag());
+        $this->assertSame('</middle>', $intermediate->getEndTag());
+        $this->assertSame('</root>', $root->getEndTag());
     }
 
     public function testIsBlockLevel(): void
@@ -258,7 +293,10 @@ class TagNodeTest extends TestCase
         $leaf2 = new TagNode($intermediate, 'leaf2');
         $intermediate->addChild($leaf2);
 
-        $this->assertEquals($root, $root->copyTree());
+        $copy = $root->copyTree();
+
+        $this->assertEquals($root, $copy);
+        $this->assertNotSame($root, $copy);
     }
 
     public function testGetMatchRatio(): void
@@ -331,12 +369,12 @@ class TagNodeTest extends TestCase
         $refMethod->setAccessible(true);
 
         $attrs1 = [
-            'first' => 'a',
+            'first'  => 'a',
             'second' => 'b',
         ];
         $attrs2 = [
             'second' => 'b',
-            'first' => 'a',
+            'first'  => 'a',
         ];
         $attrs3 = [
             'first' => 'a',

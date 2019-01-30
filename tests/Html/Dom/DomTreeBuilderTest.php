@@ -23,7 +23,7 @@ class DomTreeBuilderTest extends TestCase
         $textNodes = [];
 
         $this->assertEquals('<body>', $tree->getBodyNode()->__toString());
-        $this->assertTrue($textNodes === $tree->getTextNodes());
+        $this->assertSame($textNodes, $tree->getTextNodes());
         $this->assertFalse($tree->isDocumentStarted());
 
         $tree->startDocument();
@@ -31,7 +31,7 @@ class DomTreeBuilderTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Exception
      */
     public function testStartDocumentException(): void
     {
@@ -39,7 +39,13 @@ class DomTreeBuilderTest extends TestCase
         $tree->startDocument();
         $this->assertTrue($tree->isDocumentStarted());
 
-        $tree->startDocument();
+        try {
+            $tree->startDocument();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\RuntimeException::class, $e);
+
+            throw $e;
+        }
     }
 
     public function testEndDocument(): void
@@ -49,7 +55,7 @@ class DomTreeBuilderTest extends TestCase
 
         $tree->startDocument();
         $this->assertEquals('<body>', $tree->getBodyNode()->__toString());
-        $this->assertTrue($textNodes === $tree->getTextNodes());
+        $this->assertSame($textNodes, $tree->getTextNodes());
         $this->assertFalse($tree->isDocumentEnded());
 
         $tree->endDocument();
@@ -57,24 +63,345 @@ class DomTreeBuilderTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Exception
      */
     public function testEndDocumentException1(): void
     {
-        $tree = new DomTreeBuilder();
-        $tree->endDocument();
+        try {
+            $tree = new DomTreeBuilder();
+            $tree->endDocument();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\RuntimeException::class, $e);
+
+            throw $e;
+        }
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Exception
      */
     public function testEndDocumentException2(): void
     {
         $tree = new DomTreeBuilder();
         $tree->startDocument();
 
+        try {
+            $tree->endDocument();
+            $tree->endDocument();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\RuntimeException::class, $e);
+
+            throw $e;
+        }
+    }
+
+    public function testStartElementExample1(): void
+    {
+        $attrs = ['class' => 'diff'];
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, true);
+        $tree->startElement(true, 'p', $attrs);
+
+        $this->assertSame('<p class="diff">', $tree->getBodyNode()->getChild(0)->__toString());
+    }
+
+    public function testStartElementExample2(): void
+    {
+        $attrs = ['class' => 'diff'];
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, true);
+        $this->setBodyEnded($tree, true);
+        $tree->startElement(true, 'p', $attrs);
+
+        $this->assertSame(0, $tree->getBodyNode()->getNumChildren());
+    }
+
+    public function testStartElementExample3(): void
+    {
+        $attrs = ['class' => 'diff'];
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, false);
+        $this->setBodyEnded($tree, true);
+        $tree->startElement(true, 'p', $attrs);
+
+        $this->assertSame(0, $tree->getBodyNode()->getNumChildren());
+    }
+
+    public function testStartElementExample4(): void
+    {
+        $attrs = ['class' => 'diff'];
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, false);
+        $this->setBodyEnded($tree, false);
+        $tree->startElement(true, 'p', $attrs);
+
+        $this->assertSame(0, $tree->getBodyNode()->getNumChildren());
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testStartElementExample5(): void
+    {
+        $attrs = ['class' => 'diff'];
+
+        $tree = new DomTreeBuilder();
+        $this->setBodyStarted($tree, false);
+        $this->setBodyEnded($tree, false);
+
+        try {
+            $tree->startElement(true, 'p', $attrs);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\RuntimeException::class, $e);
+
+            throw $e;
+        }
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testStartElementExample6(): void
+    {
+        $attrs = ['class' => 'diff'];
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
         $tree->endDocument();
+
+        $this->setBodyStarted($tree, false);
+        $this->setBodyEnded($tree, false);
+
+        try {
+            $tree->startElement(true, 'p', $attrs);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\RuntimeException::class, $e);
+
+            throw $e;
+        }
+    }
+
+    public function testStartElementExample7(): void
+    {
+        $attrs = ['class' => 'diff'];
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $tree->startElement(true, 'body', $attrs);
+
+        $this->assertSame('<body>', $tree->getBodyNode()->__toString());
+    }
+
+    public function testStartElementExample8(): void
+    {
+        $attrs = ['class' => 'diff'];
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, true);
+        $tree->startElement(true, 'pre', $attrs);
+
+        $this->assertSame('<pre class="diff">', $tree->getBodyNode()->getChild(0)->__toString());
+    }
+
+    public function testEndElementExample1(): void
+    {
+        $attrs = ['class' => 'diff'];
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, true);
+        $this->setBodyEnded($tree, true);
+
+        $tree->startElement(true, 'p', $attrs);
+        $tree->endElement(true, 'p');
+
+        $this->assertSame(0, $tree->getBodyNode()->getNumChildren());
+    }
+
+    public function testEndElementExample2(): void
+    {
+        $attrs = ['class' => 'diff'];
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, false);
+        $this->setBodyEnded($tree, true);
+
+        $tree->startElement(true, 'p', $attrs);
+        $tree->endElement(true, 'p');
+
+        $this->assertSame(0, $tree->getBodyNode()->getNumChildren());
+    }
+
+    public function testEndElementExample3(): void
+    {
+        $attrs = ['class' => 'diff'];
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, false);
+        $this->setBodyEnded($tree, false);
+
+        $tree->startElement(true, 'p', $attrs);
+        $tree->endElement(true, 'p');
+
+        $this->assertSame(0, $tree->getBodyNode()->getNumChildren());
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testEndElementExample4(): void
+    {
+        $tree = new DomTreeBuilder();
+        $this->setBodyStarted($tree, false);
+        $this->setBodyEnded($tree, false);
+
+        try {
+            $tree->endElement(true, 'p');
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\RuntimeException::class, $e);
+
+            throw $e;
+        }
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testEndElementExample5(): void
+    {
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
         $tree->endDocument();
+
+        $this->setBodyStarted($tree, false);
+        $this->setBodyEnded($tree, false);
+
+        try {
+            $tree->endElement(true, 'p');
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\RuntimeException::class, $e);
+
+            throw $e;
+        }
+    }
+
+    public function testEndElementExample6(): void
+    {
+        $attrs = ['class' => 'diff'];
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+
+        $tree->startElement(true, 'body', $attrs);
+        $tree->endElement(true, 'body');
+
+        $this->assertSame('<body>', $tree->getBodyNode()->__toString());
+    }
+
+    public function testEndElementExample7(): void
+    {
+        $attrs = [
+            'src' => 'http://placehold.it/200x200',
+            'alt' => '',
+        ];
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, true);
+
+        $tree->startElement(true, 'img', $attrs);
+        $tree->endElement(true, 'img');
+
+        $this->assertSame('<img src="http://placehold.it/200x200" alt="">', $tree->getBodyNode()->getChild(0)->__toString());
+    }
+
+    public function testEndElementExample8(): void
+    {
+        $attrs = ['class' => 'diff'];
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, true);
+
+        $tree->startElement(true, 'pre', $attrs);
+        $tree->endElement(true, 'pre');
+
+        $this->assertSame('<pre class="diff">', $tree->getBodyNode()->getChild(0)->__toString());
+    }
+
+    public function testCharacters(): void
+    {
+        $attrs = ['class' => 'diff'];
+
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, true);
+
+        $tree->startElement(true, 'p', $attrs);
+        $tree->endElement(true, 'p');
+
+        $chars = "/es\t h+ract\nr";
+        $tree->characters(true, $chars);
+
+        $this->assertSame('<p class="diff">', $tree->getBodyNode()->getChild(0)->__toString());
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testCharactersException(): void
+    {
+        $tree = new DomTreeBuilder();
+        $flags = [
+            'documentStarted' => false,
+            'documentEnded'   => true,
+            'bodyStarted'     => false,
+            'bodyEnded'       => true,
+        ];
+
+        foreach ($flags as $prop => $value) {
+            $refProp = new \ReflectionProperty($tree, $prop);
+            $refProp->setAccessible(true);
+            $refProp->setValue($tree, $value);
+        }
+
+        try {
+            $chars = "/es\t h+ract\nr";
+            $tree->characters(true, $chars);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\RuntimeException::class, $e);
+
+            throw $e;
+        }
+    }
+
+    public function testAddSeparatingNode(): void
+    {
+        $tree = new DomTreeBuilder();
+        $tree->startDocument();
+        $this->setBodyStarted($tree, true);
+        $tree->startElement(true, 'div', []);
+        $tree->startElement(true, 'p', []);
+        $tree->characters(true, 'test');
+        $tree->endElement(true, 'p');
+        $tree->endElement(true, 'div');
+
+        $refProp = new \ReflectionProperty($tree, 'textNodes');
+        $refProp->setAccessible(true);
+        $value = $refProp->getValue($tree);
+
+        $this->assertTrue(end($value) instanceof SeparatingNode);
     }
 
     public function testUnitStartElement1(): void
@@ -149,111 +476,6 @@ class DomTreeBuilderTest extends TestCase
         $this->assertTrue($value);
     }
 
-    public function testStartElementExample1(): void
-    {
-        $attrs = ['class' => 'diff'];
-
-        $tree = new DomTreeBuilder();
-        $tree->startDocument();
-        $this->setBodyStarted($tree, true);
-        $tree->startElement(true, 'p', $attrs);
-
-        $this->assertSame('<p class="diff">', $tree->getBodyNode()->getChild(0)->__toString());
-    }
-
-    public function testStartElementExample2(): void
-    {
-        $attrs = ['class' => 'diff'];
-
-        $tree = new DomTreeBuilder();
-        $tree->startDocument();
-        $this->setBodyStarted($tree, true);
-        $this->setBodyEnded($tree, true);
-        $tree->startElement(true, 'p', $attrs);
-
-        $this->assertSame(0, $tree->getBodyNode()->getNumChildren());
-    }
-
-    public function testStartElementExample3(): void
-    {
-        $attrs = ['class' => 'diff'];
-
-        $tree = new DomTreeBuilder();
-        $tree->startDocument();
-        $this->setBodyStarted($tree, false);
-        $this->setBodyEnded($tree, true);
-        $tree->startElement(true, 'p', $attrs);
-
-        $this->assertSame(0, $tree->getBodyNode()->getNumChildren());
-    }
-
-    public function testStartElementExample4(): void
-    {
-        $attrs = ['class' => 'diff'];
-
-        $tree = new DomTreeBuilder();
-        $tree->startDocument();
-        $this->setBodyStarted($tree, false);
-        $this->setBodyEnded($tree, false);
-        $tree->startElement(true, 'p', $attrs);
-
-        $this->assertSame(0, $tree->getBodyNode()->getNumChildren());
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testStartElementExample5(): void
-    {
-        $attrs = ['class' => 'diff'];
-
-        $tree = new DomTreeBuilder();
-        $this->setBodyStarted($tree, false);
-        $this->setBodyEnded($tree, false);
-
-        $tree->startElement(true, 'p', $attrs);
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testStartElementExample6(): void
-    {
-        $attrs = ['class' => 'diff'];
-
-        $tree = new DomTreeBuilder();
-        $tree->startDocument();
-        $tree->endDocument();
-
-        $this->setBodyStarted($tree, false);
-        $this->setBodyEnded($tree, false);
-
-        $tree->startElement(true, 'p', $attrs);
-    }
-
-    public function testStartElementExample7(): void
-    {
-        $attrs = ['class' => 'diff'];
-
-        $tree = new DomTreeBuilder();
-        $tree->startDocument();
-        $tree->startElement(true, 'body', $attrs);
-
-        $this->assertSame('<body>', $tree->getBodyNode()->__toString());
-    }
-
-    public function testStartElementExample8(): void
-    {
-        $attrs = ['class' => 'diff'];
-
-        $tree = new DomTreeBuilder();
-        $tree->startDocument();
-        $this->setBodyStarted($tree, true);
-        $tree->startElement(true, 'pre', $attrs);
-
-        $this->assertSame('<pre class="diff">', $tree->getBodyNode()->getChild(0)->__toString());
-    }
-
     public function testUnitEndElement1(): void
     {
         $tree = new DomTreeBuilder();
@@ -296,139 +518,6 @@ class DomTreeBuilderTest extends TestCase
         $element = $refProp->getValue($tree);
 
         $this->assertSame('<span>', $element->__toString());
-    }
-
-    public function testEndElementExample1(): void
-    {
-        $attrs = ['class' => 'diff'];
-
-        $tree = new DomTreeBuilder();
-        $tree->startDocument();
-        $this->setBodyStarted($tree, true);
-        $this->setBodyEnded($tree, true);
-
-        $tree->startElement(true, 'p', $attrs);
-        $tree->endElement(true, 'p');
-
-        $this->assertSame(0, $tree->getBodyNode()->getNumChildren());
-    }
-
-    public function testEndElementExample2(): void
-    {
-        $attrs = ['class' => 'diff'];
-
-        $tree = new DomTreeBuilder();
-        $tree->startDocument();
-        $this->setBodyStarted($tree, false);
-        $this->setBodyEnded($tree, true);
-
-        $tree->startElement(true, 'p', $attrs);
-        $tree->endElement(true, 'p');
-
-        $this->assertSame(0, $tree->getBodyNode()->getNumChildren());
-    }
-
-    public function testEndElementExample3(): void
-    {
-        $attrs = ['class' => 'diff'];
-
-        $tree = new DomTreeBuilder();
-        $tree->startDocument();
-        $this->setBodyStarted($tree, false);
-        $this->setBodyEnded($tree, false);
-
-        $tree->startElement(true, 'p', $attrs);
-        $tree->endElement(true, 'p');
-
-        $this->assertSame(0, $tree->getBodyNode()->getNumChildren());
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testEndElementExample4(): void
-    {
-        $tree = new DomTreeBuilder();
-        $this->setBodyStarted($tree, false);
-        $this->setBodyEnded($tree, false);
-
-        $tree->endElement(true, 'p');
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testEndElementExample5(): void
-    {
-        $tree = new DomTreeBuilder();
-        $tree->startDocument();
-        $tree->endDocument();
-
-        $this->setBodyStarted($tree, false);
-        $this->setBodyEnded($tree, false);
-
-        $tree->endElement(true, 'p');
-    }
-
-    public function testEndElementExample6(): void
-    {
-        $attrs = ['class' => 'diff'];
-
-        $tree = new DomTreeBuilder();
-        $tree->startDocument();
-
-        $tree->startElement(true, 'body', $attrs);
-        $tree->endElement(true, 'body');
-
-        $this->assertSame('<body>', $tree->getBodyNode()->__toString());
-    }
-
-    public function testEndElementExample7(): void
-    {
-        $attrs = [
-            'src' => 'http://placehold.it/200x200',
-            'alt' => '',
-        ];
-
-        $tree = new DomTreeBuilder();
-        $tree->startDocument();
-        $this->setBodyStarted($tree, true);
-
-        $tree->startElement(true, 'img', $attrs);
-        $tree->endElement(true, 'img');
-
-        $this->assertSame('<img src="http://placehold.it/200x200" alt="">', $tree->getBodyNode()->getChild(0)->__toString());
-    }
-
-    public function testEndElementExample8(): void
-    {
-        $attrs = ['class' => 'diff'];
-
-        $tree = new DomTreeBuilder();
-        $tree->startDocument();
-        $this->setBodyStarted($tree, true);
-
-        $tree->startElement(true, 'pre', $attrs);
-        $tree->endElement(true, 'pre');
-
-        $this->assertSame('<pre class="diff">', $tree->getBodyNode()->getChild(0)->__toString());
-    }
-
-    public function testCharacters(): void
-    {
-        $attrs = ['class' => 'diff'];
-
-        $tree = new DomTreeBuilder();
-        $tree->startDocument();
-        $this->setBodyStarted($tree, true);
-
-        $tree->startElement(true, 'p', $attrs);
-        $tree->endElement(true, 'p');
-
-        $c = "/es\t h+ract\nr";
-        $tree->characters(true, $c);
-
-        $this->assertSame('<p class="diff">', $tree->getBodyNode()->getChild(0)->__toString());
     }
 
     public function testUnitCharacters1(): void
@@ -545,47 +634,6 @@ class DomTreeBuilderTest extends TestCase
                 $this->assertTrue($textNodes[$i]->isWhiteAfter());
             }
         }
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testCharactersException(): void
-    {
-        $tree = new DomTreeBuilder();
-        $flags = [
-            'documentStarted' => false,
-            'documentEnded'   => true,
-            'bodyStarted'     => false,
-            'bodyEnded'       => true,
-        ];
-
-        foreach ($flags as $prop => $value) {
-            $refProp = new \ReflectionProperty($tree, $prop);
-            $refProp->setAccessible(true);
-            $refProp->setValue($tree, $value);
-        }
-
-        $c = "/es\t h+ract\nr";
-        $tree->characters(true, $c);
-    }
-
-    public function testAddSeparatingNode(): void
-    {
-        $tree = new DomTreeBuilder();
-        $tree->startDocument();
-        $this->setBodyStarted($tree, true);
-        $tree->startElement(true, 'div', []);
-        $tree->startElement(true, 'p', []);
-        $tree->characters(true, 'test');
-        $tree->endElement(true, 'p');
-        $tree->endElement(true, 'div');
-
-        $refProp = new \ReflectionProperty($tree, 'textNodes');
-        $refProp->setAccessible(true);
-        $value = $refProp->getValue($tree);
-
-        $this->assertTrue(end($value) instanceof SeparatingNode);
     }
 
     /**

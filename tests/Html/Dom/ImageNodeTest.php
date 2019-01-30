@@ -31,7 +31,7 @@ class ImageNodeTest extends TestCase
 
         $this->assertTrue($imgNode->isSameText($rootNode));
         $this->assertFalse($compareNode->isSameText($rootNode));
-//        $this->assertFalse($imgNode->isSameText(null));
+        $this->assertFalse($imgNode->isSameText(null));
         $this->assertFalse($rootNode->isSameText($root));
 
         $this->assertSame('src', \key($imgNode->getAttributes()));

@@ -37,6 +37,24 @@ class NodeTest extends TestCase
         $this->assertSame($root, $intermediate->getRoot());
     }
 
+    /**
+     * @expectedException \Error
+     */
+    public function testNullGetLastCommonParent(): void
+    {
+        $root = new TagNode(null, 'root');
+        $intermediate = new TagNode($root, 'middle');
+        $root->addChild($intermediate);
+
+        try {
+            $root->getLastCommonParent(null);
+        } catch (\Error $error) {
+            $this->assertInstanceOf(\TypeError::class, $error);
+
+            throw $error;
+        }
+    }
+
     public function testGetLastCommonParent(): void
     {
         $root = new TagNode(null, 'root');
@@ -60,6 +78,8 @@ class NodeTest extends TestCase
         $this->assertSame($parent, $leafNode->getLastCommonParent($intermediate)->getLastCommonParent());
         $this->assertSame($root, $leaf2->getLastCommonParent($middle)->getLastCommonParent());
         $this->assertSame($parent, $leafNode->getLastCommonParent($leaf2)->getLastCommonParent());
+
+        // Added test.
         $this->assertSame($root, $intermediate->getLastCommonParent($leafNode)->getLastCommonParent());
     }
 
@@ -92,10 +112,10 @@ class NodeTest extends TestCase
         $root = new TagNode(null, 'root');
         $middle = new TagNode($root, 'middle');
         $root->addChild($middle);
-        $leaf = new TagNode($middle, 'leaf');
-        $middle->addChild($leaf);
+        $leafNode = new TagNode($middle, 'leaf');
+        $middle->addChild($leafNode);
 
-        $this->assertFalse($leaf->inPre());
+        $this->assertFalse($leafNode->inPre());
     }
 
     public function testIsWhiteBeforeAfter(): void

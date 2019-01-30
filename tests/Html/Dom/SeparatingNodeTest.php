@@ -22,7 +22,7 @@ class SeparatingNodeTest extends TestCase
         $root = new TagNode(null, 'root');
         $body = new SeparatingNode($root);
 
-//        $this->assertFalse($body->equals(null));
+        $this->assertFalse($body->equals(null));
         $this->assertTrue($body->equals($body));
     }
 }

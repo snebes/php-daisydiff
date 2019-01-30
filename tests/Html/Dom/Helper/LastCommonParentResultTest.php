@@ -24,7 +24,7 @@ class LastCommonParentResultTest extends TestCase
 
         $common = new LastCommonParentResult();
         $common->setLastCommonParent($root);
-        $this->assertEquals($root, $common->getLastCommonParent());
+        $this->assertSame($root, $common->getLastCommonParent());
 
         $common->setLastCommonParent(null);
         $this->assertNull($common->getLastCommonParent());
@@ -43,17 +43,17 @@ class LastCommonParentResultTest extends TestCase
     {
         $common = new LastCommonParentResult();
 
-        $this->assertEquals(-1, $common->getLastCommonParentDepth());
+        $this->assertSame(-1, $common->getLastCommonParentDepth());
         $common->setLastCommonParentDepth(2);
-        $this->assertEquals(2, $common->getLastCommonParentDepth());
+        $this->assertSame(2, $common->getLastCommonParentDepth());
     }
 
-    public function testIndexInLastCommonParentDepth(): void
+    public function testIndexInLastCommonParent(): void
     {
         $common = new LastCommonParentResult();
 
-        $this->assertEquals(-1, $common->getIndexInLastCommonParent());
+        $this->assertSame(-1, $common->getIndexInLastCommonParent());
         $common->setIndexInLastCommonParent(2);
-        $this->assertEquals(2, $common->getIndexInLastCommonParent());
+        $this->assertSame(2, $common->getIndexInLastCommonParent());
     }
 }

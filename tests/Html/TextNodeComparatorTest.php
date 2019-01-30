@@ -264,7 +264,7 @@ HTML;
     }
 
     /**
-     * @param  TextNodeComparator $comp
+     * @param TextNodeComparator $comp
      * @return TextNode[]
      */
     private function getTextNodes(TextNodeComparator $comp): array

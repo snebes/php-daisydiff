@@ -37,8 +37,6 @@ class HtmlDiffer
      * @param TextNodeComparator $ancestorComparator
      * @param TextNodeComparator $leftComparator
      * @param TextNodeComparator $rightComparator
-     *
-     * @throws
      */
 //    public function diff3(
 //        TextNodeComparator $ancestorComparator,
@@ -124,8 +122,6 @@ class HtmlDiffer
      *
      * @param TextNodeComparator $leftComparator  Root of the first tree.
      * @param TextNodeComparator $rightComparator Root of the second tree.
-     *
-     * @throws
      */
     public function diff(TextNodeComparator $leftComparator, TextNodeComparator $rightComparator): void
     {
@@ -224,9 +220,15 @@ class HtmlDiffer
     /**
      * @param int[] $numbers
      * @return float
+     *
+     * @throws \OutOfRangeException
      */
     public static function score(int ...$numbers): float
     {
+        if (\count($numbers) < 3) {
+            throw new \OutOfRangeException();
+        }
+
         if (($numbers[0] === 0 && $numbers[1] === 0) || ($numbers[2] === 0 && $numbers[3] === 0)) {
             return (float) 0;
         }

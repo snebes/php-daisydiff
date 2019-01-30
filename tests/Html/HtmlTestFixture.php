@@ -31,8 +31,8 @@ class HtmlTestFixture
      * Performs HTML diffing on two HTML strings. Notice that the input strings are "cleaned-up" first (e.g. all html
      * tags are converted to lowercase).
      *
-     * @param  string $oldText
-     * @param  string $newText
+     * @param string $oldText
+     * @param string $newText
      * @return string
      */
     public static function diff(string $oldText, string $newText): string
@@ -61,9 +61,9 @@ class HtmlTestFixture
     }
 
     /**
-     * @param  string $ancestor
-     * @param  string $oldText
-     * @param  string $newText
+     * @param string $ancestor
+     * @param string $oldText
+     * @param string $newText
      * @return string
      */
 //    public static function diff3(string $ancestor, string $oldText, string $newText): string
@@ -88,12 +88,11 @@ class HtmlTestFixture
 //        $leftComparator     = new TextNodeComparator($oldHandler);
 //        $rightComparator    = new TextNodeComparator($newHandler);
 //
-//        $content = new ChangeText();
-//        $handler = new DelegatingContentHandler($content);
-//        $output  = new HtmlSaxDiffOutput($handler, 'test');
+//        $changeText = new ChangeText();
+//        $output = new HtmlSaxDiffOutput($changeText);
 //        $differ  = new HtmlDiffer($output);
 //        $differ->diff3($ancestorComparator, $leftComparator, $rightComparator);
 //
-//        return $content->__toString();
+//        return $changeText->__toString();
 //    }
 }
