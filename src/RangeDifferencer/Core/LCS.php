@@ -130,7 +130,7 @@ abstract class LCS
             $lcs1 = $this->lcsRec($bottomL1, $startX - 1, $bottomL2, $startY - 1, $V, $snake);
             $lcs2 = $this->lcsRec($startX + $len, $topL1, $startY + $len, $topL2, $V, $snake);
 
-            return $len + $lcs1 + $lcs2;
+            return (int) ($len + $lcs1 + $lcs2);
         } elseif ($d === 1) {
             // In this case the sequences differ by exactly 1 line. We have already saved all the lines after the
             // difference in the for loop above, now we need to save all the lines before the difference.

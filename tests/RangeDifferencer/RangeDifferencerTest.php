@@ -61,19 +61,19 @@ class RangeDifferencerTest extends TestCase
         $this->assertSame('Left: (11, 4) Right: (15, 0)', $diffs[1]->__toString());
     }
 
-    public function testFindDifferenceExample4(): void
-    {
-        $ancestor = new TagComparator('<p> This is a book </p>');
-
-        $settings = new LCSSettings();
-        $settings->setUseGreedyMethod(true);
-
-        $diffs = RangeDifferencer::findDifferences3($ancestor, $this->left, $this->right, $settings);
-
-        $this->assertCount(2, $diffs);
-        $this->assertSame('Left: (8, 2) Right: (8, 6) Ancestor: (8, 0)', $diffs[0]->__toString());
-        $this->assertSame('Left: (11, 4) Right: (15, 0) Ancestor: (9, 1)', $diffs[1]->__toString());
-    }
+//    public function testFindDifferenceExample4(): void
+//    {
+//        $ancestor = new TagComparator('<p> This is a book </p>');
+//
+//        $settings = new LCSSettings();
+//        $settings->setUseGreedyMethod(true);
+//
+//        $diffs = RangeDifferencer::findDifferences3($ancestor, $this->left, $this->right, $settings);
+//
+//        $this->assertCount(2, $diffs);
+//        $this->assertSame('Left: (8, 2) Right: (8, 6) Ancestor: (8, 0)', $diffs[0]->__toString());
+//        $this->assertSame('Left: (11, 4) Right: (15, 0) Ancestor: (9, 1)', $diffs[1]->__toString());
+//    }
 
     public function testFindDifferenceExample5(): void
     {
@@ -111,19 +111,19 @@ class RangeDifferencerTest extends TestCase
         $this->assertSame('Left: (8, 1) Right: (8, 5)', $diffs[1]->__toString());
     }
 
-    public function testFindDifferenceExample8(): void
-    {
-        $ancestor = new TagComparator('<p> This is a book </p>');
-
-        $settings = new LCSSettings();
-        $settings->setUseGreedyMethod(true);
-
-        $diffs = RangeDifferencer::findRanges3($ancestor, $this->left, $this->right, $settings);
-
-        $this->assertCount(5, $diffs);
-        $this->assertSame('Left: (0, 8) Right: (0, 8) Ancestor: (0, 8)', $diffs[0]->__toString());
-        $this->assertSame('Left: (8, 2) Right: (8, 6) Ancestor: (8, 0)', $diffs[1]->__toString());
-    }
+//    public function testFindDifferenceExample8(): void
+//    {
+//        $ancestor = new TagComparator('<p> This is a book </p>');
+//
+//        $settings = new LCSSettings();
+//        $settings->setUseGreedyMethod(true);
+//
+//        $diffs = RangeDifferencer::findRanges3($ancestor, $this->left, $this->right, $settings);
+//
+//        $this->assertCount(5, $diffs);
+//        $this->assertSame('Left: (0, 8) Right: (0, 8) Ancestor: (0, 8)', $diffs[0]->__toString());
+//        $this->assertSame('Left: (8, 2) Right: (8, 6) Ancestor: (8, 0)', $diffs[1]->__toString());
+//    }
 
     public function testFindDifferenceExample9(): void
     {

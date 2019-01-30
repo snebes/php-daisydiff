@@ -26,6 +26,7 @@ class OldDifferencerTest extends TestCase
         $right = new TagComparator($newText);
 
         $ranges = OldDifferencer::findDifferences($left, $right);
+
         $this->assertSame('Left: (8, 0) Right: (8, 4)', $ranges[0]->__toString());
     }
 
@@ -37,7 +38,8 @@ class OldDifferencerTest extends TestCase
         $right = new TagComparator($newText);
 
         $ranges = OldDifferencer::findDifferences($right, $left);
-        $this->assertSame('Left: (9, 4) Right: (8, 0)', $ranges[0]->__toString());
+
+        $this->assertSame('Left: (8, 4) Right: (8, 0)', $ranges[0]->__toString());
     }
 
     public function testFindDifferencesExample3(): void
@@ -47,6 +49,7 @@ class OldDifferencerTest extends TestCase
         $right = new TagComparator($oldText);
 
         $ranges = OldDifferencer::findDifferences($right, $left);
+
         $this->assertCount(0, $ranges);
     }
 }

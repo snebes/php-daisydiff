@@ -65,7 +65,6 @@ class TagDiffer implements TextDifferInterface
 
             if ($pDifferences[$i]->getRightLength() > 0) {
                 $this->output->addAddedPart($rightString);
-
             }
 
             $rightAtom = $pDifferences[$i]->getRightEnd();

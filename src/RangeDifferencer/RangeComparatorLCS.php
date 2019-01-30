@@ -145,7 +145,7 @@ class RangeComparatorLCS extends LCS
                 $end1 = $l1 - 1;
                 $end2 = $l2 - 1;
 
-                if ($s1 === -1 && ($end1 !== 0 || $end2 !== 0)) {
+                if (-1 === $s1 && (0 !== $end1 || 0 !== $end2)) {
                     // There is a diff at the beginning.
                     // TODO: We need to confirm that this is the proper order.
                     $differences[] = new RangeDifference(
@@ -172,8 +172,10 @@ class RangeComparatorLCS extends LCS
                 $index2++;
             }
 
-            if ($s1 !== -1 &&
-                ($s1 + 1 < $this->comparator1->getRangeCount() || $s2 + 1 < $this->comparator2->getRangeCount())) {
+            if (
+                -1 !== $s1 &&
+                ($s1 + 1 < $this->comparator1->getRangeCount() || $s2 + 1 < $this->comparator2->getRangeCount())
+            ) {
                 // TODO: we need to find the proper way of representing an append.
                 $leftStart = $s1 < $this->comparator1->getRangeCount() ? $s1 + 1 : $s1;
                 $rightStart = $s2 < $this->comparator2->getRangeCount() ? $s2 + 1 : $s2;

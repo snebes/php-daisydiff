@@ -30,7 +30,7 @@ use IteratorAggregate;
 class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
 {
     /** @var TextNode[] */
-    private $textNodes = [];
+    public $textNodes = [];
 
     /** @var Modification[] */
     private $lastModified = [];
@@ -91,9 +91,6 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
         if (isset($this->textNodes[$index])) {
             return $this->textNodes[$index];
         }
-
-        var_dump($this->textNodes);
-        var_dump($index);
 
         throw new \OutOfBoundsException();
     }

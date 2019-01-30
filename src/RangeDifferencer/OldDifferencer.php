@@ -36,7 +36,7 @@ final class OldDifferencer
     public static function findDifferences(RangeComparatorInterface $left, RangeComparatorInterface $right): array
     {
         // Assert that both RangeComparatorInterface are of the same class.
-        assert(get_class($right) === get_class($left));
+        \assert(\get_class($right) === \get_class($left));
 
         $rightSize = $right->getRangeCount();
         $leftSize = $left->getRangeCount();
@@ -53,12 +53,12 @@ final class OldDifferencer
         $origin = (int) ($diagLen / 2);
 
         // Script corresponding to $d[$k]
-        /** @var LinkedRangeDifference */
+        /** @var LinkedRangeDifference[] $script */
         $script = \array_fill(0, $diagLen + 1, null);
         $row = 0;
 
         // Find common prefix.
-        while ($row < $rightSize && $row < $leftSize && self::rangesEqual($right, $row, $left, $row)) {
+        for (;$row < $rightSize && $row < $leftSize && self::rangesEqual($right, $row, $left, $row);) {
             $row++;
         }
 
@@ -73,7 +73,7 @@ final class OldDifferencer
         }
 
         // For each value of the edit distance.
-        for ($d = 1; $d <= $maxDiagonal; ++$d) {
+        for ($d = 1; $d <= $maxDiagonal; $d++) {
             // $d is the current edit distance.
 
             if ($right->skipRangeComparison($d, $maxDiagonal, $left)) {
@@ -100,21 +100,21 @@ final class OldDifferencer
                 $edit->setRightStart($row);
                 $edit->setLeftStart($col);
 
-                assert($k >= 0 && $k <= $maxDiagonal);
+                \assert($k >= 0 && $k <= $maxDiagonal);
                 $script[$k] = $edit;
 
                 // Slide down the diagonal as far as possible.
                 while ($row < $rightSize && $col < $leftSize && self::rangesEqual($right, $row, $left, $col)) {
-                    ++$row;
-                    ++$col;
+                    $row++;
+                    $col++;
                 }
 
                 // Unreasonable value for diagonal index.
-                assert($k >= 0 && $k <= $maxDiagonal);
+                \assert($k >= 0 && $k <= $maxDiagonal);
                 $lastDiagonal[$k] = $row;
 
                 if ($row === $rightSize && $col === $leftSize) {
-                    return self::createDifferencesRanges($script[$k]);
+                    return self::createRangeDifferences($script[$k]);
                 }
 
                 if ($row === $rightSize) {
@@ -126,8 +126,8 @@ final class OldDifferencer
                 }
             }
 
-            --$lower;
-            ++$upper;
+            $lower--;
+            $upper++;
         }
 
         // Too many differences.
@@ -160,7 +160,7 @@ final class OldDifferencer
      * @param LinkedRangeDifference $start
      * @return RangeDifference[]
      */
-    private static function createDifferencesRanges(LinkedRangeDifference $start): array
+    private static function createRangeDifferences(LinkedRangeDifference $start): array
     {
         $ep = self::reverseDifferences($start);
         $result = [];
@@ -170,7 +170,7 @@ final class OldDifferencer
 
             if ($ep->isInsert()) {
                 $es->setRightStart($ep->getRightStart() + 1);
-                $es->setLeftStart($ep->getLeftStart() + 1);
+                $es->setLeftStart($ep->getLeftStart());
                 $b = $ep;
 
                 do {

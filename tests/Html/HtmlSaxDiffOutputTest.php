@@ -37,32 +37,6 @@ class HtmlSaxDiffOutputTest extends TestCase
     }
 
     /**
-     * @param  object $instance
-     * @param  string $name
-     * @param  array  $params
-     * @return mixed
-     * @throws
-     */
-    private function executeMethod($instance, string $name, array $params)
-    {
-        $refClass = new ReflectionClass($instance);
-        $method = $refClass->getMethod($name);
-        $method->setAccessible(true);
-
-        if ('addAttributes' == $name) {
-            $mod = $params[0];
-            $attrs = $params[1];
-            $method->invokeArgs($instance, [$mod, &$attrs]);
-
-            return $attrs;
-        } else {
-            $method->invokeArgs($instance, $params);
-
-            return $params[0];
-        }
-    }
-
-    /**
      * @param string $oldText
      * @param string $newText
      * @return string

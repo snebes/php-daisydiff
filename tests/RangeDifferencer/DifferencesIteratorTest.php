@@ -8,11 +8,8 @@
 
 declare(strict_types=1);
 
-namespace RangeDifferencer;
+namespace DaisyDiff\RangeDifferencer;
 
-use DaisyDiff\RangeDifferencer\DifferencesIterator;
-use DaisyDiff\RangeDifferencer\RangeDifference;
-use DaisyDiff\RangeDifferencer\RangeDifferencer;
 use DaisyDiff\Tag\TagComparator;
 use PHPUnit\Framework\TestCase;
 
@@ -45,7 +42,9 @@ class DifferencesIteratorTest extends TestCase
     public function testDifferencesIteratorEmpty(): void
     {
         $iterator = new DifferencesIterator([]);
+
         $this->assertSame(0, $iterator->getIndex());
+        $this->assertNull($iterator->getDifference());
     }
 
     public function testGetCount(): void
@@ -59,7 +58,7 @@ class DifferencesIteratorTest extends TestCase
     {
         $iterator = new DifferencesIterator([]);
 
-        $this->assertSame(0, $iterator->getIndex());
+        $this->assertSame(0, $iterator->getCount());
     }
 
     public function testNext(): void
@@ -92,6 +91,7 @@ class DifferencesIteratorTest extends TestCase
         $iterator->next();
 
         $this->assertSame(1, $iterator->getCount());
+        $this->assertNull($iterator->getDifference());
     }
 
     public function testOther(): void
@@ -100,12 +100,17 @@ class DifferencesIteratorTest extends TestCase
         $right = new DifferencesIterator($this->ranges);
 
         $this->assertSame($right, $left->other($right, $left));
+        $this->assertSame($right, $left->other($left, $right));
         $this->assertSame($left, $right->other($right, $left));
+        $this->assertSame($left, $right->other($left, $right));
     }
 
     public function testRemoveAll(): void
     {
         $iterator = new DifferencesIterator($this->ranges);
+
+        $iterator->next();
+        $this->assertSame(1, $iterator->getCount());
 
         $iterator->removeAll();
         $this->assertSame(0, $iterator->getCount());
@@ -115,7 +120,27 @@ class DifferencesIteratorTest extends TestCase
     {
         $iterator = new DifferencesIterator([]);
 
+        $iterator->next();
+        $this->assertSame(1, $iterator->getCount());
+
         $iterator->removeAll();
         $this->assertSame(0, $iterator->getCount());
+    }
+
+    public function testEmpty(): void
+    {
+        $iterator = new DifferencesIterator([]);
+
+        $this->assertSame(0, $iterator->getCount());
+        $this->assertSame(0, $iterator->getIndex());
+        $this->assertNull($iterator->getDifference());
+        $this->assertSame([], $iterator->getRange());
+
+        // This is very weird behavior, but this is java implementation.
+        $iterator->next();
+        $this->assertSame(1, $iterator->getCount());
+        $this->assertSame(0, $iterator->getIndex());
+        $this->assertNull($iterator->getDifference());
+        $this->assertSame([null], $iterator->getRange());
     }
 }

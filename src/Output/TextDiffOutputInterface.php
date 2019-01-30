@@ -10,8 +10,6 @@ declare(strict_types=1);
 
 namespace DaisyDiff\Output;
 
-use Exception;
-
 /**
  * Interface for classes that need to process the result from the tag-like representation of the output.
  */

@@ -34,7 +34,6 @@ class HtmlTestFixture
      * @param  string $oldText
      * @param  string $newText
      * @return string
-     * @throws
      */
     public static function diff(string $oldText, string $newText): string
     {
@@ -47,9 +46,6 @@ class HtmlTestFixture
         $newHandler = new DomTreeBuilder();
         $newSax = new XMLReader($newHandler);
         $newSax->parse($newText);
-
-        var_dump($oldHandler->getTextNodes());
-        var_dump($newHandler->getTextNodes());
 
         // Diff.
         $leftComparator = new TextNodeComparator($oldHandler);
@@ -69,7 +65,6 @@ class HtmlTestFixture
      * @param  string $oldText
      * @param  string $newText
      * @return string
-     * @throws
      */
 //    public static function diff3(string $ancestor, string $oldText, string $newText): string
 //    {

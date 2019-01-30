@@ -15,6 +15,9 @@ use DaisyDiff\Html\Dom\DomTreeBuilder;
 use DaisyDiff\Html\HtmlDiffer;
 use DaisyDiff\Html\HtmlSaxDiffOutput;
 use DaisyDiff\Html\TextNodeComparator;
+use DaisyDiff\Tag\TagComparator;
+use DaisyDiff\Tag\TagDiffer;
+use DaisyDiff\Tag\TagSaxDiffOutput;
 use DaisyDiff\Xml\XMLReader;
 
 /**
@@ -25,21 +28,21 @@ class DaisyDiff
     /**
      * Diffs two HTML strings, returning the result.
      *
-     * @param string $oldSource
-     * @param string $newSource
+     * @param string $oldText
+     * @param string $newText
      * @return string
      */
-    public function diff(string $oldSource, string $newSource): string
+    public function diff(string $oldText, string $newText): string
     {
         // Parse $old XML.
         $oldHandler = new DomTreeBuilder();
         $reader1 = new XMLReader($oldHandler);
-        $reader1->parse($oldSource);
+        $reader1->parse($oldText);
 
         // Parse $new XML.
         $newHandler = new DomTreeBuilder();
         $reader2 = new XMLReader($newHandler);
-        $reader2->parse($newSource);
+        $reader2->parse($newText);
 
         // Comparators.
         $leftComparator = new TextNodeComparator($oldHandler);
@@ -49,6 +52,19 @@ class DaisyDiff
         $output = new HtmlSaxDiffOutput($changeText);
         $differ = new HtmlDiffer($output);
         $differ->diff($leftComparator, $rightComparator);
+
+        return $changeText->getText();
+    }
+
+    public function diffTag(string $oldText, string $newText): string
+    {
+        $oldComp = new TagComparator($oldText);
+        $newComp = new TagComparator($newText);
+
+        $changeText = new ChangeText();
+        $output = new TagSaxDiffOutput($changeText);
+        $differ = new TagDiffer($output);
+        $differ->diff($oldComp, $newComp);
 
         return $changeText->getText();
     }

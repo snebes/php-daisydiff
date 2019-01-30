@@ -41,8 +41,8 @@ class TextNode extends Node
      */
     public function copyTree(): Node
     {
-        $node = new static(null, $this->s);
-        $node->setModification(clone $this->modification);
+        $node = clone $this;
+        $node->setParent(null);
 
         return $node;
     }

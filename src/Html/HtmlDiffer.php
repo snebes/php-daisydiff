@@ -161,12 +161,12 @@ class HtmlDiffer
             $currentIndexRight = $d->getRightEnd();
         }
 
-//        if ($currentIndexLeft < $leftComparator->getRangeCount()) {
-//            $rightComparator->handlePossibleChangedPart(
-//                $currentIndexLeft, $leftComparator->getRangeCount(),
-//                $currentIndexRight, $rightComparator->getRangeCount(),
-//                $leftComparator);
-//        }
+        if ($currentIndexLeft < $leftComparator->getRangeCount()) {
+            $rightComparator->handlePossibleChangedPart(
+                $currentIndexLeft, $leftComparator->getRangeCount(),
+                $currentIndexRight, $rightComparator->getRangeCount(),
+                $leftComparator);
+        }
 
         $rightComparator->expandWhiteSpace();
         $this->output->generateOutput($rightComparator->getBodyNode());
@@ -225,17 +225,13 @@ class HtmlDiffer
      * @param int[] $numbers
      * @return float
      */
-    public function score(int ...$numbers): float
+    public static function score(int ...$numbers): float
     {
-        if (\count($numbers) < 3) {
-            throw new \OutOfBoundsException('Need at least 3 numbers.');
-        }
-
         if (($numbers[0] === 0 && $numbers[1] === 0) || ($numbers[2] === 0 && $numbers[3] === 0)) {
-            return (float) 0.0;
+            return (float) 0;
         }
 
-        $d = 0.0;
+        $d = 0;
 
         foreach ($numbers as $number) {
             while ($number > 3) {
@@ -247,6 +243,6 @@ class HtmlDiffer
             $d += $number;
         }
 
-        return (float) ($d / 1.5 * \count($numbers));
+        return (float) ($d / (1.5 * \count($numbers)));
     }
 }

@@ -25,12 +25,6 @@ class TagSaxDiffOutput implements TextDiffOutputInterface
     /** @var bool */
     private $insideTag = false;
 
-    /** @var int */
-    private $removedId = 1;
-
-    /** @var int */
-    private $addedId = 1;
-
     /**
      * Default values.
      *
@@ -98,16 +92,11 @@ class TagSaxDiffOutput implements TextDiffOutputInterface
      */
     public function addRemovedPart(string $text): void
     {
-        $attrs = [
-            'class' => 'diff-tag-removed',
-            'id'    => 'removed' . $this->removedId,
-            'title' => '#removed' . $this->removedId,
-        ];
-        $this->removedId++;
+        $attrs = ['class' => 'diff-tag-removed'];
 
-        $this->consumer->startElement('span', $attrs);
+        $this->consumer->startElement('del', $attrs);
         $this->addBasicText($text);
-        $this->consumer->endElement('span');
+        $this->consumer->endElement('del');
     }
 
     /**
@@ -115,15 +104,10 @@ class TagSaxDiffOutput implements TextDiffOutputInterface
      */
     public function addAddedPart(string $text): void
     {
-        $attrs = [
-            'class' => 'diff-tag-added',
-            'id'    => 'removed' . $this->addedId,
-            'title' => '#removed' . $this->addedId,
-        ];
-        $this->addedId++;
+        $attrs = ['class' => 'diff-tag-added'];
 
-        $this->consumer->startElement('span', $attrs);
+        $this->consumer->startElement('ins', $attrs);
         $this->addBasicText($text);
-        $this->consumer->endElement('span');
+        $this->consumer->endElement('ins');
     }
 }
