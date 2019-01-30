@@ -19,7 +19,7 @@ namespace DaisyDiff\Html\Dom;
 class SeparatingNode extends TextNode
 {
     /**
-     * @param TagNode $parent
+     * @param TagNode|null $parent
      */
     public function __construct(?TagNode $parent)
     {
@@ -27,7 +27,8 @@ class SeparatingNode extends TextNode
     }
 
     /**
-     * {@inheritdoc}
+     * @param Node|null $other
+     * @return bool
      */
     public function equals(?Node $other): bool
     {

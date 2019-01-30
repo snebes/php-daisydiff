@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace DaisyDiff\Html\Dom;
 
+use DaisyDiff\Html\Modification\Modification;
+use DaisyDiff\Html\Modification\ModificationType;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,30 +22,40 @@ class BodyNodeTest extends TestCase
     public function testCopyTreeWithNoChildren(): void
     {
         $body = new BodyNode();
-        $this->assertEquals($body, $body->copyTree());
+        $copy = $body->copyTree();
+
+        $this->assertEquals($body, $copy);
+        $this->assertNotSame($body, $copy);
+
     }
 
     public function testCopyTreeWithChildren(): void
     {
         $body = new BodyNode();
         $intermediate = new TagNode($body, 'middle');
-        $body->addChild($intermediate);
         $leaf = new TagNode($intermediate, 'leaf');
-        $intermediate->addChild($leaf);
+        $copy = $body->copyTree();
 
-        $this->assertEquals($body, $body->copyTree());
+        $this->assertEquals($body, $copy);
+        $this->assertNotSame($body, $copy);
     }
 
     public function testGetMinimalDeletedSet(): void
     {
         $body = new BodyNode();
         $intermediate = new TagNode($body, 'middle');
-        $body->addChild($intermediate);
         $leaf = new TagNode($intermediate, 'leaf');
-        $intermediate->addChild($leaf);
+        new TextNode($leaf, 'text');
 
         $nodes = [];
         $this->assertSame($nodes, $body->getMinimalDeletedSet(0));
         $this->assertSame($nodes, $leaf->getMinimalDeletedSet(0));
+
+        $text = new TextNode($leaf, 'deleted');
+        $mod = new Modification(ModificationType::REMOVED, ModificationType::REMOVED);
+        $mod->setId(1);
+        $text->setModification($mod);
+
+        $this->assertSame([$text], $body->getMinimalDeletedSet(1));
     }
 }

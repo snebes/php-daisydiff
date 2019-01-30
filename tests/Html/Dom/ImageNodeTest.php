@@ -20,13 +20,13 @@ class ImageNodeTest extends TestCase
     public function testIsSameText(): void
     {
         $nodeAttrs = ['src' => 'location of image tag'];
-        $attrs     = ['src' => 'different location for this tag'];
+        $attrs = ['src' => 'different location for this tag'];
 
         $root = new TagNode(null, 'root', $nodeAttrs);
-        $img  = new TagNode($root, 'img', $nodeAttrs);
+        $img = new TagNode($root, 'img', $nodeAttrs);
 
-        $imgNode     = new ImageNode($img, $nodeAttrs);
-        $rootNode    = new ImageNode($root, $nodeAttrs);
+        $imgNode = new ImageNode($img, $nodeAttrs);
+        $rootNode = new ImageNode($root, $nodeAttrs);
         $compareNode = new ImageNode($root, $attrs);
 
         $this->assertTrue($imgNode->isSameText($rootNode));
@@ -34,17 +34,14 @@ class ImageNodeTest extends TestCase
         $this->assertFalse($imgNode->isSameText(null));
         $this->assertFalse($rootNode->isSameText($root));
 
-        $this->assertSame('src', key($imgNode->getAttributes()));
+        $this->assertSame('src', \key($imgNode->getAttributes()));
     }
 
     public function testGetAttributes(): void
     {
         $nodeAttrs = ['src' => 'location of image tag'];
+        $root = new TagNode(null, 'root', $nodeAttrs);
 
-        $root    = new TagNode(null, 'root', $nodeAttrs);
-        $img     = new TagNode($root, 'img', $nodeAttrs);
-        $imgNode = new ImageNode($img, $nodeAttrs);
-
-        $this->assertEquals($nodeAttrs, $imgNode->getAttributes());
+        $this->assertEquals($nodeAttrs, $root->getAttributes());
     }
 }

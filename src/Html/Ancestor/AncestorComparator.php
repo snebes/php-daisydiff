@@ -29,9 +29,9 @@ class AncestorComparator implements RangeComparatorInterface
     /**
      * @param TagNode[] $ancestors
      */
-    public function __construct(?array $ancestors)
+    public function __construct(array $ancestors)
     {
-        $this->ancestors = $ancestors ?? [];
+        $this->ancestors = $ancestors;
     }
 
     /**
@@ -70,11 +70,11 @@ class AncestorComparator implements RangeComparatorInterface
      */
     public function getAncestor(int $index): ?TagNode
     {
-        if (!isset($this->ancestors[$index])) {
-            throw new \OutOfBoundsException(\sprintf('Index: %d, Size: %d', $index, \count($this->ancestors)));
+        if (isset($this->ancestors[$index])) {
+            return $this->ancestors[$index];
         }
 
-        return $this->ancestors[$index];
+        throw new \OutOfBoundsException(\sprintf('Index: %d, Size: %d', $index, \count($this->ancestors)));
     }
 
     /**
@@ -103,7 +103,7 @@ class AncestorComparator implements RangeComparatorInterface
         $changeText = new ChangeTextGenerator($this, $other);
 
         $result->setChanged(true);
-        $result->setChanges($changeText->getChanged($differences)->__toString());
+        $result->setChanges($changeText->getChanged($differences)->getText());
         $result->setHtmlLayoutChanges($changeText->getHtmlLayoutChanges());
 
         return $result;

@@ -15,7 +15,7 @@ use DaisyDiff\Html\Modification\HtmlLayoutChange;
 /**
  * AncestorComparatorResult model.
  */
-final class AncestorComparatorResult
+class AncestorComparatorResult
 {
     /** @var bool */
     private $changed = false;

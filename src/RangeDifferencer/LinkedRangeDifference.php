@@ -19,7 +19,7 @@ class LinkedRangeDifference extends RangeDifference
     const INSERT = 0;
     const DELETE = 1;
 
-    /** @var LinkedRangeDifference */
+    /** @var LinkedRangeDifference|null */
     private $next;
 
     /**
@@ -41,6 +41,14 @@ class LinkedRangeDifference extends RangeDifference
     }
 
     /**
+     * @param LinkedRangeDifference|null $next
+     */
+    public function setNext(?LinkedRangeDifference $next): void
+    {
+        $this->next = $next;
+    }
+
+    /**
      * @return bool
      */
     public function isDelete(): bool
@@ -54,13 +62,5 @@ class LinkedRangeDifference extends RangeDifference
     public function isInsert(): bool
     {
         return $this->getKind() === self::INSERT;
-    }
-
-    /**
-     * @param LinkedRangeDifference|null $next
-     */
-    public function setNext(?LinkedRangeDifference $next): void
-    {
-        $this->next = $next;
     }
 }

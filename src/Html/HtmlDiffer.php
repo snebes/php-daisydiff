@@ -12,6 +12,7 @@ namespace DaisyDiff\Html;
 
 use DaisyDiff\Html\Modification\ModificationType;
 use DaisyDiff\Output\DiffOutputInterface;
+use DaisyDiff\RangeDifferencer\Core\LCSSettings;
 use DaisyDiff\RangeDifferencer\RangeDifference;
 use DaisyDiff\RangeDifferencer\RangeDifferencer;
 
@@ -33,17 +34,69 @@ class HtmlDiffer
     }
 
     /**
+     * Compares two Node Trees.
+     *
+     * @param TextNodeComparator $leftComparator  Root of the first tree.
+     * @param TextNodeComparator $rightComparator Root of the second tree.
+     */
+    public function diff(TextNodeComparator $leftComparator, TextNodeComparator $rightComparator): void
+    {
+        $settings = new LCSSettings();
+        $settings->setUseGreedyMethod(false);
+
+        /** @var RangeDifference[] $differences */
+        $differences = RangeDifferencer::findDifferences($leftComparator, $rightComparator, $settings);
+        $pDifferences = $this->preProcess($differences);
+
+        $currentIndexLeft = 0;
+        $currentIndexRight = 0;
+
+        /** @var RangeDifference $d */
+        foreach ($pDifferences as $d) {
+            if ($d->getLeftStart() > $currentIndexLeft) {
+                $rightComparator->handlePossibleChangedPart(
+                    $currentIndexLeft, $d->getLeftStart(),
+                    $currentIndexRight, $d->getRightStart(),
+                    $leftComparator);
+            }
+
+            if ($d->getLeftLength() > 0) {
+                $rightComparator->markAsDeleted(
+                    $d->getLeftStart(), $d->getLeftEnd(),
+                    $leftComparator,
+                    $d->getRightStart());
+            }
+
+            $rightComparator->markAsNew($d->getRightStart(), $d->getRightEnd());
+
+            $currentIndexLeft = $d->getLeftEnd();
+            $currentIndexRight = $d->getRightEnd();
+        }
+
+        if ($currentIndexLeft < $leftComparator->getRangeCount()) {
+            $rightComparator->handlePossibleChangedPart(
+                $currentIndexLeft, $leftComparator->getRangeCount(),
+                $currentIndexRight, $rightComparator->getRangeCount(),
+                $leftComparator);
+        }
+
+        $rightComparator->expandWhiteSpace();
+        $this->output->generateOutput($rightComparator->getBodyNode());
+    }
+
+    /**
      * @param TextNodeComparator $ancestorComparator
      * @param TextNodeComparator $leftComparator
      * @param TextNodeComparator $rightComparator
-     *
-     * @throws
      */
     public function diff3(
         TextNodeComparator $ancestorComparator,
         TextNodeComparator $leftComparator,
         TextNodeComparator $rightComparator
     ): void {
+        $settings = new LCSSettings();
+        $settings->setUseGreedyMethod(false);
+
         /** @var RangeDifference[] $differences */
         $differences = RangeDifferencer::findDifferences3($ancestorComparator, $leftComparator, $rightComparator);
         $pDifferences = $this->preProcess($differences);
@@ -80,7 +133,7 @@ class HtmlDiffer
                 if ($d->getLeftLength() > 0) {
                     $ancestorComparator->markAsDeleted(
                         $d->getLeftStart(), $d->getLeftEnd(), $leftComparator,
-                        $d->getAncestorStart(), $d->getAncestorEnd(), ModificationType::ADDED);
+                        $d->getAncestorStart(), ModificationType::ADDED);
                 }
             }
 
@@ -89,7 +142,7 @@ class HtmlDiffer
                 if ($d->getRightLength() > 0) {
                     $ancestorComparator->markAsDeleted(
                         $d->getRightStart(), $d->getRightEnd(), $rightComparator,
-                        $d->getAncestorStart(), $d->getAncestorEnd(), ModificationType::ADDED);
+                        $d->getAncestorStart(), ModificationType::ADDED);
                 }
             }
 
@@ -119,56 +172,6 @@ class HtmlDiffer
     }
 
     /**
-     * Compares two Node Trees.
-     *
-     * @param TextNodeComparator $leftComparator
-     * @param TextNodeComparator $rightComparator
-     *
-     * @throws
-     */
-    public function diff(TextNodeComparator $leftComparator, TextNodeComparator $rightComparator): void
-    {
-        /** @var RangeDifference[] $differences */
-        $differences = RangeDifferencer::findDifferences($leftComparator, $rightComparator);
-        $pDifferences = $this->preProcess($differences);
-
-        $currentIndexLeft = 0;
-        $currentIndexRight = 0;
-
-        /** @var RangeDifference $d */
-        foreach ($pDifferences as $d) {
-            if ($d->getLeftStart() > $currentIndexLeft) {
-                $rightComparator->handlePossibleChangedPart(
-                    $currentIndexLeft, $d->getLeftStart(),
-                    $currentIndexRight, $d->getRightStart(),
-                    $leftComparator);
-            }
-
-            if ($d->getLeftLength() > 0) {
-                $rightComparator->markAsDeleted(
-                    $d->getLeftStart(), $d->getLeftEnd(),
-                    $leftComparator,
-                    $d->getRightStart(), $d->getRightEnd());
-            }
-
-            $rightComparator->markAsNew($d->getRightStart(), $d->getRightEnd());
-
-            $currentIndexLeft = $d->getLeftEnd();
-            $currentIndexRight = $d->getRightEnd();
-        }
-
-        if ($currentIndexLeft < $leftComparator->getRangeCount()) {
-            $rightComparator->handlePossibleChangedPart(
-                $currentIndexLeft, $leftComparator->getRangeCount(),
-                $currentIndexRight, $rightComparator->getRangeCount(),
-                $leftComparator);
-        }
-
-        $rightComparator->expandWhiteSpace();
-        $this->output->generateOutput($rightComparator->getBodyNode());
-    }
-
-    /**
      * @param RangeDifference[] $differences
      * @return RangeDifference[]
      */
@@ -190,9 +193,12 @@ class HtmlDiffer
             $leftLength = $leftEnd - $leftStart;
             $rightLength = $rightEnd - $rightStart;
 
-            while ($i + 1 < $iMax && $differences[$i + 1]->getKind() === $kind
-                && $this->score($leftLength, $differences[$i + 1]->getLeftLength(), $rightLength,
-                    $differences[$i + 1]->getRightLength()) > ($differences[$i + 1]->getLeftStart() - $leftEnd)) {
+            while (
+                $i + 1 < $iMax &&
+                $differences[$i + 1]->getKind() === $kind &&
+                $this->score($leftLength, $differences[$i + 1]->getLeftLength(), $rightLength,
+                    $differences[$i + 1]->getRightLength()) > ($differences[$i + 1]->getLeftStart() - $leftEnd)
+            ) {
                 $ancestorEnd = $differences[$i + 1]->getAncestorEnd();
                 $leftEnd = $differences[$i + 1]->getLeftEnd();
                 $rightEnd = $differences[$i + 1]->getRightEnd();
@@ -217,18 +223,20 @@ class HtmlDiffer
     /**
      * @param int[] $numbers
      * @return float
+     *
+     * @throws \OutOfRangeException
      */
-    public function score(int ...$numbers): float
+    public static function score(int ...$numbers): float
     {
         if (\count($numbers) < 3) {
-            throw new \OutOfBoundsException('Need at least 3 numbers.');
+            throw new \OutOfRangeException();
         }
 
         if (($numbers[0] === 0 && $numbers[1] === 0) || ($numbers[2] === 0 && $numbers[3] === 0)) {
-            return (float) 0.0;
+            return (float) 0;
         }
 
-        $d = 0.0;
+        $d = 0;
 
         foreach ($numbers as $number) {
             while ($number > 3) {
@@ -240,6 +248,6 @@ class HtmlDiffer
             $d += $number;
         }
 
-        return (float) $d / (1.5 * \count($numbers));
+        return (float) ($d / (1.5 * \count($numbers)));
     }
 }

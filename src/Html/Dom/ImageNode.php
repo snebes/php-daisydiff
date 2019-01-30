@@ -20,8 +20,8 @@ class ImageNode extends TextNode
     private $attributes = [];
 
     /**
-     * @param TagNode $parent
-     * @param array   $attributes
+     * @param TagNode|null $parent
+     * @param array        $attributes
      */
     public function __construct(?TagNode $parent, array $attributes = [])
     {
@@ -34,7 +34,7 @@ class ImageNode extends TextNode
      */
     public function isSameText(?Node $other): bool
     {
-        if (null === $other || !$other instanceof ImageNode) {
+        if (!$other instanceof ImageNode) {
             return false;
         }
 

@@ -76,11 +76,11 @@ class TextOnlyComparator implements RangeComparatorInterface
      */
     public function getLeaf(int $index): TextNode
     {
-        if (!isset($this->leafs[$index])) {
-            throw new \OutOfBoundsException(\sprintf('Index: %d, Size: %d', $index, \count($this->leafs)));
+        if (isset($this->leafs[$index])) {
+            return $this->leafs[$index];
         }
 
-        return $this->leafs[$index];
+        throw new \OutOfBoundsException(\sprintf('Index: %d, Size: %d', $index, \count($this->leafs)));
     }
 
     /**
@@ -111,7 +111,7 @@ class TextOnlyComparator implements RangeComparatorInterface
             $distanceThis += $d->getRightLength();
         }
 
-        return (float) (((0.0 + $distanceOther) / $other->getRangeCount() +
-                (0.0 + $distanceThis) / $this->getRangeCount()) / 2);
+        return (float) ((0.0 + $distanceOther) / $other->getRangeCount() +
+                (0.0 + $distanceThis) / $this->getRangeCount()) / 2;
     }
 }

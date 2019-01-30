@@ -78,7 +78,7 @@ class RangeDifference
      * @param int $ancestorLength
      */
     public function __construct(
-        int $kind = 0,
+        int $kind = self::NOCHANGE,
         int $rightStart = 0,
         int $rightLength = 0,
         int $leftStart = 0,
@@ -278,7 +278,7 @@ class RangeDifference
      */
     public function getMaxLength(): int
     {
-        return \max($this->rightLength, $this->leftLength, $this->ancestorLength);
+        return (int) \max($this->rightLength, $this->leftLength, $this->ancestorLength);
     }
 
     /**

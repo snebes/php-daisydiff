@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace DaisyDiff\Html\Ancestor\TagToString;
 
-use DaisyDiff\Html\Ancestor\ChangeText;
+use DaisyDiff\Html\ChangeText;
 
 /**
  * Image <img> tag to string.
@@ -22,13 +22,13 @@ class NoContentTagToString extends TagToString
      */
     public function getAddedDescription(ChangeText $text): void
     {
-        $text->addText(\sprintf('%s %s ', $this->getChangedTo(), \mb_strtolower($this->getArticle())));
-        $text->addHtml('<b>');
-        $text->addText(\mb_strtolower($this->getDescription()));
-        $text->addHtml('</b>');
+        $text->characters(\sprintf('%s %s ', $this->getChangedTo(), \mb_strtolower($this->getArticle())));
+        $text->startElement('b');
+        $text->characters(\mb_strtolower($this->getDescription()));
+        $text->endElement('b');
 
         $this->addAttributes($text, $this->node->getAttributes());
-        $text->addText('.');
+        $text->characters('.');
     }
 
     /**
@@ -44,13 +44,13 @@ class NoContentTagToString extends TagToString
      */
     public function getRemovedDescription(ChangeText $text): void
     {
-        $text->addText(\sprintf('%s %s ', $this->getChangedFrom(), \mb_strtolower($this->getArticle())));
-        $text->addHtml('<b>');
-        $text->addText(\mb_strtolower($this->getDescription()));
-        $text->addHtml('</b>');
+        $text->characters(\sprintf('%s %s ', $this->getChangedFrom(), \mb_strtolower($this->getArticle())));
+        $text->startElement('b');
+        $text->characters(\mb_strtolower($this->getDescription()));
+        $text->endElement('b');
 
         $this->addAttributes($text, $this->node->getAttributes());
-        $text->addText('.');
+        $text->characters('.');
     }
 
     /**

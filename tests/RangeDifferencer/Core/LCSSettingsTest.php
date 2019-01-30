@@ -17,76 +17,46 @@ use PHPUnit\Framework\TestCase;
  */
 class LCSSettingsTest extends TestCase
 {
-    public function testTooLong(): void
+    /**
+     * @param float $tooLong
+     *
+     * @dataProvider tooLongTests
+     */
+    public function testTooLong(float $tooLong): void
     {
-        $tooLong  = 10000000.0;
-        $settings = new LCSSettings();
-        $settings->setTooLong($tooLong);
-
-        $this->assertEquals($tooLong, $settings->getTooLong(), '', 00);
-    }
-
-    public function testTooLongZero(): void
-    {
-        $tooLong  = 0;
         $settings = new LCSSettings();
         $settings->setTooLong($tooLong);
 
         $this->assertEquals($tooLong, $settings->getTooLong(), '', 0);
     }
 
-    public function testTooLongLong(): void
+    public function tooLongTests()
     {
-        $tooLong  = 978462375223.21;
-        $settings = new LCSSettings();
-        $settings->setTooLong($tooLong);
-
-        $this->assertEquals($tooLong, $settings->getTooLong(), '', 0);
+        yield 'default' => [10000000.0];
+        yield 'zero' => [0];
+        yield 'long' => [978462375223.21];
+        yield 'negative' => [-978462375223.21];
     }
 
-    public function testTooLongNeg(): void
+    /**
+     * @param float $powLimit
+     *
+     * @dataProvider tooLongTests
+     */
+    public function testPowLimit(float $powLimit): void
     {
-        $tooLong  = -978462375223.21;
-        $settings = new LCSSettings();
-        $settings->setTooLong($tooLong);
-
-        $this->assertEquals($tooLong, $settings->getTooLong(), '', 0);
-    }
-
-    public function testPowLimit(): void
-    {
-        $powLimit = 35.50;
         $settings = new LCSSettings();
         $settings->setPowLimit($powLimit);
 
         $this->assertEquals($powLimit, $settings->getPowLimit(), '', 0);
     }
 
-    public function testPowLimitZero(): void
+    public function powLimitTests()
     {
-        $powLimit = 0;
-        $settings = new LCSSettings();
-        $settings->setPowLimit($powLimit);
-
-        $this->assertEquals($powLimit, $settings->getPowLimit(), '', 0);
-    }
-
-    public function testPowLimitLong(): void
-    {
-        $powLimit = 978462375223.21;
-        $settings = new LCSSettings();
-        $settings->setPowLimit($powLimit);
-
-        $this->assertEquals($powLimit, $settings->getPowLimit(), '', 0);
-    }
-
-    public function testPowLimitNeg(): void
-    {
-        $powLimit = -978462375223.21;
-        $settings = new LCSSettings();
-        $settings->setPowLimit($powLimit);
-
-        $this->assertEquals($powLimit, $settings->getPowLimit(), '', 0);
+        yield 'default' => [35.50];
+        yield 'zero' => [0];
+        yield 'long' => [978462375223.21];
+        yield 'negative' => [-978462375223.21];
     }
 
     public function testUseGreedyMethod(): void

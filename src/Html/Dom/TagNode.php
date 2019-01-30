@@ -55,7 +55,7 @@ class TagNode extends Node implements IteratorAggregate
             throw new \InvalidArgumentException('The new child must have this node as a parent.');
         }
 
-        if (\is_int($index)) {
+        if (null !== $index) {
             \array_splice($this->children, $index, 0, [$node]);
         } else {
             $this->children[] = $node;
@@ -71,7 +71,7 @@ class TagNode extends Node implements IteratorAggregate
     {
         parent::setRoot($root);
 
-        foreach ($this->children as $child) {
+        foreach ($this->getIterator() as $child) {
             $child->setRoot($root);
         }
     }
@@ -81,14 +81,14 @@ class TagNode extends Node implements IteratorAggregate
      * object in the children collection. If the parameter is from a different tree, then this method attempts to return
      * the index of first semantically equivalent node to the parameter.
      *
-     * @param Node $node
-     * @return int
+     * @param Node $child Tag we need an index for.
+     * @return int Index of first semantically equivalent child or -1 if couldn't find one.
      */
-    public function getIndexOf(Node $node): int
+    public function getIndexOf(Node $child): int
     {
-        $key = \array_search($node, $this->children, true);
+        $key = \array_search($child, $this->children, true);
 
-        if (false !== $key && is_int($key)) {
+        if (false !== $key && \is_int($key)) {
             return $key;
         }
 
@@ -148,7 +148,7 @@ class TagNode extends Node implements IteratorAggregate
      * Checks tags for being semantically equivalent if it's from a different tree and for being the same object if it's
      * from the same tree as $this tag.
      *
-     * @param TagNode $other
+     * @param TagNode|null $other
      * @return bool
      */
     public function isSameTag(?TagNode $other): bool
@@ -193,7 +193,7 @@ class TagNode extends Node implements IteratorAggregate
     private function hasSameAttributes(array $otherAttributes): bool
     {
         // http://php.net/manual/en/language.operators.array.php
-        // $a == $b is TRUE if $a and $b have the same key/value pairs.
+        // $a == $b is TRUE if $a and $b have the same key/value pairs, order does not matter.
         return $this->getAttributes() == $otherAttributes;
     }
 
@@ -275,7 +275,7 @@ class TagNode extends Node implements IteratorAggregate
         // By default, we think that all children are in the deleted set until we prove otherwise.
         $hasNotDeletedDescendant = false;
 
-        foreach ($this->children as $child) {
+        foreach ($this->getIterator() as $child) {
             $childrenChildren = $child->getMinimalDeletedSet($id);
             $nodes = \array_merge($nodes, $childrenChildren);
 
@@ -367,7 +367,7 @@ class TagNode extends Node implements IteratorAggregate
                 $splitOccurred = true;
             }
 
-            // Since split ins't meant for no-children tags, we won't have a case where we removed $this and did not
+            // Since split isn't meant for no-children tags, we won't have a case where we removed $this and did not
             // substitute it with anything.
             $this->getParent()->removeChild($this);
 
@@ -388,7 +388,7 @@ class TagNode extends Node implements IteratorAggregate
     {
         $key = \array_search($node, $this->children, true);
 
-        if (false !== $key && is_int($key)) {
+        if (false !== $key && \is_int($key)) {
             \array_splice($this->children, $key, 1);
         }
     }
@@ -424,7 +424,7 @@ class TagNode extends Node implements IteratorAggregate
         $newThis->setWhiteBefore($this->isWhiteBefore());
         $newThis->setWhiteAfter($this->isWhiteAfter());
 
-        foreach ($this->children as $child) {
+        foreach ($this->getIterator() as $child) {
             $newChild = $child->copyTree();
             $newChild->setParent($newThis);
             $newThis->addChild($newChild);
@@ -452,9 +452,8 @@ class TagNode extends Node implements IteratorAggregate
     {
         $shift = 0;
         $spaceAdded = false;
-        $numOriginalChildren = $this->getNumChildren();
 
-        for ($i = 0; $i < $numOriginalChildren; $i++) {
+        for ($i = 0, $iMax = $this->getNumChildren(); $i < $iMax; $i++) {
             $child = $this->getChild($i + $shift);
 
             if ($child instanceof TagNode && !$child->isPre()) {

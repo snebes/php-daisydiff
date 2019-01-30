@@ -27,7 +27,7 @@ class DifferencesIterator
     /** @var RangeDifference[] */
     private $fArray = [];
 
-    /** @var RangeDifference */
+    /** @var RangeDifference|null */
     private $fDifference;
 
     /**
@@ -111,7 +111,7 @@ class DifferencesIterator
     }
 
     /**
-     * @return void
+     * Removes all RangeDifferences.
      */
     public function removeAll(): void
     {

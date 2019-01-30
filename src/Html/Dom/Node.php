@@ -17,7 +17,7 @@ use DaisyDiff\Html\Dom\Helper\LastCommonParentResult;
  */
 abstract class Node
 {
-    /** @var TagNode */
+    /** @var TagNode|null */
     protected $parent;
 
     /** @var TagNode */
@@ -65,13 +65,14 @@ abstract class Node
      */
     public function getParentTree(): array
     {
+        /** @var TagNode[] $ancestors */
         $ancestors = [];
 
         for ($ancestor = $this->getParent(); null !== $ancestor; $ancestor = $ancestor->getParent()) {
             $ancestors[] = $ancestor;
         }
 
-        return array_reverse($ancestors);
+        return \array_reverse($ancestors);
     }
 
     /**
@@ -84,9 +85,9 @@ abstract class Node
      * Returns the "top" ancestor if this node has a parent, or the node itself if there is no parent, and this is a
      * TagNode or null if there is no parents and this node isn't a TagNode.
      *
-     * @return TagNode|null
+     * @return TagNode
      */
-    public function getRoot(): ?TagNode
+    public function getRoot(): TagNode
     {
         return $this->root;
     }
@@ -98,36 +99,27 @@ abstract class Node
     abstract public function getMinimalDeletedSet(int $id): array;
 
     /**
-     * @return void
-     */
-    public function detectIgnorableWhiteSpace(): void
-    {
-        // no op.
-    }
-
-    /**
      * Descent the ancestors list for both nodes stopping either at the first no-match case or when either of the lists
      * is exhausted.
      *
-     * @param Node|null $other
+     * @param Node $other
      * @return LastCommonParentResult
      */
-    public function getLastCommonParent(?Node $other): LastCommonParentResult
+    public function getLastCommonParent(Node $other): LastCommonParentResult
     {
-        if (null === $other) {
-            throw new \InvalidArgumentException('The given TextNode is null.');
-        }
-
         $result = new LastCommonParentResult();
 
         // Note: these lists are never null, but sometimes are empty.
         $myParents = $this->getParentTree();
         $otherParents = $other->getParentTree();
 
+        $myParentsCount = \count($myParents);
+        $otherParentsCount = \count($otherParents);
+
         $i = 1;
         $isSame = true;
 
-        while ($isSame && $i < \count($myParents) && $i < \count($otherParents)) {
+        while ($isSame && $i < $myParentsCount && $i < $otherParentsCount) {
             if (!$myParents[$i]->isSameTag($otherParents[$i])) {
                 $isSame = false;
             } else {
@@ -143,10 +135,10 @@ abstract class Node
             // Found different parent.
             $result->setIndexInLastCommonParent($myParents[$i - 1]->getIndexOf($myParents[$i]));
             $result->setSplittingNeeded();
-        } elseif (\count($myParents) < \count($otherParents)) {
+        } elseif ($myParentsCount < $otherParentsCount) {
             // Current node is not so deeply nested.
             $result->setIndexInLastCommonParent($myParents[$i - 1]->getIndexOf($this));
-        } elseif (\count($myParents) > \count($otherParents)) {
+        } elseif ($myParentsCount > $otherParentsCount) {
             // All tags matched but there are tags left in this tree - other node is not so deeply nested.
             $result->setIndexInLastCommonParent($myParents[$i - 1]->getIndexOf($myParents[$i]));
             $result->setSplittingNeeded();
@@ -159,7 +151,7 @@ abstract class Node
     }
 
     /**
-     * Changes the $parent field of this node. Does NOT append/remvoe iteself from the previous or the new parent
+     * Changes the $parent field of this node. Does NOT append/remove itself from the previous or the new parent
      * children collection.
      *
      * @param TagNode|null $parent

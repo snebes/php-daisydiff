@@ -76,11 +76,11 @@ class TagToStringFactory
     {
         $sem = $this->getChangeSemantic($node->getQName());
 
-        if (0 === \strcasecmp($node->getQName(), 'a')) {
+        if ('a' === $node->getQName()) {
             return new AnchorToString($node, $sem);
         }
 
-        if (0 === \strcasecmp($node->getQName(), 'img')) {
+        if ('img' === $node->getQName()) {
             return new NoContentTagToString($node, $sem);
         }
 
@@ -88,16 +88,16 @@ class TagToStringFactory
     }
 
     /**
-     * @param string $str
-     * @return string<TagChangeSemantic>
+     * @param string $qName
+     * @return string
      */
-    private function getChangeSemantic(string $str): string
+    private function getChangeSemantic(string $qName): string
     {
-        if (\in_array(\mb_strtolower($str), self::$containerTags)) {
+        if (\in_array($qName, self::$containerTags)) {
             return TagChangeSemantic::MOVED;
         }
 
-        if (\in_array(\mb_strtolower($str), self::$styleTags)) {
+        if (\in_array($qName, self::$styleTags)) {
             return TagChangeSemantic::STYLE;
         }
 

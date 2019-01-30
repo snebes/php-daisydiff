@@ -25,16 +25,17 @@ class WhiteSpaceNodeTest extends TestCase
         $whiteSpaceNode = new WhiteSpaceNode($root, 'root', $textNode);
         $whiteSpaceNodeNullPointer = new WhiteSpaceNode(null, 'root', null);
 
-        $this->assertEquals($root, $whiteSpaceNode->getParent());
+        $this->assertSame($root, $whiteSpaceNode->getParent());
         $this->assertNull($whiteSpaceNodeNullPointer->getParent());
+        $this->assertTrue($whiteSpaceNode->isSameText($whiteSpaceNodeNullPointer));
     }
 
     public function testIsWhiteSpace(): void
     {
         $this->assertFalse(WhiteSpaceNode::isWhiteSpace('a'));
-        $this->assertTrue(WhiteSpaceNode::isWhiteSpace("\n"));
         $this->assertTrue(WhiteSpaceNode::isWhiteSpace(' '));
         $this->assertTrue(WhiteSpaceNode::isWhiteSpace("\t"));
         $this->assertTrue(WhiteSpaceNode::isWhiteSpace("\r"));
+        $this->assertTrue(WhiteSpaceNode::isWhiteSpace("\n"));
     }
 }

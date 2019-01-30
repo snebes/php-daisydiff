@@ -30,6 +30,8 @@ final class RangeDifferencer
 {
     /**
      * Prevent class instantiation.
+     *
+     * @codeCoverageIgnore
      */
     private function __construct()
     {
@@ -137,7 +139,7 @@ final class RangeDifferencer
                 $changeRangeStart, $changeRangeEnd);
         }
 
-        // Remove sentinal, the first item in the array.
+        // Remove sentinel, the first item in the array.
         \array_shift($diff3);
 
         return $diff3;
@@ -157,14 +159,14 @@ final class RangeDifferencer
         $in = self::findDifferences($left, $right, $settings);
         $out = [];
 
-        $mstart = 0;
-        $ystart = 0;
+        $mStart = 0;
+        $yStart = 0;
 
         for ($i = 0, $iMax = \count($in); $i < $iMax; $i++) {
             $es = $in[$i];
             $rd = new RangeDifference(RangeDifference::NOCHANGE,
-                $mstart, $es->getRightStart() - $mstart,
-                $ystart, $es->getLeftStart() - $ystart);
+                $mStart, $es->getRightStart() - $mStart,
+                $yStart, $es->getLeftStart() - $yStart);
 
             if ($rd->getMaxLength() !== 0) {
                 $out[] = $rd;
@@ -172,13 +174,13 @@ final class RangeDifferencer
 
             $out[] = $es;
 
-            $mstart = $es->getRightEnd();
-            $ystart = $es->getLeftEnd();
+            $mStart = $es->getRightEnd();
+            $yStart = $es->getLeftEnd();
         }
 
         $rd = new RangeDifference(RangeDifference::NOCHANGE,
-            $mstart, $right->getRangeCount() - $mstart,
-            $ystart, $left->getRangeCount() - $ystart);
+            $mStart, $right->getRangeCount() - $mStart,
+            $yStart, $left->getRangeCount() - $yStart);
 
         if ($rd->getMaxLength() > 0) {
             $out[] = $rd;
@@ -203,16 +205,16 @@ final class RangeDifferencer
         $in = self::findDifferences3($ancestor, $left, $right, $settings);
         $out = [];
 
-        $mstart = 0;
-        $ystart = 0;
-        $astart = 0;
+        $mStart = 0;
+        $yStart = 0;
+        $aStart = 0;
 
         for ($i = 0, $iMax = \count($in); $i < $iMax; $i++) {
             $es = $in[$i];
             $rd = new RangeDifference(RangeDifference::NOCHANGE,
-                $mstart, $es->getRightStart() - $mstart,
-                $ystart, $es->getLeftStart() - $ystart,
-                $astart, $es->getAncestorStart() - $astart);
+                $mStart, $es->getRightStart() - $mStart,
+                $yStart, $es->getLeftStart() - $yStart,
+                $aStart, $es->getAncestorStart() - $aStart);
 
             if ($rd->getMaxLength() > 0) {
                 $out[] = $rd;
@@ -220,15 +222,15 @@ final class RangeDifferencer
 
             $out[] = $es;
 
-            $mstart = $es->getRightEnd();
-            $ystart = $es->getLeftEnd();
-            $astart = $es->getAncestorEnd();
+            $mStart = $es->getRightEnd();
+            $yStart = $es->getLeftEnd();
+            $aStart = $es->getAncestorEnd();
         }
 
         $rd = new RangeDifference(RangeDifference::NOCHANGE,
-            $mstart, $right->getRangeCount() - $mstart,
-            $ystart, $left->getRangeCount() - $ystart,
-            $astart, $ancestor->getRangeCount() - $astart);
+            $mStart, $right->getRangeCount() - $mStart,
+            $yStart, $left->getRangeCount() - $yStart,
+            $aStart, $ancestor->getRangeCount() - $aStart);
 
         if ($rd->getMaxLength() > 0) {
             $out[] = $rd;
@@ -262,7 +264,7 @@ final class RangeDifferencer
         $last = $diff3[\count($diff3) - 1];
 
         // At least one range array must be non-empty.
-        \assert(0 !== $myIter->getCount() || 0 !== $yourIter->getCount());
+        \assert($myIter->getCount() > 0 || $yourIter->getCount() > 0);
 
         // Find corresponding lines to fChangeRangeStart/End in right and left.
         if (0 === $myIter->getCount()) {

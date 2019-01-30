@@ -28,6 +28,7 @@ class RangeComparatorLCSTest extends TestCase
         $settings = new LCSSettings();
 
         $diffs = RangeComparatorLCS::findDifferences($left, $right, $settings);
+
         $this->assertSame('Left: (8, 0) Right: (8, 4)', $diffs[0]->__toString());
     }
 
@@ -83,6 +84,7 @@ class RangeComparatorLCSTest extends TestCase
 
         $this->assertCount(2, $lcs);
         $this->assertCount($length, $lcs[0]);
+        $this->assertCount($length, $lcs[1]);
     }
 
     public function lcsTests()

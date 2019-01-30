@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace DaisyDiff\Html\Ancestor\TagToString;
 
-use DaisyDiff\Html\Ancestor\ChangeText;
 use DaisyDiff\Html\Ancestor\TagChangeSemantic;
+use DaisyDiff\Html\ChangeText;
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Modification\HtmlLayoutChange;
 
@@ -58,24 +58,24 @@ class TagToString
         $this->htmlLayoutChange->setType(HtmlLayoutChange::TAG_REMOVED);
 
         if ($this->sem === TagChangeSemantic::MOVED) {
-            $text->addText(\sprintf('%s %s ', $this->getMovedOutOf(), \mb_strtolower($this->getArticle())));
-            $text->addHtml('<b>');
-            $text->addText(\mb_strtolower($this->getDescription()));
-            $text->addHtml('</b>');
+            $text->characters(\sprintf('%s %s ', $this->getMovedOutOf(), \mb_strtolower($this->getArticle())));
+            $text->startElement('b');
+            $text->characters(\mb_strtolower($this->getDescription()));
+            $text->endElement('b');
         } elseif ($this->sem === TagChangeSemantic::STYLE) {
-            $text->addHtml('<b>');
-            $text->addText($this->getDescription());
-            $text->addHtml('</b>');
-            $text->addText(\sprintf(' %s', \mb_strtolower($this->getStyleRemoved())));
+            $text->startElement('b');
+            $text->characters($this->getDescription());
+            $text->endElement('b');
+            $text->characters(\sprintf(' %s', \mb_strtolower($this->getStyleRemoved())));
         } else {
-            $text->addHtml('<b>');
-            $text->addText($this->getDescription());
-            $text->addHtml('</b>');
-            $text->addText(\sprintf(' %s', \mb_strtolower($this->getRemoved())));
+            $text->startElement('b');
+            $text->characters($this->getDescription());
+            $text->endElement('b');
+            $text->characters(\sprintf(' %s', \mb_strtolower($this->getRemoved())));
         }
 
         $this->addAttributes($text, $this->node->getAttributes());
-        $text->addText('.');
+        $text->characters('.');
     }
 
     /**
@@ -89,24 +89,24 @@ class TagToString
         $this->htmlLayoutChange->setType(HtmlLayoutChange::TAG_ADDED);
 
         if ($this->sem === TagChangeSemantic::MOVED) {
-            $text->addText(\sprintf('%s %s ', $this->getMovedTo(), \mb_strtolower($this->getArticle())));
-            $text->addHtml('<b>');
-            $text->addText(\mb_strtolower($this->getDescription()));
-            $text->addHtml('</b>');
+            $text->characters(\sprintf('%s %s ', $this->getMovedTo(), \mb_strtolower($this->getArticle())));
+            $text->startElement('b');
+            $text->characters(\mb_strtolower($this->getDescription()));
+            $text->endElement('b');
         } elseif ($this->sem === TagChangeSemantic::STYLE) {
-            $text->addHtml('<b>');
-            $text->addText($this->getDescription());
-            $text->addHtml('</b>');
-            $text->addText(\sprintf(' %s', \mb_strtolower($this->getStyleAdded())));
+            $text->startElement('b');
+            $text->characters($this->getDescription());
+            $text->endElement('b');
+            $text->characters(\sprintf(' %s', \mb_strtolower($this->getStyleAdded())));
         } else {
-            $text->addHtml('<b>');
-            $text->addText($this->getDescription());
-            $text->addHtml('</b>');
-            $text->addText(\sprintf(' %s', \mb_strtolower($this->getAdded())));
+            $text->startElement('b');
+            $text->characters($this->getDescription());
+            $text->endElement('b');
+            $text->characters(\sprintf(' %s', \mb_strtolower($this->getAdded())));
         }
 
         $this->addAttributes($text, $this->node->getAttributes());
-        $text->addText('.');
+        $text->characters('.');
     }
 
     /**
@@ -163,17 +163,21 @@ class TagToString
      */
     protected function addAttributes(ChangeText $text, array $attributes): void
     {
-        if (\count($attributes) < 1) {
+        if (empty($attributes)) {
             return;
         }
 
         $arr = [];
 
+        /**
+         * @var string $qName
+         * @var string $value
+         */
         foreach ($attributes as $qName => $value) {
             $arr[] = \sprintf('%s %s', $this->translateArgument($qName), $value);
         }
 
-        $text->addText(\sprintf('%s %s', \mb_strtolower($this->getWith()), \implode(', ', $arr)));
+        $text->characters(\sprintf('%s %s', \mb_strtolower($this->getWith()), \implode(', ', $arr)));
     }
 
     /**

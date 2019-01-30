@@ -38,14 +38,21 @@ class NodeTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Error
      */
-    public function testGetLastCommonParentNullException(): void
+    public function testNullGetLastCommonParent(): void
     {
         $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
-        $root->getLastCommonParent(null);
+
+        try {
+            $root->getLastCommonParent(null);
+        } catch (\Error $error) {
+            $this->assertInstanceOf(\TypeError::class, $error);
+
+            throw $error;
+        }
     }
 
     public function testGetLastCommonParent(): void
@@ -71,6 +78,8 @@ class NodeTest extends TestCase
         $this->assertSame($parent, $leafNode->getLastCommonParent($intermediate)->getLastCommonParent());
         $this->assertSame($root, $leaf2->getLastCommonParent($middle)->getLastCommonParent());
         $this->assertSame($parent, $leafNode->getLastCommonParent($leaf2)->getLastCommonParent());
+
+        // Added test.
         $this->assertSame($root, $intermediate->getLastCommonParent($leafNode)->getLastCommonParent());
     }
 
@@ -103,10 +112,10 @@ class NodeTest extends TestCase
         $root = new TagNode(null, 'root');
         $middle = new TagNode($root, 'middle');
         $root->addChild($middle);
-        $leaf = new TagNode($middle, 'leaf');
-        $middle->addChild($leaf);
+        $leafNode = new TagNode($middle, 'leaf');
+        $middle->addChild($leafNode);
 
-        $this->assertFalse($leaf->inPre());
+        $this->assertFalse($leafNode->inPre());
     }
 
     public function testIsWhiteBeforeAfter(): void
@@ -118,19 +127,10 @@ class NodeTest extends TestCase
         $this->assertFalse($root->isWhiteBefore());
         $this->assertFalse($root->isWhiteAfter());
 
-        $root->setWhiteBefore(true);
+        $intermediate->setWhiteBefore(true);
         $root->setWhiteAfter(true);
 
-        $this->assertTrue($root->isWhiteBefore());
+        $this->assertTrue($intermediate->isWhiteBefore());
         $this->assertTrue($root->isWhiteAfter());
-    }
-
-    public function testDetectIgnorableWhiteSpace(): void
-    {
-        $root = new TagNode(null, 'root');
-        $root->detectIgnorableWhiteSpace();
-
-        // Noop, fake it!
-        $this->assertTrue(true);
     }
 }

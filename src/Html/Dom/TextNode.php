@@ -21,7 +21,7 @@ class TextNode extends Node
     /** @var string */
     private $s = '';
 
-    /** @var Modification */
+    /** @var Modification|null */
     private $modification;
 
     /**
@@ -37,6 +37,8 @@ class TextNode extends Node
     }
 
     /**
+     * @todo Check if we need to deep clone this.
+     *
      * @return Node
      */
     public function copyTree(): Node
@@ -56,6 +58,14 @@ class TextNode extends Node
     }
 
     /**
+     * @return Node
+     */
+    public function getRightMostChild(): Node
+    {
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getMinimalDeletedSet(int $id): array
@@ -64,18 +74,10 @@ class TextNode extends Node
         $modification = $this->getModification();
 
         if ($modification->getType() === ModificationType::REMOVED && $modification->getId() === $id) {
-            $nodes = [$this];
+            $nodes[] = $this;
         }
 
         return $nodes;
-    }
-
-    /**
-     * @return Node
-     */
-    public function getRightMostChild(): Node
-    {
-        return $this;
     }
 
     /**
@@ -87,30 +89,30 @@ class TextNode extends Node
     }
 
     /**
-     * @param Node $other
+     * @param Node|null $other
      * @return bool
      */
     public function isSameText(?Node $other): bool
     {
-        if (null === $other || !$other instanceof TextNode) {
-            return false;
+        if ($other instanceof TextNode) {
+            return $this->getText() === $other->getText();
         }
 
-        return $this->getText() === $other->getText();
+        return false;
     }
 
     /**
-     * @return Modification
+     * @return Modification|null
      */
-    public function getModification(): Modification
+    public function getModification(): ?Modification
     {
         return $this->modification;
     }
 
     /**
-     * @param Modification $m
+     * @param Modification|null $m
      */
-    public function setModification(Modification $m): void
+    public function setModification(?Modification $m): void
     {
         $this->modification = $m;
     }

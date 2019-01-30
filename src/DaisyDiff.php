@@ -10,8 +10,7 @@ declare(strict_types=1);
 
 namespace DaisyDiff;
 
-use DaisyDiff\Html\Ancestor\ChangeText;
-use DaisyDiff\Html\DelegatingContentHandler;
+use DaisyDiff\Html\ChangeText;
 use DaisyDiff\Html\Dom\DomTreeBuilder;
 use DaisyDiff\Html\HtmlDiffer;
 use DaisyDiff\Html\HtmlSaxDiffOutput;
@@ -26,32 +25,31 @@ class DaisyDiff
     /**
      * Diffs two HTML strings, returning the result.
      *
-     * @param string $oldSource
-     * @param string $newSource
+     * @param string $oldText
+     * @param string $newText
      * @return string
      */
-    public function diff(string $oldSource, string $newSource): string
+    public function diff(string $oldText, string $newText): string
     {
         // Parse $old XML.
         $oldHandler = new DomTreeBuilder();
         $reader1 = new XMLReader($oldHandler);
-        $reader1->parse($oldSource);
+        $reader1->parse($oldText);
 
         // Parse $new XML.
         $newHandler = new DomTreeBuilder();
         $reader2 = new XMLReader($newHandler);
-        $reader2->parse($newSource);
+        $reader2->parse($newText);
 
         // Comparators.
         $leftComparator = new TextNodeComparator($oldHandler);
         $rightComparator = new TextNodeComparator($newHandler);
 
-        $content = new ChangeText();
-        $handler = new DelegatingContentHandler($content);
-        $output = new HtmlSaxDiffOutput($handler, 'diff');
+        $changeText = new ChangeText();
+        $output = new HtmlSaxDiffOutput($changeText);
         $differ = new HtmlDiffer($output);
         $differ->diff($leftComparator, $rightComparator);
 
-        return strval($content);
+        return $changeText->getText();
     }
 }

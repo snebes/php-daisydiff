@@ -23,11 +23,11 @@ class TextNodeTest extends TestCase
     {
         $root = new TagNode(null, 'root');
         $textRoot = new TextNode($root, 'contents of root node');
-
         /** @var TextNode $copyRoot */
         $copyRoot = $textRoot->copyTree();
 
         $this->assertSame($textRoot->getText(), $copyRoot->getText());
+        $this->assertSame($textRoot->getModification(), $copyRoot->getModification());
     }
 
     public function testGetLeftRightMostChild(): void
@@ -37,6 +37,15 @@ class TextNodeTest extends TestCase
 
         $this->assertSame($textRoot, $textRoot->getLeftMostChild());
         $this->assertSame($textRoot, $textRoot->getRightMostChild());
+    }
+
+    public function testGetModificationText(): void
+    {
+        $root = new TagNode(null, 'root');
+        $textRoot = new TextNode($root, 'root');
+        $textRoot->setModification(null);
+
+        $this->assertNull($textRoot->getModification());
     }
 
     public function testGetText(): void
@@ -63,6 +72,7 @@ class TextNodeTest extends TestCase
     {
         $root = new TagNode(null, 'root');
         $textRoot = new TextNode($root, 'contents of root node');
+        $intermediate = new TagNode($root, 'intermediate');
         $textIntermediate = new TextNode($root, 'contents of intermediate node');
 
         $this->assertSame([], $textRoot->getMinimalDeletedSet(0));

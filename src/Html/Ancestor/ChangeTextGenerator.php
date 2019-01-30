@@ -11,9 +11,10 @@ declare(strict_types=1);
 namespace DaisyDiff\Html\Ancestor;
 
 use DaisyDiff\Html\Ancestor\TagToString\TagToStringFactory;
+use DaisyDiff\Html\ChangeText;
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Modification\HtmlLayoutChange;
-use SN\RangeDifferencer\RangeDifference;
+use DaisyDiff\RangeDifferencer\RangeDifference;
 
 /**
  * ChangeTextGenerator
@@ -40,7 +41,6 @@ class ChangeTextGenerator
     {
         $this->ancestorComparator = $ancestorComparator;
         $this->other = $other;
-
         $this->factory = new TagToStringFactory();
     }
 
@@ -54,7 +54,7 @@ class ChangeTextGenerator
         $rootListOpened = false;
 
         if (\count($differences) > 1) {
-            $text->addHtml('<ul class="changelist">');
+            $text->startElement('ul', ['class' => 'changelist']);
             $rootListOpened = true;
         }
 
@@ -64,53 +64,53 @@ class ChangeTextGenerator
             $lvl1ListOpened = false;
 
             if ($rootListOpened) {
-                $text->addHtml('<li>');
+                $text->startElement('li');
             }
 
             if ($d->getLeftLength() + $d->getRightLength() > 1) {
-                $text->addHtml('<ul class="changelist">');
+                $text->startElement('ul', ['class' => 'changelist']);
                 $lvl1ListOpened = true;
             }
 
             // Left are the old ones.
             for ($i = $d->getLeftStart(), $iMax = $d->getLeftEnd(); $i < $iMax; $i++) {
                 if ($lvl1ListOpened) {
-                    $text->addHtml('<li>');
+                    $text->startElement('li');
                 }
 
                 // Add a bullet for an old tag.
                 $this->addTagOld($text, $this->other->getAncestor($i));
 
                 if ($lvl1ListOpened) {
-                    $text->addHtml('</li>');
+                    $text->endElement('li');
                 }
             }
 
             // Right are the new ones.
             for ($i = $d->getRightStart(), $iMax = $d->getRightEnd(); $i < $iMax; $i++) {
                 if ($lvl1ListOpened) {
-                    $text->addHtml('<li>');
+                    $text->startElement('li');
                 }
 
                 // Add a bullet for an old tag.
                 $this->addTagNew($text, $this->getAncestor($i));
 
                 if ($lvl1ListOpened) {
-                    $text->addHtml('</li>');
+                    $text->endElement('li');
                 }
             }
 
             if ($lvl1ListOpened) {
-                $text->addHtml('</ul>');
+                $text->endElement('ul');
             }
 
             if ($rootListOpened) {
-                $text->addHtml('</li>');
+                $text->endElement('li');
             }
         }
 
         if ($rootListOpened) {
-            $text->addHtml('</ul>');
+            $text->endElement('ul');
         }
 
         return $text;
@@ -139,12 +139,12 @@ class ChangeTextGenerator
     }
 
     /**
-     * @param int $i
+     * @param int $index
      * @return TagNode
      */
-    private function getAncestor(int $i): TagNode
+    private function getAncestor(int $index): TagNode
     {
-        return $this->ancestorComparator->getAncestor($i);
+        return $this->ancestorComparator->getAncestor($index);
     }
 
     /**

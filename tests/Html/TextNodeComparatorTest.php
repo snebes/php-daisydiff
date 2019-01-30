@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) Steve Nebes <snebes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -9,69 +15,32 @@ use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\Html\Dom\TextNode;
 use DaisyDiff\Html\Modification\Modification;
 use DaisyDiff\Html\Modification\ModificationType;
-use OutOfBoundsException;
+use DaisyDiff\Xml\XMLReader;
 use PHPUnit\Framework\TestCase;
-use ReflectionProperty;
 
 /**
  * TextNodeComparator Tests.
  */
 class TextNodeComparatorTest extends TestCase
 {
-    /**
-     * @param  TextNodeComparator $comp
-     * @return TextNode[]
-     */
-    private function getTextNodes(TextNodeComparator $comp): array
-    {
-        $p = new TagNode(null, 'p');
-        $text = new TextNode($p, 'contents of p node');
-
-        $b = new TagNode(null, 'b');
-        $boldText = new TextNode($b, 'contents of bold node');
-
-        $refProp = new ReflectionProperty($comp, 'textNodes');
-        $refProp->setAccessible(true);
-
-        $textNodes = $refProp->getValue($comp);
-        $textNodes[] = $text;
-        $textNodes[] = $boldText;
-        $refProp->setValue($comp, $textNodes);
-
-        return $textNodes;
-    }
-
     public function testTextNodeComparator(): void
     {
         $p = new TagNode(null, 'p');
         $text = new TextNode($p, 'contents of p node');
 
-        $tree = new DomTreeBuilder();
-        $comp = new TextNodeComparator($tree);
+        $domTree = new DomTreeBuilder();
+        $comp = new TextNodeComparator($domTree);
 
-        $refProp = new ReflectionProperty($comp, 'textNodes');
+        $refProp = new \ReflectionProperty($comp, 'textNodes');
         $refProp->setAccessible(true);
 
         $textNodes = $refProp->getValue($comp);
         $textNodes[] = $text;
         $refProp->setValue($comp, $textNodes);
 
-        $this->assertEquals('<body>', strval($comp->getBodyNode()));
-        $this->assertEquals('contents of p node', strval($comp->getTextNode(0)));
-        $this->assertEquals(1, $comp->getRangeCount());
-    }
-
-    /**
-     * @expectedException OutOfBoundsException
-     */
-    public function testGetTextNode(): void
-    {
-        $tree = new DomTreeBuilder();
-        $comp = new TextNodeComparator($tree);
-        $this->getTextNodes($comp);
-
-        $this->assertTrue($comp->getTextNode(0) instanceof TextNode);
-        $comp->getTextNode(10);
+        $this->assertSame('<body>', (string) $comp->getBodyNode());
+        $this->assertSame('contents of p node', (string) $comp->getTextNode(0));
+        $this->assertSame(1, $comp->getRangeCount());
     }
 
     public function testMarkAsNewExample1(): void
@@ -83,7 +52,7 @@ class TextNodeComparatorTest extends TestCase
         $comp->markAsNew(0, 1);
 
         $lastModified = $comp->getLastModified();
-        $this->assertEquals('added', strval($lastModified[0]->getOutputType()));
+        $this->assertSame('added', $lastModified[0]->getOutputType());
     }
 
     public function testMarkAsNewExample2(): void
@@ -95,7 +64,7 @@ class TextNodeComparatorTest extends TestCase
         $comp->markAsNew(1, 0);
 
         $lastModified = $comp->getLastModified();
-        $this->assertEquals(0, count($lastModified));
+        $this->assertCount(0, $lastModified);
     }
 
     public function testMarkAsNewExample3(): void
@@ -107,7 +76,7 @@ class TextNodeComparatorTest extends TestCase
         $comp->markAsNew(0, 1, ModificationType::CHANGED);
 
         $lastModified = $comp->getLastModified();
-        $this->assertEquals('changed', strval($lastModified[0]->getOutputType()));
+        $this->assertSame('changed', $lastModified[0]->getOutputType());
     }
 
     public function testMarkAsNewExample4(): void
@@ -123,7 +92,7 @@ class TextNodeComparatorTest extends TestCase
 
         $comp->markAsNew(0, 1);
 
-        $this->assertEquals('removed', strval($lastModified[0]->getOutputType()));
+        $this->assertSame('removed', $lastModified[0]->getOutputType());
     }
 
     public function testRangesEqual(): void
@@ -158,7 +127,7 @@ class TextNodeComparatorTest extends TestCase
 
        $comp->handlePossibleChangedPart(0, 1, 1, 2, $comp);
 
-       $this->assertEquals('conflict', strval($lastModified[0]->getOutputType()));
+       $this->assertSame('conflict', $lastModified[0]->getOutputType());
    }
 
     public function testMarkAsDeletedExample1(): void
@@ -170,7 +139,7 @@ class TextNodeComparatorTest extends TestCase
         $comp->markAsDeleted(0, 2, $comp, 1);
 
         $lastModified = $comp->getLastModified();
-        $this->assertEquals('removed', strval($lastModified[0]->getOutputType()));
+        $this->assertSame('removed', $lastModified[0]->getOutputType());
     }
 
     public function testMarkAsDeletedExample2(): void
@@ -182,7 +151,7 @@ class TextNodeComparatorTest extends TestCase
         $comp->markAsDeleted(1, 0, $comp, 2);
 
         $lastModified = $comp->getLastModified();
-        $this->assertEquals(0, count($lastModified));
+        $this->assertCount(0, $lastModified);
     }
 
     public function testMarkAsDeletedExample3(): void
@@ -198,27 +167,27 @@ class TextNodeComparatorTest extends TestCase
 
         $comp->markAsDeleted(0, 2, $comp, 1);
 
-        $this->assertEquals('removed', $lastModified[0]->getOutputType());
+        $this->assertSame('removed', $lastModified[0]->getOutputType());
     }
 
     public function testExpandWhiteSpace(): void
     {
         $tree = new DomTreeBuilder();
         $comp = new TextNodeComparator($tree);
-
         $this->getTextNodes($comp);
+
         $comp->expandWhiteSpace();
 
         $lastModified = $comp->getLastModified();
-        $this->assertEquals(0, count($lastModified));
+        $this->assertCount(0, $lastModified);
     }
 
     public function testIterator(): void
     {
         $tree = new DomTreeBuilder();
         $comp = new TextNodeComparator($tree);
-
         $this->getTextNodes($comp);
+
         $iterator = $comp->getIterator();
 
         $this->assertTrue($iterator->valid());
@@ -255,5 +224,65 @@ class TextNodeComparatorTest extends TestCase
         $comp->setStartChangedID($id);
 
         $this->assertEquals($id, $comp->getChangedId());
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testGetTextNode(): void
+    {
+        $tree = new DomTreeBuilder();
+        $comp = new TextNodeComparator($tree);
+
+        try {
+            $comp->getTextNode(10);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\OutOfBoundsException::class, $e);
+
+            throw $e;
+        }
+    }
+
+    public function testComplexExample1(): void
+    {
+        $html = <<<HTML
+<p> <b> in bold </b> in p <span>in span </span></p>
+HTML;
+
+        $tree = new DomTreeBuilder();
+        $reader = new XMLReader($tree);
+        $reader->parse($html);
+
+        $comp = new TextNodeComparator($tree);
+
+        $comp->markAsDeleted(2, 4, $comp, 2);
+        $comp->markAsNew(5, 6);
+
+        $lastModified = $comp->getLastModified();
+        $this->assertSame('added', $lastModified[0]->getOutputType());
+        $this->assertSame('removed', $lastModified[0]->getPrevious()->getOutputType());
+    }
+
+    /**
+     * @param TextNodeComparator $comp
+     * @return TextNode[]
+     */
+    private function getTextNodes(TextNodeComparator $comp): array
+    {
+        $p = new TagNode(null, 'p');
+        $text = new TextNode($p, 'contents of p node');
+
+        $b = new TagNode(null, 'b');
+        $boldText = new TextNode($b, 'contents of bold node');
+
+        $refProp = new \ReflectionProperty($comp, 'textNodes');
+        $refProp->setAccessible(true);
+
+        $textNodes = $refProp->getValue($comp);
+        $textNodes[] = $text;
+        $textNodes[] = $boldText;
+        $refProp->setValue($comp, $textNodes);
+
+        return $textNodes;
     }
 }
