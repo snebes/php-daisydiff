@@ -264,7 +264,7 @@ final class RangeDifferencer
         $last = $diff3[\count($diff3) - 1];
 
         // At least one range array must be non-empty.
-        \assert($myIter->getCount() > 0|| $yourIter->getCount() > 0);
+        \assert($myIter->getCount() > 0 || $yourIter->getCount() > 0);
 
         // Find corresponding lines to fChangeRangeStart/End in right and left.
         if (0 === $myIter->getCount()) {
