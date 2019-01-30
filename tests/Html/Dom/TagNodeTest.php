@@ -158,6 +158,7 @@ class TagNodeTest extends TestCase
         $iterator = $root->getIterator();
         $iterator->next();
         $this->assertSame($intermediate, $iterator->current());
+        $this->assertTrue($iterator->valid());
     }
 
     public function testGetQName(): void

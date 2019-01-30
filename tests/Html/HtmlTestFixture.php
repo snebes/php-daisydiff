@@ -19,7 +19,11 @@ use DaisyDiff\Xml\XMLReader;
  */
 class HtmlTestFixture
 {
-    /** Prevent instantiation */
+    /**
+     * Prevent instantiation.
+     *
+     * @codeCoverageIgnore
+     */
     private function __construct()
     {
     }
@@ -52,6 +56,7 @@ class HtmlTestFixture
         $content = new ChangeText();
         $handler = new DelegatingContentHandler($content);
         $output  = new HtmlSaxDiffOutput($handler, 'test');
+
         $differ  = new HtmlDiffer($output);
         $differ->diff($leftComparator, $rightComparator);
 
@@ -65,34 +70,34 @@ class HtmlTestFixture
      * @return string
      * @throws
      */
-    public static function diff3(string $ancestor, string $oldText, string $newText): string
-    {
-        // Parse $ancestor.
-        $ancestorHandler = new DomTreeBuilder();
-        $ancestorSax     = new XMLReader($ancestorHandler);
-        $ancestorSax->parse($ancestor);
-
-        // Parse $oldText.
-        $oldHandler = new DomTreeBuilder();
-        $oldSax     = new XMLReader($oldHandler);
-        $oldSax->parse($oldText);
-
-        // Parse $newText.
-        $newHandler = new DomTreeBuilder();
-        $newSax     = new XMLReader($newHandler);
-        $newSax->parse($newText);
-
-        // Diff.
-        $ancestorComparator = new TextNodeComparator($ancestorHandler);
-        $leftComparator     = new TextNodeComparator($oldHandler);
-        $rightComparator    = new TextNodeComparator($newHandler);
-
-        $content = new ChangeText();
-        $handler = new DelegatingContentHandler($content);
-        $output  = new HtmlSaxDiffOutput($handler, 'test');
-        $differ  = new HtmlDiffer($output);
-        $differ->diff3($ancestorComparator, $leftComparator, $rightComparator);
-
-        return $content->__toString();
-    }
+//    public static function diff3(string $ancestor, string $oldText, string $newText): string
+//    {
+//        // Parse $ancestor.
+//        $ancestorHandler = new DomTreeBuilder();
+//        $ancestorSax     = new XMLReader($ancestorHandler);
+//        $ancestorSax->parse($ancestor);
+//
+//        // Parse $oldText.
+//        $oldHandler = new DomTreeBuilder();
+//        $oldSax     = new XMLReader($oldHandler);
+//        $oldSax->parse($oldText);
+//
+//        // Parse $newText.
+//        $newHandler = new DomTreeBuilder();
+//        $newSax     = new XMLReader($newHandler);
+//        $newSax->parse($newText);
+//
+//        // Diff.
+//        $ancestorComparator = new TextNodeComparator($ancestorHandler);
+//        $leftComparator     = new TextNodeComparator($oldHandler);
+//        $rightComparator    = new TextNodeComparator($newHandler);
+//
+//        $content = new ChangeText();
+//        $handler = new DelegatingContentHandler($content);
+//        $output  = new HtmlSaxDiffOutput($handler, 'test');
+//        $differ  = new HtmlDiffer($output);
+//        $differ->diff3($ancestorComparator, $leftComparator, $rightComparator);
+//
+//        return $content->__toString();
+//    }
 }

@@ -23,9 +23,9 @@ class HtmlDifferTest extends TestCase
         $newText = '<p> This is a big blue book</p>';
         $result = HtmlTestFixture::diff($oldText, $newText);
 
-        $expected = <<<XML
+        $expected = <<<HTML
 <p> This is a <ins class="diff-html-added">big </ins>blue book</p>
-XML;
+HTML;
 
         $this->assertXmlStringEqualsXmlString($expected, $result);
     }
@@ -44,15 +44,19 @@ XML;
 //        $this->assertXmlStringEqualsXmlString($expected, $result);
 //    }
 
-//    public function testSimpleTextRemove(): void
-//    {
-//        $oldText = '<p> This is a blue book</p>';
-//        $newText = '<p> This is a book</p>';
-//
-//        $result = HtmlTestFixture::diff($oldText, $newText);
-//        $this->assertContains('<p> This is a <del class="diff-html-removed"', $result);
-//    }
-//
+    public function testSimpleTextRemove(): void
+    {
+        $oldText = '<p> This is a blue book</p>';
+        $newText = '<p> This is a book</p>';
+
+        $expected = <<<HTML
+<p> This is a <del class="diff-html-removed">blue </del>book</p>
+HTML;
+
+        $result = HtmlTestFixture::diff($oldText, $newText);
+        $this->assertContains($expected, $result);
+    }
+
 //    public function testSimpleTextRemoveWithAncestor(): void
 //    {
 //        $ancestor = '<p> This is a big blue book</p>';

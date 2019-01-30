@@ -367,7 +367,7 @@ class TagNode extends Node implements IteratorAggregate
                 $splitOccurred = true;
             }
 
-            // Since split ins't meant for no-children tags, we won't have a case where we removed $this and did not
+            // Since split isn't meant for no-children tags, we won't have a case where we removed $this and did not
             // substitute it with anything.
             $this->getParent()->removeChild($this);
 

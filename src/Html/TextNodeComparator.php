@@ -256,7 +256,6 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
      * @param int                $end
      * @param TextNodeComparator $oldComp
      * @param int                $before
-     * @param int                $after
      * @param string             $outputFormat
      */
     public function markAsDeleted(
@@ -264,7 +263,6 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
         int $end,
         TextNodeComparator $oldComp,
         int $before,
-        int $after = 0,
         string $outputFormat = ModificationType::REMOVED
     ): void
     {
@@ -315,42 +313,8 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
 
         // Set $nextLeaf to the leaf before which the old HTML needs to be inserted.
         $nextLeaf = null;
-        $useAfter = false;
 
-        if ($after < $this->getRangeCount()) {
-            $orderResult = $this->getTextNode($before)->getLastCommonParent($this->getTextNode($after));
-            $check = $this->getTextNode($before)->getParentTree();
-            $check = \array_reverse($check);
-
-            foreach ($check as $curr) {
-                if ($curr === $orderResult->getLastCommonParent()) {
-                    break;
-                } elseif ($curr->isBlockLevel()) {
-                    $useAfter = true;
-                    break;
-                }
-            }
-
-            if (!$useAfter) {
-                $check = $this->getTextNode($after)->getParentTree();
-                $check = \array_reverse($check);
-
-                foreach ($check as $curr) {
-                    if ($curr === $orderResult->getLastCommonParent()) {
-                        break;
-                    } elseif ($curr->isBlockLevel()) {
-                        $useAfter = true;
-                        break;
-                    }
-                }
-            }
-        } else {
-            $useAfter = false;
-        }
-
-        if ($useAfter) {
-            $nextLeaf = $this->getTextNode($after);
-        } elseif ($before < $this->getRangeCount()) {
+        if ($before < $this->getRangeCount()) {
             $nextLeaf = $this->getTextNode($before);
         }
 
@@ -376,8 +340,10 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
 
             if ($prevResult->getLastCommonParentDepth() === $nextResult->getLastCommonParentDepth()) {
                 // We need some metric to choose which way to add...
-                if ($deletedNodes[0]->getParent() === $deletedNodes[\count($deletedNodes) - 1]->getParent() &&
-                    $prevResult->getLastCommonParent() === $nextResult->getLastCommonParent()) {
+                if (
+                    $deletedNodes[0]->getParent() === $deletedNodes[\count($deletedNodes) - 1]->getParent() &&
+                    $prevResult->getLastCommonParent() === $nextResult->getLastCommonParent()
+                ) {
                     // The difference is not in the parent.
                     $prevResult->setLastCommonParentDepth($prevResult->getLastCommonParentDepth() + 1);
                 } else {
@@ -454,6 +420,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
     }
 
     /**
+     * @codeCoverageIgnore
      * @deprecated Not used, and will not be used in the future.
      *
      * Used for combining multiple comparators in order to create a single output document. The IDs must be successive
@@ -467,6 +434,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
     }
 
     /**
+     * @codeCoverageIgnore
      * @deprecated Not used, and will not be used in the future.
      *
      * Used for combining multiple comparators in order to create a single output document. The IDs must be successive
@@ -480,6 +448,7 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
     }
 
     /**
+     * @codeCoverageIgnore
      * @deprecated Not used, and will not be used in the future.
      *
      * Used for combining multiple comparators in order to create a single output document. The IDs must be successive
