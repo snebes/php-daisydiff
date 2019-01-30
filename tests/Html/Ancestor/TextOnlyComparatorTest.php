@@ -19,34 +19,38 @@ use PHPUnit\Framework\TestCase;
  */
 class TextOnlyComparatorTest extends TestCase
 {
+    /** @var TextOnlyComparator */
+    private $comp;
 
-    public function testAddRecursive(): void
-    {
-        $comp = $this->getComparator();
-        $this->assertSame(TextOnlyComparator::class, get_class($comp));
-    }
-
-    public function testGetRangeCount(): void
-    {
-        $comp = $this->getComparator();
-        $this->assertSame(2, $comp->getRangeCount());
-    }
-
-    public function testRangesEqual(): void
-    {
-        $comp = $this->getComparator();
-        $this->assertTrue($comp->rangesEqual(0, $comp, 0));
-    }
-
-    public function testSkipRangeComparison(): void
+    protected function setUp()
     {
         $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');
         $root->addChild($intermediate);
+        $textRoot = new TextNode($root, 'contents of root node');
+        $root->addChild($textRoot);
 
-        $comp = new TextOnlyComparator($root);
+        $this->comp = new TextOnlyComparator($root);
+    }
 
-        $this->assertFalse($comp->skipRangeComparison(0, 1, $comp));
+    public function testAddRecursive(): void
+    {
+        $this->assertInstanceOf(TextOnlyComparator::class, $this->comp);
+    }
+
+    public function testGetRangeCount(): void
+    {
+        $this->assertSame(2, $this->comp->getRangeCount());
+    }
+
+    public function testRangesEqual(): void
+    {
+        $this->assertTrue($this->comp->rangesEqual(0, $this->comp, 0));
+    }
+
+    public function testSkipRangeComparison(): void
+    {
+        $this->assertFalse($this->comp->skipRangeComparison(0, 1, $this->comp));
     }
 
     public function testGetMatchRatio(): void
@@ -63,32 +67,20 @@ class TextOnlyComparatorTest extends TestCase
         $interComp = new TextOnlyComparator($intermediate);
 
         $this->assertEquals(0.0, $rootComp->getMatchRatio($rootComp), '', 0.1);
-        // @todo: investigate why this is failing.
-//        $this->assertEquals(0.33, $rootComp->getMatchRatio($interComp), '', 0.1);
+        $this->assertEquals(0.33, $rootComp->getMatchRatio($interComp), '', 0.1);
     }
 
     /**
-     * @expectedException \OutOfBoundsException
+     * @expectedException \Exception
      */
     public function testGetLeafIndexOutOfBounds(): void
     {
-        $comp = $this->getComparator();
-        $comp->getLeaf(-1);
-    }
+        try {
+            $this->comp->getLeaf(100);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\OutOfBoundsException::class, $e);
 
-    /**
-     * @return TextOnlyComparator
-     */
-    private function getComparator(): TextOnlyComparator
-    {
-        $root = new TagNode(null, 'root');
-        $intermediate = new TagNode($root, 'middle');
-        $root->addChild($intermediate);
-        $textRoot = new TextNode($root, 'contents of root node');
-        $root->addChild($textRoot);
-
-        $comp = new TextOnlyComparator($root);
-
-        return $comp;
+            throw $e;
+        }
     }
 }

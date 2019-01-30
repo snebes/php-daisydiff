@@ -23,7 +23,6 @@ class TextNodeTest extends TestCase
     {
         $root = new TagNode(null, 'root');
         $textRoot = new TextNode($root, 'contents of root node');
-
         /** @var TextNode $copyRoot */
         $copyRoot = $textRoot->copyTree();
 
@@ -42,8 +41,6 @@ class TextNodeTest extends TestCase
 
     public function testGetModificationText(): void
     {
-        $this->markTestSkipped();
-
         $root = new TagNode(null, 'root');
         $textRoot = new TextNode($root, 'root');
         $textRoot->setModification(null);
@@ -67,7 +64,7 @@ class TextNodeTest extends TestCase
         $textBody = new TextNode($root, 'root');
 
         $this->assertTrue($textRoot->isSameText($textBody));
-//        $this->assertFalse($textRoot->isSameText(null));
+        $this->assertFalse($textRoot->isSameText(null));
         $this->assertFalse($textRoot->isSameText($root));
     }
 
@@ -75,6 +72,7 @@ class TextNodeTest extends TestCase
     {
         $root = new TagNode(null, 'root');
         $textRoot = new TextNode($root, 'contents of root node');
+        $intermediate = new TagNode($root, 'intermediate');
         $textIntermediate = new TextNode($root, 'contents of intermediate node');
 
         $this->assertSame([], $textRoot->getMinimalDeletedSet(0));

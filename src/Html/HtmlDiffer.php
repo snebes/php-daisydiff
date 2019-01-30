@@ -34,90 +34,6 @@ class HtmlDiffer
     }
 
     /**
-     * @param TextNodeComparator $ancestorComparator
-     * @param TextNodeComparator $leftComparator
-     * @param TextNodeComparator $rightComparator
-     */
-//    public function diff3(
-//        TextNodeComparator $ancestorComparator,
-//        TextNodeComparator $leftComparator,
-//        TextNodeComparator $rightComparator
-//    ): void {
-//        /** @var RangeDifference[] $differences */
-//        $differences = RangeDifferencer::findDifferences3($ancestorComparator, $leftComparator, $rightComparator);
-//        $pDifferences = $this->preProcess($differences);
-//
-//        $currentIndexAncestor = 0;
-//        $currentIndexLeft = 0;
-//        $currentIndexRight = 0;
-//
-//        /** @var RangeDifference $d */
-//        foreach ($pDifferences as $d) {
-//            $tempKind = $d->getKind();
-//
-//            if (RangeDifference::ANCESTOR === $tempKind) {
-//                // Ignore, we won't show pseudo-conflicts currently (left and right have the same change).
-//                continue;
-//            }
-//
-//            if ($d->getLeftStart() > $currentIndexLeft) {
-//                $ancestorComparator->handlePossibleChangedPart(
-//                    $currentIndexLeft, $d->getLeftStart(),
-//                    $currentIndexAncestor, $d->getAncestorStart(),
-//                    $leftComparator);
-//            }
-//
-//            if ($d->getRightStart() > $currentIndexRight) {
-//                $ancestorComparator->handlePossibleChangedPart(
-//                    $currentIndexRight, $d->getRightStart(),
-//                    $currentIndexAncestor, $d->getAncestorStart(),
-//                    $rightComparator);
-//            }
-//
-//            if (RangeDifference::CONFLICT === $tempKind || RangeDifference::LEFT === $tempKind) {
-//                // Conflicts and changes on the left side.
-//                if ($d->getLeftLength() > 0) {
-//                    $ancestorComparator->markAsDeleted(
-//                        $d->getLeftStart(), $d->getLeftEnd(), $leftComparator,
-//                        $d->getAncestorStart(), $d->getAncestorEnd(), ModificationType::ADDED);
-//                }
-//            }
-//
-//            if (RangeDifference::CONFLICT === $tempKind || RangeDifference::RIGHT === $tempKind) {
-//                // Conflicts and changes on the right side.
-//                if ($d->getRightLength() > 0) {
-//                    $ancestorComparator->markAsDeleted(
-//                        $d->getRightStart(), $d->getRightEnd(), $rightComparator,
-//                        $d->getAncestorStart(), $d->getAncestorEnd(), ModificationType::ADDED);
-//                }
-//            }
-//
-//            $ancestorComparator->markAsNew($d->getAncestorStart(), $d->getAncestorEnd(), ModificationType::REMOVED);
-//
-//            $currentIndexAncestor = $d->getAncestorEnd();
-//            $currentIndexLeft = $d->getLeftEnd();
-//            $currentIndexRight = $d->getRightEnd();
-//        }
-//
-//        if ($currentIndexLeft < $leftComparator->getRangeCount()) {
-//            $ancestorComparator->handlePossibleChangedPart(
-//                $currentIndexLeft, $leftComparator->getRangeCount(),
-//                $currentIndexAncestor, $ancestorComparator->getRangeCount(),
-//                $leftComparator);
-//        }
-//
-//        if ($currentIndexRight < $rightComparator->getRangeCount()) {
-//            $ancestorComparator->handlePossibleChangedPart(
-//                $currentIndexRight, $rightComparator->getRangeCount(),
-//                $currentIndexAncestor, $ancestorComparator->getRangeCount(),
-//                $rightComparator);
-//        }
-//
-//        $ancestorComparator->expandWhiteSpace();
-//        $this->output->generateOutput($ancestorComparator->getBodyNode());
-//    }
-
-    /**
      * Compares two Node Trees.
      *
      * @param TextNodeComparator $leftComparator  Root of the first tree.
@@ -166,6 +82,93 @@ class HtmlDiffer
 
         $rightComparator->expandWhiteSpace();
         $this->output->generateOutput($rightComparator->getBodyNode());
+    }
+
+    /**
+     * @param TextNodeComparator $ancestorComparator
+     * @param TextNodeComparator $leftComparator
+     * @param TextNodeComparator $rightComparator
+     */
+    public function diff3(
+        TextNodeComparator $ancestorComparator,
+        TextNodeComparator $leftComparator,
+        TextNodeComparator $rightComparator
+    ): void {
+        $settings = new LCSSettings();
+        $settings->setUseGreedyMethod(false);
+
+        /** @var RangeDifference[] $differences */
+        $differences = RangeDifferencer::findDifferences3($ancestorComparator, $leftComparator, $rightComparator);
+        $pDifferences = $this->preProcess($differences);
+
+        $currentIndexAncestor = 0;
+        $currentIndexLeft = 0;
+        $currentIndexRight = 0;
+
+        /** @var RangeDifference $d */
+        foreach ($pDifferences as $d) {
+            $tempKind = $d->getKind();
+
+            if (RangeDifference::ANCESTOR === $tempKind) {
+                // Ignore, we won't show pseudo-conflicts currently (left and right have the same change).
+                continue;
+            }
+
+            if ($d->getLeftStart() > $currentIndexLeft) {
+                $ancestorComparator->handlePossibleChangedPart(
+                    $currentIndexLeft, $d->getLeftStart(),
+                    $currentIndexAncestor, $d->getAncestorStart(),
+                    $leftComparator);
+            }
+
+            if ($d->getRightStart() > $currentIndexRight) {
+                $ancestorComparator->handlePossibleChangedPart(
+                    $currentIndexRight, $d->getRightStart(),
+                    $currentIndexAncestor, $d->getAncestorStart(),
+                    $rightComparator);
+            }
+
+            if (RangeDifference::CONFLICT === $tempKind || RangeDifference::LEFT === $tempKind) {
+                // Conflicts and changes on the left side.
+                if ($d->getLeftLength() > 0) {
+                    $ancestorComparator->markAsDeleted(
+                        $d->getLeftStart(), $d->getLeftEnd(), $leftComparator,
+                        $d->getAncestorStart(), ModificationType::ADDED);
+                }
+            }
+
+            if (RangeDifference::CONFLICT === $tempKind || RangeDifference::RIGHT === $tempKind) {
+                // Conflicts and changes on the right side.
+                if ($d->getRightLength() > 0) {
+                    $ancestorComparator->markAsDeleted(
+                        $d->getRightStart(), $d->getRightEnd(), $rightComparator,
+                        $d->getAncestorStart(), ModificationType::ADDED);
+                }
+            }
+
+            $ancestorComparator->markAsNew($d->getAncestorStart(), $d->getAncestorEnd(), ModificationType::REMOVED);
+
+            $currentIndexAncestor = $d->getAncestorEnd();
+            $currentIndexLeft = $d->getLeftEnd();
+            $currentIndexRight = $d->getRightEnd();
+        }
+
+        if ($currentIndexLeft < $leftComparator->getRangeCount()) {
+            $ancestorComparator->handlePossibleChangedPart(
+                $currentIndexLeft, $leftComparator->getRangeCount(),
+                $currentIndexAncestor, $ancestorComparator->getRangeCount(),
+                $leftComparator);
+        }
+
+        if ($currentIndexRight < $rightComparator->getRangeCount()) {
+            $ancestorComparator->handlePossibleChangedPart(
+                $currentIndexRight, $rightComparator->getRangeCount(),
+                $currentIndexAncestor, $ancestorComparator->getRangeCount(),
+                $rightComparator);
+        }
+
+        $ancestorComparator->expandWhiteSpace();
+        $this->output->generateOutput($ancestorComparator->getBodyNode());
     }
 
     /**

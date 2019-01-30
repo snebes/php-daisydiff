@@ -25,7 +25,7 @@ class WhiteSpaceNodeTest extends TestCase
         $whiteSpaceNode = new WhiteSpaceNode($root, 'root', $textNode);
         $whiteSpaceNodeNullPointer = new WhiteSpaceNode(null, 'root', null);
 
-        $this->assertEquals($root, $whiteSpaceNode->getParent());
+        $this->assertSame($root, $whiteSpaceNode->getParent());
         $this->assertNull($whiteSpaceNodeNullPointer->getParent());
         $this->assertTrue($whiteSpaceNode->isSameText($whiteSpaceNodeNullPointer));
     }

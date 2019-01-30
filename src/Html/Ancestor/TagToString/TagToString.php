@@ -163,12 +163,16 @@ class TagToString
      */
     protected function addAttributes(ChangeText $text, array $attributes): void
     {
-        if (\count($attributes) < 1) {
+        if (empty($attributes)) {
             return;
         }
 
         $arr = [];
 
+        /**
+         * @var string $qName
+         * @var string $value
+         */
         foreach ($attributes as $qName => $value) {
             $arr[] = \sprintf('%s %s', $this->translateArgument($qName), $value);
         }

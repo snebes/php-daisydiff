@@ -21,7 +21,7 @@ class TextNode extends Node
     /** @var string */
     private $s = '';
 
-    /** @var Modification */
+    /** @var Modification|null */
     private $modification;
 
     /**
@@ -102,17 +102,17 @@ class TextNode extends Node
     }
 
     /**
-     * @return Modification
+     * @return Modification|null
      */
-    public function getModification(): Modification
+    public function getModification(): ?Modification
     {
         return $this->modification;
     }
 
     /**
-     * @param Modification $m
+     * @param Modification|null $m
      */
-    public function setModification(Modification $m): void
+    public function setModification(?Modification $m): void
     {
         $this->modification = $m;
     }

@@ -27,6 +27,6 @@ class AnchorToStringTest extends TestCase
 
         $anchor = new AnchorToString($root, TagChangeSemantic::STYLE);
 
-        $this->assertEquals('!diff-root!', $anchor->getDescription());
+        $this->assertSame('!diff-root!', $anchor->getDescription());
     }
 }

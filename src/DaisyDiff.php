@@ -15,9 +15,6 @@ use DaisyDiff\Html\Dom\DomTreeBuilder;
 use DaisyDiff\Html\HtmlDiffer;
 use DaisyDiff\Html\HtmlSaxDiffOutput;
 use DaisyDiff\Html\TextNodeComparator;
-use DaisyDiff\Tag\TagComparator;
-use DaisyDiff\Tag\TagDiffer;
-use DaisyDiff\Tag\TagSaxDiffOutput;
 use DaisyDiff\Xml\XMLReader;
 
 /**
@@ -52,19 +49,6 @@ class DaisyDiff
         $output = new HtmlSaxDiffOutput($changeText);
         $differ = new HtmlDiffer($output);
         $differ->diff($leftComparator, $rightComparator);
-
-        return $changeText->getText();
-    }
-
-    public function diffTag(string $oldText, string $newText): string
-    {
-        $oldComp = new TagComparator($oldText);
-        $newComp = new TagComparator($newText);
-
-        $changeText = new ChangeText();
-        $output = new TagSaxDiffOutput($changeText);
-        $differ = new TagDiffer($output);
-        $differ->diff($oldComp, $newComp);
 
         return $changeText->getText();
     }

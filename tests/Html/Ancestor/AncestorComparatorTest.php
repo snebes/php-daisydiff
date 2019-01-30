@@ -29,8 +29,6 @@ class AncestorComparatorTest extends TestCase
 
     protected function setUp()
     {
-        $this->markTestSkipped();
-
         $this->root = new TagNode(null, 'root');
         $this->intermediate = new TagNode(null, 'middle');
 
@@ -63,11 +61,17 @@ class AncestorComparatorTest extends TestCase
     }
 
     /**
-     * @expectedException \OutOfBoundsException
+     * @expectedException \Exception
      */
     public function testGetAncestorException(): void
     {
-        $this->comp->getAncestor(3);
+        try {
+            $this->comp->getAncestor(3);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\OutOfBoundsException::class, $e);
+
+            throw $e;
+        }
     }
 
     public function testGetCompareTxt(): void

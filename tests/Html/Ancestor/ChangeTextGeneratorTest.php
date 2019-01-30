@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace DaisyDiff\Html\Ancestor;
 
+use DaisyDiff\Html\ChangeText;
 use DaisyDiff\Html\Dom\TagNode;
 use DaisyDiff\RangeDifferencer\RangeDifferencer;
 use PHPUnit\Framework\TestCase;
@@ -24,9 +25,6 @@ class ChangeTextGeneratorTest extends TestCase
 
     /** @var AncestorComparator */
     private $other;
-
-    /** @var ChangeTextGenerator */
-    private $textGenerator;
 
     protected function setUp()
     {
@@ -44,14 +42,32 @@ class ChangeTextGeneratorTest extends TestCase
         $secondNodeList[] = $html;
         $secondNodeList[] = $body;
 
-        $this->comp  = new AncestorComparator($firstNodeList);
+        $this->comp = new AncestorComparator($firstNodeList);
         $this->other = new AncestorComparator($secondNodeList);
-
-        $this->textGenerator = new ChangeTextGenerator($this->comp, $this->other);
     }
 
-    public function testGetRangeCount(): void
+    public function testChangeTextGenerator(): void
     {
-        $this->assertInstanceOf(ChangeTextGenerator::class, $this->textGenerator);
+        $textGenerator = new ChangeTextGenerator($this->comp, $this->other);
+
+        $this->assertInstanceOf(ChangeTextGenerator::class, $textGenerator);
+    }
+
+    public function testGetChanged(): void
+    {
+        $textGenerator = new ChangeTextGenerator($this->comp, $this->other);
+
+        $changes = [];
+        $this->assertSame($changes, $textGenerator->getHtmlLayoutChanges());
+
+        $differences = RangeDifferencer::findDifferences($this->other, $this->comp);
+        $changed = $textGenerator->getChanged($differences);
+        $changedText = <<<HTML
+<ul class="changelist"><li>Moved out of a <b>html page</b>.</li><li>Moved out of a <b>html document</b>.</li><li><b>!diff-root!</b> added.</li><li><b>!diff-middle!</b> added.</li></ul>
+HTML;
+
+
+        $this->assertSame($changedText, $changed->getText());
+        $this->assertInstanceOf(ChangeText::class, $changed);
     }
 }
