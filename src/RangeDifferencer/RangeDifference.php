@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\RangeDifferencer;
+namespace SN\DaisyDiff\RangeDifferencer;
 
 /**
  * Description of a change between two or three ranges of comparable entities.

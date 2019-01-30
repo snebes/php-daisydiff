@@ -8,15 +8,15 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html;
+namespace SN\DaisyDiff\Html;
 
-use DaisyDiff\Html\Dom\DomTreeBuilder;
-use DaisyDiff\Html\Dom\ImageNode;
-use DaisyDiff\Html\Dom\TagNode;
-use DaisyDiff\Html\Dom\TextNode;
-use DaisyDiff\Html\Modification\Modification;
-use DaisyDiff\Html\Modification\ModificationType;
-use DaisyDiff\Xml\XMLReader;
+use SN\DaisyDiff\Html\Dom\DomTreeBuilder;
+use SN\DaisyDiff\Html\Dom\ImageNode;
+use SN\DaisyDiff\Html\Dom\TagNode;
+use SN\DaisyDiff\Html\Dom\TextNode;
+use SN\DaisyDiff\Html\Modification\Modification;
+use SN\DaisyDiff\Html\Modification\ModificationType;
+use SN\DaisyDiff\Xml\XMLReader;
 use PHPUnit\Framework\TestCase;
 
 /**

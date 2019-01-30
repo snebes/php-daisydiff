@@ -8,14 +8,14 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff;
+namespace SN\DaisyDiff;
 
-use DaisyDiff\Html\ChangeText;
-use DaisyDiff\Html\Dom\DomTreeBuilder;
-use DaisyDiff\Html\HtmlDiffer;
-use DaisyDiff\Html\HtmlSaxDiffOutput;
-use DaisyDiff\Html\TextNodeComparator;
-use DaisyDiff\Xml\XMLReader;
+use SN\DaisyDiff\Html\ChangeText;
+use SN\DaisyDiff\Html\Dom\DomTreeBuilder;
+use SN\DaisyDiff\Html\HtmlDiffer;
+use SN\DaisyDiff\Html\HtmlSaxDiffOutput;
+use SN\DaisyDiff\Html\TextNodeComparator;
+use SN\DaisyDiff\Xml\XMLReader;
 
 /**
  * Daisy Diff is a library that diffs (compares) HTML.

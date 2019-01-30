@@ -8,19 +8,19 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html;
+namespace SN\DaisyDiff\Html;
 
 use ArrayIterator;
-use DaisyDiff\Html\Ancestor\AncestorComparator;
-use DaisyDiff\Html\Ancestor\AncestorComparatorResult;
-use DaisyDiff\Html\Dom\BodyNode;
-use DaisyDiff\Html\Dom\DomTreeBuilder;
-use DaisyDiff\Html\Dom\Helper\LastCommonParentResult;
-use DaisyDiff\Html\Dom\TagNode;
-use DaisyDiff\Html\Dom\TextNode;
-use DaisyDiff\Html\Modification\Modification;
-use DaisyDiff\Html\Modification\ModificationType;
-use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
+use SN\DaisyDiff\Html\Ancestor\AncestorComparator;
+use SN\DaisyDiff\Html\Ancestor\AncestorComparatorResult;
+use SN\DaisyDiff\Html\Dom\BodyNode;
+use SN\DaisyDiff\Html\Dom\DomTreeBuilder;
+use SN\DaisyDiff\Html\Dom\Helper\LastCommonParentResult;
+use SN\DaisyDiff\Html\Dom\TagNode;
+use SN\DaisyDiff\Html\Dom\TextNode;
+use SN\DaisyDiff\Html\Modification\Modification;
+use SN\DaisyDiff\Html\Modification\ModificationType;
+use SN\DaisyDiff\RangeDifferencer\RangeComparatorInterface;
 use IteratorAggregate;
 
 /**

@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html;
+namespace SN\DaisyDiff\Html;
 
 use PHPUnit\Framework\TestCase;
 

@@ -8,10 +8,10 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Dom;
+namespace SN\DaisyDiff\Html\Dom;
 
 use ArrayIterator;
-use DaisyDiff\Html\Ancestor\TextOnlyComparator;
+use SN\DaisyDiff\Html\Ancestor\TextOnlyComparator;
 use IteratorAggregate;
 
 /**

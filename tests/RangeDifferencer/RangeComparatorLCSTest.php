@@ -8,10 +8,10 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\RangeDifferencer;
+namespace SN\DaisyDiff\RangeDifferencer;
 
-use DaisyDiff\RangeDifferencer\Core\LCSSettings;
-use DaisyDiff\Tag\TagComparator;
+use SN\DaisyDiff\RangeDifferencer\Core\LCSSettings;
+use SN\DaisyDiff\Tag\TagComparator;
 use PHPUnit\Framework\TestCase;
 
 /**

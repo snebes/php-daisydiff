@@ -8,10 +8,10 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Dom;
+namespace SN\DaisyDiff\Html\Dom;
 
-use DaisyDiff\Html\Modification\Modification;
-use DaisyDiff\Html\Modification\ModificationType;
+use SN\DaisyDiff\Html\Modification\Modification;
+use SN\DaisyDiff\Html\Modification\ModificationType;
 
 /**
  * Represents a piece of text in the HTML file.

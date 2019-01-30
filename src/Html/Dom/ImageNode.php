@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Dom;
+namespace SN\DaisyDiff\Html\Dom;
 
 /**
  * Represents an image in HTML. Even though images do not contain any text they are single visible objects on the page.

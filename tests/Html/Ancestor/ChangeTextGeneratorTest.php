@@ -8,11 +8,11 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Ancestor;
+namespace SN\DaisyDiff\Html\Ancestor;
 
-use DaisyDiff\Html\ChangeText;
-use DaisyDiff\Html\Dom\TagNode;
-use DaisyDiff\RangeDifferencer\RangeDifferencer;
+use SN\DaisyDiff\Html\ChangeText;
+use SN\DaisyDiff\Html\Dom\TagNode;
+use SN\DaisyDiff\RangeDifferencer\RangeDifferencer;
 use PHPUnit\Framework\TestCase;
 
 /**

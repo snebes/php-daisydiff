@@ -8,13 +8,13 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html;
+namespace SN\DaisyDiff\Html;
 
-use DaisyDiff\Html\Modification\ModificationType;
-use DaisyDiff\Output\DiffOutputInterface;
-use DaisyDiff\RangeDifferencer\Core\LCSSettings;
-use DaisyDiff\RangeDifferencer\RangeDifference;
-use DaisyDiff\RangeDifferencer\RangeDifferencer;
+use SN\DaisyDiff\Html\Modification\ModificationType;
+use SN\DaisyDiff\Output\DiffOutputInterface;
+use SN\DaisyDiff\RangeDifferencer\Core\LCSSettings;
+use SN\DaisyDiff\RangeDifferencer\RangeDifference;
+use SN\DaisyDiff\RangeDifferencer\RangeDifferencer;
 
 /**
  * Takes TextNodeComparator instances, computes the difference between them, marks the changes, and outputs a merged

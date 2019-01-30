@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Tag;
+namespace SN\DaisyDiff\Tag;
 
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;

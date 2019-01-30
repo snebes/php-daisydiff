@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Xml;
+namespace SN\DaisyDiff\Xml;
 
 /**
  * Sanitizing methods.

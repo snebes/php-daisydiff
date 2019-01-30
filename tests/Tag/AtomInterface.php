@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Tag;
+namespace SN\DaisyDiff\Tag;
 
 /**
  * A unit of comparison between html files. An Atom can be equal to another while not having the same text (tag

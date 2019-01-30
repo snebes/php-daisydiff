@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Tag;
+namespace SN\DaisyDiff\Tag;
 
-use DaisyDiff\RangeDifferencer\RangeComparatorInterface;
+use SN\DaisyDiff\RangeDifferencer\RangeComparatorInterface;
 
 /**
  * Extends RangeComparatorInterface with functionality to recreate parts of the original document.

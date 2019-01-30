@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Tag;
+namespace SN\DaisyDiff\Tag;
 
 /**
  * A TextAtom with an identifier from a limited set of delimiter strings.

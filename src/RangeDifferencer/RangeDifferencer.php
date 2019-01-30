@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\RangeDifferencer;
+namespace SN\DaisyDiff\RangeDifferencer;
 
-use DaisyDiff\RangeDifferencer\Core\LCSSettings;
+use SN\DaisyDiff\RangeDifferencer\Core\LCSSettings;
 
 /**
  * A RangeDifferencer finds the differences between two or three RangeComparatorInterfaces.

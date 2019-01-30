@@ -8,10 +8,10 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html\Ancestor\TagToString;
+namespace SN\DaisyDiff\Html\Ancestor\TagToString;
 
-use DaisyDiff\Html\Ancestor\TagChangeSemantic;
-use DaisyDiff\Html\Dom\TagNode;
+use SN\DaisyDiff\Html\Ancestor\TagChangeSemantic;
+use SN\DaisyDiff\Html\Dom\TagNode;
 use PHPUnit\Framework\TestCase;
 
 /**

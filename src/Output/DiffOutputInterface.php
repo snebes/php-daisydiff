@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Output;
+namespace SN\DaisyDiff\Output;
 
-use DaisyDiff\Html\Dom\TagNode;
+use SN\DaisyDiff\Html\Dom\TagNode;
 use Exception;
 
 /**

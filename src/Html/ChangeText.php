@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace DaisyDiff\Html;
+namespace SN\DaisyDiff\Html;
 
-use DaisyDiff\Xml\ContentHandlerInterface;
+use SN\DaisyDiff\Xml\ContentHandlerInterface;
 
 /**
  * ChangeText model.
