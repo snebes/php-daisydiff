@@ -48,6 +48,9 @@ class HtmlTestFixture
         $newSax = new XMLReader($newHandler);
         $newSax->parse($newText);
 
+        var_dump($oldHandler->getTextNodes());
+        var_dump($newHandler->getTextNodes());
+
         // Diff.
         $leftComparator = new TextNodeComparator($oldHandler);
         $rightComparator = new TextNodeComparator($newHandler);

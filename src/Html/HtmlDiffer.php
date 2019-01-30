@@ -161,12 +161,12 @@ class HtmlDiffer
             $currentIndexRight = $d->getRightEnd();
         }
 
-        if ($currentIndexLeft < $leftComparator->getRangeCount()) {
-            $rightComparator->handlePossibleChangedPart(
-                $currentIndexLeft, $leftComparator->getRangeCount(),
-                $currentIndexRight, $rightComparator->getRangeCount(),
-                $leftComparator);
-        }
+//        if ($currentIndexLeft < $leftComparator->getRangeCount()) {
+//            $rightComparator->handlePossibleChangedPart(
+//                $currentIndexLeft, $leftComparator->getRangeCount(),
+//                $currentIndexRight, $rightComparator->getRangeCount(),
+//                $leftComparator);
+//        }
 
         $rightComparator->expandWhiteSpace();
         $this->output->generateOutput($rightComparator->getBodyNode());

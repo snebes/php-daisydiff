@@ -92,6 +92,9 @@ class TextNodeComparator implements RangeComparatorInterface, IteratorAggregate
             return $this->textNodes[$index];
         }
 
+        var_dump($this->textNodes);
+        var_dump($index);
+
         throw new \OutOfBoundsException();
     }
 
