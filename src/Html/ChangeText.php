@@ -10,25 +10,15 @@ declare(strict_types=1);
 
 namespace DaisyDiff\Html;
 
-use DaisyDiff\Html\Ancestor\ChangeText;
 use DaisyDiff\Xml\ContentHandlerInterface;
-use DaisyDiff\Xml\Xml;
 
 /**
- * Delegates content handling to ChangeText.
+ * ChangeText model.
  */
-class DelegatingContentHandler implements ContentHandlerInterface
+class ChangeText implements ContentHandlerInterface
 {
-    /** @var ChangeText */
-    private $changeText;
-
-    /**
-     * @param ChangeText $changeText
-     */
-    public function __construct(ChangeText $changeText)
-    {
-        $this->changeText = $changeText;
-    }
+    /** @var string */
+    private $text = '';
 
     /**
      * @param string $qName
@@ -36,7 +26,13 @@ class DelegatingContentHandler implements ContentHandlerInterface
      */
     public function startElement(string $qName, array $attributes = []): void
     {
-        $this->changeText->addHtml(Xml::openElement($qName, $attributes));
+        $this->text .= '<' . $qName;
+
+        foreach ($attributes as $attr => $value) {
+            $this->text .= \sprintf(' %s="%s"', $attr, $value);
+        }
+
+        $this->text .= '>';
     }
 
     /**
@@ -44,7 +40,7 @@ class DelegatingContentHandler implements ContentHandlerInterface
      */
     public function endElement(string $qName): void
     {
-        $this->changeText->addHtml(Xml::closeElement($qName));
+        $this->text .= \sprintf('</%s>', $qName);
     }
 
     /**
@@ -52,6 +48,22 @@ class DelegatingContentHandler implements ContentHandlerInterface
      */
     public function characters(string $chars): void
     {
-        $this->changeText->addHtml($chars);
+        $this->text .= $chars;
+    }
+
+    /**
+     * @return string
+     */
+    public function getText(): string
+    {
+        return $this->text;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->getText();
     }
 }

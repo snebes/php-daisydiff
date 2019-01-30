@@ -10,8 +10,7 @@ declare(strict_types=1);
 
 namespace DaisyDiff;
 
-use DaisyDiff\Html\Ancestor\ChangeText;
-use DaisyDiff\Html\DelegatingContentHandler;
+use DaisyDiff\Html\ChangeText;
 use DaisyDiff\Html\Dom\DomTreeBuilder;
 use DaisyDiff\Html\HtmlDiffer;
 use DaisyDiff\Html\HtmlSaxDiffOutput;
@@ -46,12 +45,11 @@ class DaisyDiff
         $leftComparator = new TextNodeComparator($oldHandler);
         $rightComparator = new TextNodeComparator($newHandler);
 
-        $content = new ChangeText();
-        $handler = new DelegatingContentHandler($content);
-        $output = new HtmlSaxDiffOutput($handler, 'diff');
+        $changeText = new ChangeText();
+        $output = new HtmlSaxDiffOutput($changeText);
         $differ = new HtmlDiffer($output);
         $differ->diff($leftComparator, $rightComparator);
 
-        return strval($content);
+        return $changeText->getText();
     }
 }

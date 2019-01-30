@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace DaisyDiff\Html;
 
-use DaisyDiff\Html\Ancestor\ChangeText;
 use DaisyDiff\Html\Dom\DomTreeBuilder;
 use DaisyDiff\Xml\XMLReader;
 
@@ -41,26 +40,25 @@ class HtmlTestFixture
     {
         // Parse $oldText.
         $oldHandler = new DomTreeBuilder();
-        $oldSax     = new XMLReader($oldHandler);
+        $oldSax = new XMLReader($oldHandler);
         $oldSax->parse($oldText);
 
         // Parse $newText.
         $newHandler = new DomTreeBuilder();
-        $newSax     = new XMLReader($newHandler);
+        $newSax = new XMLReader($newHandler);
         $newSax->parse($newText);
 
         // Diff.
-        $leftComparator  = new TextNodeComparator($oldHandler);
+        $leftComparator = new TextNodeComparator($oldHandler);
         $rightComparator = new TextNodeComparator($newHandler);
 
-        $content = new ChangeText();
-        $handler = new DelegatingContentHandler($content);
-        $output  = new HtmlSaxDiffOutput($handler, 'test');
+        $changeText = new ChangeText();
+        $output = new HtmlSaxDiffOutput($changeText);
 
-        $differ  = new HtmlDiffer($output);
+        $differ = new HtmlDiffer($output);
         $differ->diff($leftComparator, $rightComparator);
 
-        return $content->__toString();
+        return $changeText->getText();
     }
 
     /**

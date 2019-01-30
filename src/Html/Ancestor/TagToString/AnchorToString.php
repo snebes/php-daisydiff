@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace DaisyDiff\Html\Ancestor\TagToString;
 
-use DaisyDiff\Html\Ancestor\ChangeText;
+use DaisyDiff\Html\ChangeText;
 
 /**
  * Anchor <a> tag to string.
@@ -26,7 +26,7 @@ class AnchorToString extends TagToString
         $href = \array_key_exists('href', $attributes) ? $attributes['href'] : null;
 
         if (!empty($href)) {
-            $text->addText(\sprintf(' %s %s', \mb_strtolower($this->getWithDestination()), $href));
+            $text->characters(\sprintf(' %s %s', \mb_strtolower($this->getWithDestination()), $href));
             unset($attributes['href']);
         }
 

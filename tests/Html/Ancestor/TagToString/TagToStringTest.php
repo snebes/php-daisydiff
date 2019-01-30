@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * (c) Steve Nebes <snebes@gmail.com>
  *
@@ -6,13 +6,14 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace DaisyDiff\Html\Ancestor\TagToString;
 
-use DaisyDiff\Html\Ancestor\ChangeText;
 use DaisyDiff\Html\Ancestor\TagChangeSemantic;
+use DaisyDiff\Html\ChangeText;
 use DaisyDiff\Html\Dom\TagNode;
 use PHPUnit\Framework\TestCase;
-use ReflectionProperty;
 
 /**
  * TagToString Tests.

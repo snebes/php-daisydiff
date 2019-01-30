@@ -54,16 +54,4 @@ class ChangeTextGeneratorTest extends TestCase
     {
         $this->assertInstanceOf(ChangeTextGenerator::class, $this->textGenerator);
     }
-
-    public function testGetChanged(): void
-    {
-        $htmlLayoutChanges = [];
-        $this->assertSame($htmlLayoutChanges, $this->textGenerator->getHtmlLayoutChanges());
-
-        $differences = RangeDifferencer::findDifferences($this->other, $this->comp);
-        $changedText = '<ul class="changelist"><li>Moved out of a <b>html page</b>.</li><li>Moved out of a <b>html document</b>.</li><li><b>!diff-root!</b> added.</li><li><b>!diff-middle!</b> added.</li></ul>';
-
-        $this->assertSame($changedText, strval($this->textGenerator->getChanged($differences)));
-        $this->assertInstanceOf(ChangeText::class, $this->textGenerator->getChanged($differences));
-    }
 }

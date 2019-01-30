@@ -100,11 +100,11 @@ class AncestorComparator implements RangeComparatorInterface
             return $result;
         }
 
-        $changeText = new ChangeTextGenerator($this, $other);
+//        $changeText = new ChangeTextGenerator($this, $other);
 
         $result->setChanged(true);
-        $result->setChanges($changeText->getChanged($differences)->__toString());
-        $result->setHtmlLayoutChanges($changeText->getHtmlLayoutChanges());
+//        $result->setChanges($changeText->getChanged($differences)->__toString());
+//        $result->setHtmlLayoutChanges($changeText->getHtmlLayoutChanges());
 
         return $result;
     }

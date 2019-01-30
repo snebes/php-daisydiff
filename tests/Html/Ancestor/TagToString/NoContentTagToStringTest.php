@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace DaisyDiff\Html\Ancestor\TagToString;
 
-use DaisyDiff\Html\Ancestor\ChangeText;
 use DaisyDiff\Html\Ancestor\TagChangeSemantic;
+use DaisyDiff\Html\ChangeText;
 use DaisyDiff\Html\Dom\TagNode;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
@@ -28,7 +28,7 @@ class NoContentTagToStringTest extends TestCase
 
         $changeText = new ChangeText();
         $newText = 'Div tag to add styles';
-        $changeText->addText($newText);
+        $changeText->characters($newText);
 
         $tagMoved->getRemovedDescription($changeText);
 
@@ -46,7 +46,7 @@ class NoContentTagToStringTest extends TestCase
 
         $changeText = new ChangeText();
         $newText = 'Form to collect data';
-        $changeText->addText($newText);
+        $changeText->characters($newText);
 
         $tagMoved->getAddedDescription($changeText);
 
