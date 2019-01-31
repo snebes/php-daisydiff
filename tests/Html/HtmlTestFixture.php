@@ -66,33 +66,33 @@ class HtmlTestFixture
      * @param string $newText
      * @return string
      */
-//    public static function diff3(string $ancestor, string $oldText, string $newText): string
-//    {
-//        // Parse $ancestor.
-//        $ancestorHandler = new DomTreeBuilder();
-//        $ancestorSax     = new XMLReader($ancestorHandler);
-//        $ancestorSax->parse($ancestor);
-//
-//        // Parse $oldText.
-//        $oldHandler = new DomTreeBuilder();
-//        $oldSax     = new XMLReader($oldHandler);
-//        $oldSax->parse($oldText);
-//
-//        // Parse $newText.
-//        $newHandler = new DomTreeBuilder();
-//        $newSax     = new XMLReader($newHandler);
-//        $newSax->parse($newText);
-//
-//        // Diff.
-//        $ancestorComparator = new TextNodeComparator($ancestorHandler);
-//        $leftComparator     = new TextNodeComparator($oldHandler);
-//        $rightComparator    = new TextNodeComparator($newHandler);
-//
-//        $changeText = new ChangeText();
-//        $output = new HtmlSaxDiffOutput($changeText);
-//        $differ  = new HtmlDiffer($output);
-//        $differ->diff3($ancestorComparator, $leftComparator, $rightComparator);
-//
-//        return $changeText->__toString();
-//    }
+    public static function diff3(string $ancestor, string $oldText, string $newText): string
+    {
+        // Parse $ancestor.
+        $ancestorHandler = new DomTreeBuilder();
+        $ancestorSax     = new XMLReader($ancestorHandler);
+        $ancestorSax->parse($ancestor);
+
+        // Parse $oldText.
+        $oldHandler = new DomTreeBuilder();
+        $oldSax     = new XMLReader($oldHandler);
+        $oldSax->parse($oldText);
+
+        // Parse $newText.
+        $newHandler = new DomTreeBuilder();
+        $newSax     = new XMLReader($newHandler);
+        $newSax->parse($newText);
+
+        // Diff.
+        $ancestorComparator = new TextNodeComparator($ancestorHandler);
+        $leftComparator     = new TextNodeComparator($oldHandler);
+        $rightComparator    = new TextNodeComparator($newHandler);
+
+        $changeText = new ChangeText();
+        $output = new HtmlSaxDiffOutput($changeText);
+        $differ  = new HtmlDiffer($output);
+        $differ->diff3($ancestorComparator, $leftComparator, $rightComparator);
+
+        return $changeText->__toString();
+    }
 }

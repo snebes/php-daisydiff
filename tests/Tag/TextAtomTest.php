@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace SN\DaisyDiff\Tag;
 
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 /**
  * TextAtom Tests.
@@ -45,14 +44,15 @@ class TextAtomTest extends TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \Exception
      */
     public function testIsValidAtomException(): void
     {
         try {
             new TextAtom('');
-        } catch (RuntimeException $e) {
-            $this->assertEquals('The given String is not a valid Text Atom.', $e->getMessage());
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\RuntimeException::class, $e);
+
             throw $e;
         }
     }
@@ -60,16 +60,16 @@ class TextAtomTest extends TestCase
     public function testEqualsIdentifier(): void
     {
         $input = '<p>This is a blue book</p>';
-        $atom  = new TextAtom($input);
+        $atom = new TextAtom($input);
 
         $matchInput = '<p>This is a blue book</p>';
-        $matchAtom  = new TextAtom($matchInput);
+        $matchAtom = new TextAtom($matchInput);
 
         $empty = ' ';
         $emptyAtom = new TextAtom($empty);
 
         $differentInput = "<b>This is a different \n input</b>";
-        $differentAtom  = new TextAtom($differentInput);
+        $differentAtom = new TextAtom($differentInput);
 
         $this->assertTrue($atom->equalsIdentifier($matchAtom));
         $this->assertFalse($atom->equalsIdentifier($emptyAtom));
@@ -79,9 +79,9 @@ class TextAtomTest extends TestCase
     public function testToString(): void
     {
         $input = '~';
-        $atom  = new TextAtom($input);
+        $atom = new TextAtom($input);
 
-        $this->assertEquals('TextAtom: ~', strval($atom));
+        $this->assertSame('TextAtom: ~', strval($atom));
     }
 
     public function testTagAtomIdentifiers(): void
@@ -89,11 +89,11 @@ class TextAtomTest extends TestCase
         $example = '<p>';
         $exampleAtom = new TextAtom($example);
 
-        $this->assertEquals('<p>', $exampleAtom->getIdentifier());
+        $this->assertSame('<p>', $exampleAtom->getIdentifier());
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \Exception
      */
     public function testTagAtomInternalIdentifiers(): void
     {
@@ -104,8 +104,9 @@ class TextAtomTest extends TestCase
 
         try {
             $exampleAtom->getInternalIdentifiers();
-        } catch (RuntimeException $e) {
-            $this->assertEquals('This Atom has no internal identifiers.', $e->getMessage());
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\RuntimeException::class, $e);
+
             throw $e;
         }
     }
