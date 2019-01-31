@@ -34,7 +34,7 @@ class FileBasedTest extends TestCase
 
     public function listTests()
     {
-        $files = $this->listFiles(__DIR__ . '/TestData/General');
+        $files = $this->listFiles(__DIR__ . '/TestData');
 
         foreach ($files as $testName => $fileList) {
             if (!empty($fileList['a.html']) && !empty($fileList['b.html']) && !empty($fileList['expected.html'])) {
