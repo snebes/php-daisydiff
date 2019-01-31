@@ -25,8 +25,11 @@ The `DaisyDiff` class can be used to generate a textual representation of the di
 
 use SN\DaisyDiff\DaisyDiff;
 
+$original = '<html><body>The original document</body></html>';
+$modified = '<html><body>The changed document</body></html>';
+
 $daisyDiff = new DaisyDiff();
-\printf("%s\n", $daisyDiff->diff('<html><body>The original document</body></html>', '<html><body>The changed document</body></html>'));
+\printf("%s\n", $daisyDiff->diff($original, $modified));
 ```
 
 The code above yields the output below:
