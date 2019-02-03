@@ -19,12 +19,16 @@ class FileBasedTest extends TestCase
      * @param string $original
      * @param string $modified
      * @param string $expected
+     * @param bool   $skipTest
      *
      * @dataProvider listTests
+     * @group        file
      */
-    public function testFiles(string $original, string $modified, string $expected): void
+    public function testFiles(string $original, string $modified, string $expected, bool $skipTest): void
     {
-        $this->markTestSkipped();
+        if ($skipTest) {
+            $this->markTestSkipped();
+        }
 
         $daisy = new DaisyDiff();
         $actual = $daisy->diff($original, $modified);
@@ -34,16 +38,16 @@ class FileBasedTest extends TestCase
 
     public function listTests()
     {
-        $files = $this->listFiles(__DIR__ . '/TestData');
+        $files = $this->listFiles(__DIR__ . '/TestData/General');
 
         foreach ($files as $testName => $fileList) {
             if (!empty($fileList['a.html']) && !empty($fileList['b.html']) && !empty($fileList['expected.html'])) {
+                $original = $fileList['a.html'];
+                $modified = $fileList['b.html'];
+                $expected = $fileList['expected.html'];
+                $skipTest = isset($fileList['skipped']) ? true : false;
 
-                $expected = \preg_replace('#<head>.*?</head>#', '', $fileList['expected.html']);
-                $expected = \preg_replace('#<span class="diff-html-added".*?>(.*?)</span>#', '<ins class="diff-html-added">\1</ins>', $expected);
-                $expected = \preg_replace('#<span class="diff-html-removed".*?>(.*?)</span>#', '<del class="diff-html-removed">\1</del>', $expected);
-
-                yield $testName => [$fileList['a.html'], $fileList['b.html'], $expected];
+                yield $testName => [$original, $modified, $expected, $skipTest];
             }
         }
     }
