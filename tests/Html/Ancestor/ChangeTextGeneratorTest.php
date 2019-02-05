@@ -12,8 +12,8 @@ namespace SN\DaisyDiff\Html\Ancestor;
 
 use SN\DaisyDiff\Html\ChangeText;
 use SN\DaisyDiff\Html\Dom\TagNode;
-use SN\DaisyDiff\RangeDifferencer\RangeDifferencer;
 use PHPUnit\Framework\TestCase;
+use SN\RangeDifferencer\RangeDifference;
 
 /**
  * ChangeTextGenerator Tests.
@@ -60,7 +60,7 @@ class ChangeTextGeneratorTest extends TestCase
         $changes = [];
         $this->assertSame($changes, $textGenerator->getHtmlLayoutChanges());
 
-        $differences = RangeDifferencer::findDifferences($this->other, $this->comp);
+        $differences = RangeDifference::findDifferences($this->other, $this->comp);
         $changed = $textGenerator->getChanged($differences);
         $changedText = <<<HTML
 <ul class="changelist"><li>Moved out of a <b>html page</b>.</li><li>Moved out of a <b>html document</b>.</li><li><b>!diff-root!</b> added.</li><li><b>!diff-middle!</b> added.</li></ul>

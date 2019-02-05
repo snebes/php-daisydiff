@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace SN\DaisyDiff;
 
-use Exception;
 use PHPUnit\Framework\TestCase;
 
 class DaisyDiffTest extends TestCase

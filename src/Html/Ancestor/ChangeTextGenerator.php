@@ -14,7 +14,7 @@ use SN\DaisyDiff\Html\Ancestor\TagToString\TagToStringFactory;
 use SN\DaisyDiff\Html\ChangeText;
 use SN\DaisyDiff\Html\Dom\TagNode;
 use SN\DaisyDiff\Html\Modification\HtmlLayoutChange;
-use SN\DaisyDiff\RangeDifferencer\RangeDifference;
+use SN\RangeDifferencer\RangeDifference;
 
 /**
  * ChangeTextGenerator

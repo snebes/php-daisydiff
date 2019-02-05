@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace SN\DaisyDiff\Tag;
 
-use SN\DaisyDiff\RangeDifferencer\RangeComparatorInterface;
+use SN\RangeDifferencer\RangeComparatorInterface;
 
 /**
  * Extends RangeComparatorInterface with functionality to recreate parts of the original document.

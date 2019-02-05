@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace SN\DaisyDiff\Tag;
 
-use SN\DaisyDiff\RangeDifferencer\RangeComparatorInterface;
+use SN\RangeDifferencer\RangeComparatorInterface;
 
 /**
  * Takes a String and generates tokens/atoms that can be used by LCS. This comparator is used specifically for HTML

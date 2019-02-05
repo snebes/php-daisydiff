@@ -12,9 +12,9 @@ namespace SN\DaisyDiff\Html;
 
 use SN\DaisyDiff\Html\Modification\ModificationType;
 use SN\DaisyDiff\Output\DiffOutputInterface;
-use SN\DaisyDiff\RangeDifferencer\Core\LCSSettings;
-use SN\DaisyDiff\RangeDifferencer\RangeDifference;
-use SN\DaisyDiff\RangeDifferencer\RangeDifferencer;
+use SN\RangeDifferencer\Core\LCSSettings;
+use SN\RangeDifferencer\RangeDifference;
+use SN\RangeDifferencer\RangeDifferencer;
 
 /**
  * Takes TextNodeComparator instances, computes the difference between them, marks the changes, and outputs a merged

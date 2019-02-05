@@ -20,7 +20,7 @@ use SN\DaisyDiff\Html\Dom\TagNode;
 use SN\DaisyDiff\Html\Dom\TextNode;
 use SN\DaisyDiff\Html\Modification\Modification;
 use SN\DaisyDiff\Html\Modification\ModificationType;
-use SN\DaisyDiff\RangeDifferencer\RangeComparatorInterface;
+use SN\RangeDifferencer\RangeComparatorInterface;
 use IteratorAggregate;
 
 /**

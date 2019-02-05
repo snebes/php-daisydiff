@@ -12,9 +12,9 @@ namespace SN\DaisyDiff\Html\Ancestor;
 
 use SN\DaisyDiff\Html\Dom\TagNode;
 use SN\DaisyDiff\Html\Dom\TextNode;
-use SN\DaisyDiff\RangeDifferencer\Core\LCSSettings;
-use SN\DaisyDiff\RangeDifferencer\RangeComparatorInterface;
-use SN\DaisyDiff\RangeDifferencer\RangeDifferencer;
+use SN\RangeDifferencer\Core\LCSSettings;
+use SN\RangeDifferencer\RangeComparatorInterface;
+use SN\RangeDifferencer\RangeDifferencer;
 
 /**
  * A comparator that compares only the elements of text inside a given tag.
