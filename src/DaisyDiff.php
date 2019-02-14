@@ -15,6 +15,7 @@ use SN\DaisyDiff\Html\Dom\DomTreeBuilder;
 use SN\DaisyDiff\Html\HtmlDiffer;
 use SN\DaisyDiff\Html\HtmlSaxDiffOutput;
 use SN\DaisyDiff\Html\TextNodeComparator;
+use SN\DaisyDiff\Parser\MastermindsParser;
 use SN\DaisyDiff\Xml\XMLReader;
 
 /**
@@ -22,6 +23,16 @@ use SN\DaisyDiff\Xml\XMLReader;
  */
 class DaisyDiff
 {
+    private $domVisitor;
+
+    private $maxLength = 200000;
+
+    public function __construct()
+    {
+        $this->domVisitor = null;
+        $this->maxLength = 200000;
+    }
+
     /**
      * Diffs two HTML strings, returning the result.
      *
@@ -51,5 +62,38 @@ class DaisyDiff
         $differ->diff($leftComparator, $rightComparator);
 
         return $changeText->getText();
+    }
+
+    public function parse(string $html)
+    {
+        if (\mb_strlen($html) > $this->maxLength) {
+            $html = \mb_substr($html, 0, $this->maxLength);
+        }
+
+        if (!$this->isValidUtf8($html)) {
+            return '';
+        }
+
+        $html = \str_replace(\chr(0), '', $html);
+
+        try {
+            $parser = new MastermindsParser();
+            $parsed = $parser->parse($html);
+        } catch (\Exception $e) {
+            return '';
+        }
+
+        return $this->domVisitor->visit($parsed);
+    }
+
+    /**
+     * Validates that the string is utf8 encoded.
+     *
+     * @param string $html
+     * @return bool
+     */
+    private function isValidUtf8(string $html): bool
+    {
+        return '' === $html || 1 === \preg_match('/^./us', $html);
     }
 }
