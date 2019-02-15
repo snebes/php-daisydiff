@@ -8,12 +8,13 @@
 
 declare(strict_types=1);
 
-namespace SN\DaisyDiff\Visitor;
+namespace SN\DaisyDiff\Node;
 
 /**
- * The DomVisitor iterates over the parsed DOM tree and visits nodes using NodeVisitorInterface objects.
+ * Cursor for node tree.
  */
-class DomVisitor implements DomVisitorInterface
+class Cursor
 {
-
+    /** @var NodeInterface */
+    public $node;
 }

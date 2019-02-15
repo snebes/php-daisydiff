@@ -31,6 +31,7 @@ class DaisyDiff
     {
         $this->domVisitor = null;
         $this->maxLength = 200000;
+        $this->domVisitor = new DomVisitor();
     }
 
     /**
@@ -51,7 +52,7 @@ class DaisyDiff
         $newHandler = new DomTreeBuilder();
         $reader2 = new XMLReader($newHandler);
         $reader2->parse($newText);
-
+dd($newHandler);
         // Comparators.
         $leftComparator = new TextNodeComparator($oldHandler);
         $rightComparator = new TextNodeComparator($newHandler);
@@ -60,10 +61,15 @@ class DaisyDiff
         $output = new HtmlSaxDiffOutput($changeText);
         $differ = new HtmlDiffer($output);
         $differ->diff($leftComparator, $rightComparator);
-
+dump($oldHandler);
+dd($newHandler);
         return $changeText->getText();
     }
 
+    /**
+     * @param string $html
+     * @return string
+     */
     public function parse(string $html)
     {
         if (\mb_strlen($html) > $this->maxLength) {
@@ -83,7 +89,7 @@ class DaisyDiff
             return '';
         }
 
-        return $this->domVisitor->visit($parsed);
+        return $this->domVisitor->visit($parsed)->render();
     }
 
     /**

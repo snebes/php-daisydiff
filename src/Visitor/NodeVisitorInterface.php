@@ -8,7 +8,9 @@
 
 declare(strict_types=1);
 
-namespace SN\DaisyDiff\Contracts;
+namespace SN\DaisyDiff\Visitor;
+
+use SN\DaisyDiff\Node\Cursor;
 
 /**
  * A visitor visits supported DOM nodes.
@@ -19,26 +21,26 @@ interface NodeVisitorInterface
      * Whether this visitor supports the DOMNode or not in the current context.
      *
      * @param \DOMNode $domNode
-     * @param          $cursor
+     * @param Cursor   $cursor
      * @return bool
      */
-    public function supports(\DOMNode $domNode, $cursor): bool;
+    public function supports(\DOMNode $domNode, Cursor $cursor): bool;
 
     /**
      * Enter the DOMNode.
      *
      * @param \DOMNode $domNode
-     * @param          $cursor
+     * @param Cursor   $cursor
      * @return mixed
      */
-    public function enterNode(\DOMNode $domNode, $cursor);
+    public function enterNode(\DOMNode $domNode, Cursor $cursor);
 
     /**
      * Leave the DOMNode.
      *
      * @param \DOMNode $domNode
-     * @param          $cursor
+     * @param Cursor   $cursor
      * @return mixed
      */
-    public function leaveNode(\DOMNode $domNode, $cursor);
+    public function leaveNode(\DOMNode $domNode, Cursor $cursor);
 }
