@@ -22,7 +22,7 @@ class TextOnlyComparatorTest extends TestCase
     /** @var TextOnlyComparator */
     private $comp;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $root = new TagNode(null, 'root');
         $intermediate = new TagNode($root, 'middle');

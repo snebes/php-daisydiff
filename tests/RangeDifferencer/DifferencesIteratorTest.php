@@ -21,7 +21,7 @@ class DifferencesIteratorTest extends TestCase
     /** @var RangeDifference[] */
     private $ranges = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $oldText = '<p> This is a blue book</p>';
         $newText = '<p> This is a <b>big</b> blue book</p>';

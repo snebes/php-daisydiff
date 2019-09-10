@@ -27,7 +27,7 @@ class AncestorComparatorTest extends TestCase
     /** @var Tagnode */
     private $intermediate;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->root = new TagNode(null, 'root');
         $this->intermediate = new TagNode(null, 'middle');
@@ -61,10 +61,12 @@ class AncestorComparatorTest extends TestCase
     }
 
     /**
-     * @expectedException \Exception
+     * @throws \Exception
      */
     public function testGetAncestorException(): void
     {
+        $this->expectException(\Exception::class);
+
         try {
             $this->comp->getAncestor(3);
         } catch (\Exception $e) {

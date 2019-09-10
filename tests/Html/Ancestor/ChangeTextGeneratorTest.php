@@ -26,7 +26,7 @@ class ChangeTextGeneratorTest extends TestCase
     /** @var AncestorComparator */
     private $other;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $root = new TagNode(null, 'root');
         $intermediate = new TagNode(null, 'middle');
