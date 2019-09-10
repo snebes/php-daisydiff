@@ -25,7 +25,7 @@ class RangeDifferencerTest extends TestCase
     /** @var TagComparator */
     private $right;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->left = new TagComparator('<p> This is a green book about food</p>');
         $this->right = new TagComparator('<p> This is a <b>big</b> blue book</p>');

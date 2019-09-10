@@ -1,6 +1,5 @@
 imports:
     - php
-
 filter:
     excluded_paths:
         - 'tests/*'
@@ -9,7 +8,7 @@ checks:
 build:
     environment:
         php:
-            version: 7.2
+            version: 7.1
     tests:
         override:
             -

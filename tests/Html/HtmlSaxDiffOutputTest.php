@@ -30,7 +30,7 @@ class HtmlSaxDiffOutputTest extends TestCase
     /** @var HtmlSaxDiffOutput */
     private $htmlDiffOutput;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->changeText = new ChangeText();
         $this->htmlDiffOutput = new HtmlSaxDiffOutput($this->changeText);

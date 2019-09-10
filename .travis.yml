@@ -1,13 +1,47 @@
 language: php
-php:
-  - 7.1
-  - 7.2
-  - 7.3
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
+env:
+  global:
+    - PHPUNIT_FLAGS="-v  --configuration phpunit.xml.dist --coverage-text"
+
+matrix:
+  fast_finish: true
+  include:
+    # Minimum supported dependencies with the latest and oldest PHP version
+    - php: 7.1
+      env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
+    - php: 7.2
+      env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
+    - php: 7.3
+      env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
+
+    # Test the latest stable release
+    - php: 7.1
+    - php: 7.2
+    - php: 7.3
+      env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text"
+
+    # Latest commit to master
+    - php: 7.3
+      env: STABILITY="dev"
+
+  allow_failures:
+    # Dev-master is allowed to fail.
+    - env: STABILITY="dev"
+
 before_install:
-  - composer selfupdate
+  - if [[ $COVERAGE != true ]]; then phpenv config-rm xdebug.ini || true; fi
+  - if ! [ -z "$STABILITY" ]; then travis_wait composer config minimum-stability ${STABILITY}; fi;
+  - if ! [ -v "$DEPENDENCIES" ]; then composer require --no-update ${DEPENDENCIES}; fi;
+
 install:
-  - composer install --prefer-dist --no-interaction $COMPOSER_FLAGS
+  - composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction
+
 script:
-  - phpunit --configuration phpunit.xml.dist --coverage-text --exclude-group incomplete
-notifications:
-  email: 'snebes+travis@gmail.com'
+  - composer validate --no-check-lock --strict
+  - ./vendor/bin/phpunit $PHPUNIT_FLAGS
